@@ -1,0 +1,911 @@
+<?xml version="1.0" ?>
+<spellcast xmlns:xi="http://www.w3.org/2001/XInclude">
+    <!-- Last modified: 9/15/2012 10:58:02 AM -->
+
+    <config Debug="false"
+          ShowGearSwaps="false"
+          ShowSpellInfo="false"
+          RequireVersion="2.30"
+          />
+
+    <Variables clear="True">
+        <!-- General configuration -->
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='ConfigurationVars']/*" />
+
+        <!-- Configuration var overrides. -->
+        <var name="HasShield">Yes</var>
+        <var name="HasEvasion">No</var>
+        <var name="CritWS">Vorpal Blade</var>
+        <var name="MagicalWS">Sanguine Blade|Atonement</var>
+
+        <!-- General utility -->
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='UtilityVars']/*" />
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='RecastDurations']/*" />
+
+        <!-- Utility default var overrides. -->
+        <!-- Weapon styles: Sword (covers Club as well), Greatsword, Polearm, Staff -->
+        <var name="TPWeapon">Sword+Shield</var>
+        <var name="LastEquipMain">Unknown</var>
+
+        <var name="TankMode">Shield</var>
+        <var name="CustomDefMode">Reraise</var>
+
+        <var name="HPGap">0</var>
+        <var name="InterruptLayer">None</var>
+    </Variables>
+
+    <Sets>
+        <group name="Outside-Group" default="yes">
+            <set name="None">
+            </set>
+
+            <set name="Idle-Town-*">
+                <ammo>Demonry Stone</ammo>
+                <head>Yaoyotl Helm</head>
+                <neck>Creed Collar</neck>
+                <lear>Creed Earring</lear>
+                <rear>Bloodgem Earring</rear>
+                <body>Valor Surcoat</body>
+                <hands>Creed Gauntlets +2</hands>
+                <lring>Shadow Ring</lring>
+                <rring>Eihwaz Ring</rring>
+                <back>Shadow Mantle</back>
+                <waist>Goading Belt</waist>
+                <legs>Crimson Cuisses</legs>
+                <feet>Creed Sabatons +2</feet>
+            </set>
+            <set name="Idle-Field-*" BaseSet="Idle-Town-Normal|PDT|Refresh">
+            </set>
+
+            <set name="Move|Kite">
+                <legs>Crimson Cuisses</legs>
+            </set>
+
+
+            <!-- ***************************** -->
+            <!--  Meleeing TP gear             -->
+            <!-- ***************************** -->
+
+            <!-- Sword/Shield or Club/Shield sets -->
+            <set name="TP-Sword+Shield-Normal-Shield">
+                <ammo>Demonry Stone</ammo>
+                <head>Yaoyotl Helm</head>
+                <neck>Creed Collar</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Reverence Surcoat</body>
+                <hands>Cizin Mufflers</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Zoran's Belt</waist>
+                <legs>Cizin Breeches</legs>
+                <feet>Cizin greaves</feet>
+            </set>
+            <set name="TP-Sword+Shield-Normal-PDT">
+                <ammo>Demonry Stone</ammo>
+                <head>Laeradr Helm </head>
+                <neck>Twilight Torque</neck>
+                <lear>Creed Earring</lear>
+                <rear>Buckler Earring</rear>
+                <body>Reverence Surcoat</body>
+                <hands>Cizin Mufflers</hands>
+                <back>Shadow Mantle</back>
+                <waist>Nierenschutz</waist>
+                <legs>Creed Cuisses +2</legs>
+                <feet>Phorcys Schuhs</feet>
+            </set>
+            <set name="TP-Sword+Shield-Normal-*">
+                <ammo>Demonry Stone</ammo>
+                <head>Yaoyotl Helm</head>
+                <neck>Creed Collar</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Reverence Surcoat</body>
+                <hands>Cizin Mufflers</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Zoran's Belt</waist>
+                <legs>Cizin Breeches</legs>
+                <feet>Cizin greaves</feet>
+            </set>
+
+            <!-- Customize specific offense sets
+            <set name="TP-Sword+Shield-Acc-Shield">
+            </set>
+            <set name="TP-Sword+Shield-Acc-PDT">
+            </set>
+            <set name="TP-Sword+Shield-Acc-*">
+            </set>
+
+            <set name="TP-Sword+Shield-MaxAcc-Shield">
+            </set>
+            <set name="TP-Sword+Shield-MaxAcc-PDT">
+            </set>
+            <set name="TP-Sword+Shield-MaxAcc-*">
+            </set>
+
+            <set name="TP-Sword+Shield-Att-Shield">
+            </set>
+            <set name="TP-Sword+Shield-Att-PDT">
+            </set>
+            <set name="TP-Sword+Shield-Att-*">
+            </set>
+
+            <set name="TP-Sword+Shield-Str-Shield">
+            </set>
+            <set name="TP-Sword+Shield-Str-PDT">
+            </set>
+            <set name="TP-Sword+Shield-Str-*">
+            </set>
+            -->
+
+            <set name="TP-Sword+Shield-*-Shield" BaseSet="TP-Sword+Shield-Normal-Shield">
+            </set>
+            <set name="TP-Sword+Shield-*-PDT" BaseSet="TP-Sword+Shield-Normal-PDT">
+            </set>
+            <set name="TP-Sword+Shield-*-*" BaseSet="TP-Sword+Shield-Normal-Normal">
+            </set>
+
+
+            <!-- Dual-wield sets -->
+            <set name="TP-Sword+DualWield-Normal-PDT">
+                <ammo>Demonry Stone</ammo>
+                <head>Laeradr Helm </head>
+                <neck>Twilight Torque</neck>
+                <lear>Creed Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Reverence Surcoat</body>
+                <hands>Versa Mufflers</hands>
+                <back>Shadow Mantle</back>
+                <waist>Nierenschutz</waist>
+                <legs>Creed Cuisses +2</legs>
+                <feet>Phorcys Schuhs</feet>
+            </set>
+            <set name="TP-Sword+DualWield-Normal-*">
+               
+            </set>
+
+
+            <!-- Customize specific offense sets
+            <set name="TP-Sword+DualWield-Acc-PDT">
+            </set>
+            <set name="TP-Sword+DualWield-Acc-*">
+            </set>
+
+            <set name="TP-Sword+DualWield-MaxAcc-PDT">
+            </set>
+            <set name="TP-Sword+DualWield-MaxAcc-*">
+            </set>
+
+            <set name="TP-Sword+DualWield-Att-PDT">
+            </set>
+            <set name="TP-Sword+DualWield-Att-*">
+            </set>
+
+            <set name="TP-Sword+DualWield-Str-PDT">
+            </set>
+            <set name="TP-Sword+DualWield-Str-*">
+            </set>
+            -->
+
+            <set name="TP-Sword+DualWield-*-PDT" BaseSet="TP-Sword+DualWield-Normal-PDT">
+            </set>
+            <set name="TP-Sword+DualWield-*-*" BaseSet="TP-Sword+DualWield-Normal-Normal">
+            </set>
+
+
+            <!-- Greatsword -->
+            <set name="TP-Greatsword-*">
+                <ammo>Demonry Stone</ammo>
+                <head>Phorcys Salade</head>
+                <neck>Creed Collar</neck>
+                <lear>Creed Earring</lear>
+                <rear>Buckler Earring</rear>
+                <body>Reverence Surcoat</body>
+                <hands>Creed Gauntlets +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Goading Belt</waist>
+                <legs>Phorcys Dirs</legs>
+                <feet>Creed Sabatons +2</feet>
+            </set>
+
+
+            <!-- Polearm -->
+            <set name="TP-Polearm-*">
+                <ammo>Demonry Stone</ammo>
+                <head>Phorcys Salade</head>
+                <neck>Creed Collar</neck>
+                <lear>Creed Earring</lear>
+                <rear>Buckler Earring</rear>
+                <body>Reverence Surcoat</body>
+                <hands>Creed Gauntlets +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Goading Belt</waist>
+                <legs>Phorcys Dirs</legs>
+                <feet>Creed Sabatons +2</feet>
+            </set>
+
+
+            <!-- Staff -->
+            <set name="TP-Staff-Normal-PDT">
+                <ammo>Demonry Stone</ammo>
+                <head>Phorcys Salade</head>
+                <neck>Creed Collar</neck>
+                <lear>Creed Earring</lear>
+                <rear>Buckler Earring</rear>
+                <body>Reverence Surcoat</body>
+                <hands>Creed Gauntlets +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Goading Belt</waist>
+                <legs>Phorcys Dirs</legs>
+                <feet>Creed Sabatons +2</feet>
+            </set>
+            <set name="TP-Staff-*" BaseSet="TP-Staff-Normal-PDT">
+                <rring>Tyrant's Ring</rring>
+            </set>
+
+            <!-- Weaponskill sets -->
+            <set name="WS-Vorpal Blade-*">
+                <ammo>Demonry Stone</ammo>
+                <head>Yaoyotl Helm</head>
+                <neck>Rancor Collar</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Phorcys Korazin</body>
+                <hands>Cizin Mufflers</hands>
+                <lring>Dark Ring</lring>
+                <rring>Rajas Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Zoran's Belt</waist>
+                <legs>Cizin Breeches</legs>
+                <feet>Cizin greaves</feet>
+            </set>
+
+            <set name="WS-Savage Blade-*">
+                <head>Yaoyotl Helm</head>
+                <neck>Rancor Collar</neck>
+                <body>Phorcys Korazin</body>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Anguinus Belt</waist>
+                <legs>Phorcys Dirs</legs>
+                <feet>Creed Sabatons +2</feet>
+            </set>
+
+            <set name="WS-Swift Blade-*">
+                <head>Yaoyotl Helm</head>
+                <neck>Rancor Collar</neck>
+                <body>Phorcys Korazin</body>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Anguinus Belt</waist>
+                <legs>Phorcys Dirs</legs>
+                <feet>Creed Sabatons +2</feet>
+            </set>
+
+            <set name="WS-Atonement">
+                <head>Yaoyotl Helm</head>
+                <neck>Harmonia's Torque</neck>
+                <body>Iron Ram Hauberk</body>
+                <hands>Homam Manopolas</hands>
+                <lring>Hercules' Ring</lring>
+                <waist>Creed Baudrier</waist>
+                <legs>Iron Ram Hose</legs>
+                <feet>Creed Sabatons +2</feet>
+            </set>
+			
+			<set name="WS-Aeolian Edge">
+				<ammo>Demonry Stone</ammo>
+                <head>Yaoyotl Helm</head>
+                <neck>Rancor Collar</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Phorcys Korazin</body>
+                <hands>Cizin Mufflers</hands>
+                <lring>Strophadic Earring</lring>
+				<rring>Hecate's Earring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Thunder Belt</waist>
+                <legs>Cizin Breeches</legs>
+                <feet>Cizin greaves</feet>
+            </set>
+
+            <set name="WS-Sanguine Blade">
+                <head>Yaoyotl Helm</head>
+                <neck>Rancor Collar</neck>
+                <body>Phorcys Korazin</body>
+                <lear>Strophadic Earring</lear>
+                <rear>Hecate's Earring</rear>
+                <lring>Rajas Ring</lring>
+                <rring>Archon Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Anguinus Belt</waist>
+                <legs>Phorcys Dirs</legs>
+                <feet>Creed Sabatons +2</feet>
+            </set>
+
+            <set name="WS-*">
+				<ammo>Demonry Stone</ammo>
+                <head>Yaoyotl Helm</head>
+                <neck>Rancor Collar</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Phorcys Korazin</body>
+                <hands>Cizin Mufflers</hands>
+                <lring>Dark Ring</lring>
+                <rring>Rajas Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Zoran's Belt</waist>
+                <legs>Cizin Breeches</legs>
+                <feet>Cizin greaves</feet>
+            </set>
+
+
+            <!-- ***************************** -->
+            <!--  PDT and MDT gear             -->
+            <!-- ***************************** -->
+
+            <set name="Reraise|WeakSet">
+                <ammo>Demonry Stone</ammo>
+                <head>Twilight Helm</head>
+                <neck>Twilight Torque</neck>
+                <lear>Creed Earring</lear>
+                <rear>Buckler Earring</rear>
+                <body>Twilight Mail</body>
+                <hands>Versa Mufflers</hands>
+                <back>Shadow Mantle</back>
+                <waist>Nierenschutz</waist>
+                <legs>Creed Cuisses +2</legs>
+                <feet>Phorcys Schuhs</feet>
+            </set>
+
+            <set name="HPWeakSet">
+                <ammo>Demonry Stone</ammo>
+                <head>Twilight Helm</head>
+                <neck>Twilight Torque</neck>
+                <lear>Creed Earring</lear>
+                <rear>Buckler Earring</rear>
+                <body>Twilight Mail</body>
+                <hands>Versa Mufflers</hands>
+                <back>Shadow Mantle</back>
+                <waist>Nierenschutz</waist>
+                <legs>Creed Cuisses +2</legs>
+                <feet>Phorcys Schuhs</feet>
+            </set>
+
+            <!-- Cap of 50%
+                 Angha Gem: 2%
+                 Chersos Helm: 4%
+                 Twilight Torque 5%
+                 Creed body: 10% with sufficient hate
+                 Magma Gauntlets: 4%
+                 Dark Ring ~4%-6%
+                 Shadow Mantle 4%
+                 or Mollusca Mantle 5%
+                 Nierenschutz 3%
+                 Creed legs: 3%-5%
+                 Ruffian Leggings: 3%
+             -->
+
+            <set name="PDT">
+				<ammo>Demonry Stone</ammo>
+                <head>Laeradr Helm</head>
+                <neck>Twilight Torque</neck>
+                <lear>Creed Earring</lear>
+                <rear>Buckler Earring</rear>
+                <body>Reverence Surcoat</body>
+                <hands>Cizin Mufflers</hands>
+                <back>Shadow Mantle</back>
+                <waist>Nierenschutz</waist>
+                <legs>Creed Cuisses +2</legs>
+                <feet>Phorcys Schuhs</feet>
+            </set>
+
+            <set name="PhysDef-PDT|PhysDef-Evasion" BaseSet="PDT">
+            </set>
+
+            <set name="PhysDef-Shield" BaseSet="PDT|Shield">
+            </set>
+
+            <set name="PhysDef-Reraise" BaseSet="PDT|Reraise">
+            </set>
+
+            <set name="MDT-Any|MDT-All|MDT-None|Resist-Any|Resist-All|Resist-None">
+				<sub>Aegis</sub>
+                <ammo>Demonry Stone</ammo>
+                <head>Laeradr Helm</head>
+                <neck>Twilight Torque</neck>
+				<lear>Merman's Earring</lear>
+				<rear>Merman's Earring</rear>
+                <body>Reverence Surcoat</body>
+                <hands>Reverence Gauntlets</hands>
+                <lring>Dark Ring</lring>
+                <lring>Shadow Ring</lring>
+                <back>Engulfer Cape</back>
+                <waist>Creed Baudrier</waist>
+                <legs>Affronter Cuisses</legs>
+                <feet>Valor leggings +2</feet>
+            </set>
+            <set name="MDT-Earth|Resist-Earth" BaseSet="MDT-Any">
+                <ammo>Soil Sachet</ammo>
+            </set>
+            <set name="MDT-Water|Resist-Water" BaseSet="MDT-Any">
+                <ammo>Aqua Sachet</ammo>
+                <legs>Crimson Cuisses</legs>
+            </set>
+            <set name="MDT-Wind|Resist-Wind" BaseSet="MDT-Any">
+                <ammo>Breeze Sachet</ammo>
+            </set>
+            <set name="MDT-Fire|Resist-Fire" BaseSet="MDT-Any">
+                <!-- <ammo>Flame Sachet</ammo> -->
+                <legs>Crimson Cuisses</legs>
+            </set>
+            <set name="MDT-Ice|Resist-Ice" BaseSet="MDT-Any">
+                <ammo>Snow Sachet</ammo>
+            </set>
+            <set name="MDT-Thunder|Resist-Thunder" BaseSet="MDT-Any">
+                <ammo>Thunder Sachet</ammo>
+                <legs>Crimson Cuisses</legs>
+            </set>
+            <set name="MDT-Light|Resist-Light" BaseSet="MDT-Any">
+                <ammo>Light Sachet</ammo>
+            </set>
+            <set name="MDT-Dark|Resist-Dark" BaseSet="MDT-Any">
+                <!-- <ammo>Shadow Sachet</ammo> -->
+                <legs>Crimson Cuisses</legs>
+            </set>
+
+            <set name="DarkdayMDT">
+                <rring>Shadow Ring</rring>
+                <waist>Nierenschutz</waist>
+            </set>
+
+
+            <set name="Sentinel">
+                <feet>Valor Leggings +2</feet>
+            </set>
+            <!-- Add +vit set for Rampart -->
+            <set name="Rampart">
+                <head>Valor Coronet</head>
+                <body>Shadow Breastplate</body>
+                <hands>Creed Gauntlets +2</hands>
+                <waist>Warwolf Belt</waist>
+            </set>
+            <set name="Shield Bash">
+                <hands>Valor Gauntlets +2</hands>
+            </set>
+
+            <set name="Divine Emblem">
+                <feet>Creed Sabatons +2</feet>
+            </set>
+
+            <!-- Max mnd for Chivalry -->
+            <set name="Chivalry">
+                <head>Twilight Helm</head>
+                <body>Shadow Breastplate</body>
+                <lring>Solemn Ring</lring>
+                <feet>Valor Leggings +2</feet>
+            </set>
+
+            <!-- Specialty sets -->
+
+            <set name="Refresh">
+                <neck>Creed Collar</neck>
+				<body>Twilight Mail</body>
+            </set>
+            <set name="GainMP" BaseSet="Refresh">
+                <head>Creed Armet +1</head>
+                <!-- <lear>Ethereal Earring</lear> -->
+                <waist>Goading Belt</waist>
+            </set>
+
+            <!-- Build for exactly enough mnd/skill to max stoneskin.
+                 With 310+16(merits) = 326 skill, 72 mnd is needed.
+                 Base mnd is about 74.  No extra mnd gear required.
+                 Add haste for recast, and Siegel Sash for bonus damage absorbed.
+                  -->
+            <set name="Stoneskin">
+                <waist>Siegel Sash</waist>
+            </set>
+
+            <set name="Resting-*">
+                <neck>Creed Collar</neck>
+                <body>Shadow Breastplate</body>
+                <rear>Bloodgem Earring</rear>
+                <waist>Austerity Belt</waist>
+            </set>
+
+            <set name="Shield">
+                <head>Creed Armet +1</head>
+                <neck>Shield Torque</neck>
+                <lear>Creed Earring</lear>
+                <rear>Buckler Earring</rear>
+                <back>Boxer's Mantle</back>
+                <feet>Gallant Leggings +1</feet>
+            </set>
+
+            <set name="Enmity">
+                <head>Hero's Galea</head>
+                <neck>Invidia Torque</neck>
+                <body>Reverence Surcoat</body>
+                <hands>Versa Mufflers</hands>
+                <waist>Creed Baudrier</waist>
+                <legs>Inmicus Cuisses</legs>
+                <feet>Creed Sabatons +2</feet>
+				<lring>Eihwaz Ring</lring>
+            </set>
+
+            <!-- Casting sets -->
+
+            <set name="FastCast">
+                <head>Creed Armet +1</head>
+                <rear>Loquacious Earring</rear>
+                <lring>Prolix Ring</lring>
+                <legs>Enif Cosciales</legs>
+            </set>
+            <set name="HasteCast">
+                <head>Walahra Turban</head>
+                <body>Reverence Surcoat</body>
+                <hands>Creed Gauntlets +2</hands>
+                <waist>Goading Belt</waist>
+                <legs>Enif Cosciales</legs>
+                <feet>Creed Sabatons +2</feet>
+            </set>
+
+            <set name="CureCast">
+                <head>Adaman Barbuta</head>
+                <lear>Hospitaler Earring</lear>
+                <rear>Bloodgem Earring</rear>
+                <body>Reverence Surcoat</body>
+                <hands>Homam Manopolas</hands>
+                <lring>Meridian Ring</lring>
+                <rring>Bloodbead Ring</rring>
+                <waist>Goading Belt</waist>
+                <legs>Enif Cosciales</legs>
+                <feet>Dornen Schuhs</feet>
+            </set>
+
+            <!-- Cure kits -->
+            <set name="CureKitPreCast2">
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+            </set>
+            <set name="CureKitMidCast2">
+                <head>Adaman Barbuta</head>
+                <lear>Hospitaler Earring</lear>
+                <body>Reverence Surcoat</body>
+                <lring>Meridian Ring</lring>
+                <rring>Bloodbead Ring</rring>
+            </set>
+
+            <set name="CureKitPreCast3">
+                <body>Shadow Breastplate</body>
+                <hands>Creed Gauntlets +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Shadow Mantle</back>
+                <legs>Perle Brayettes</legs>
+                <feet>Creed Sabatons +2</feet>
+            </set>
+            <set name="CureKitMidCast3">
+                <head>Adaman Barbuta</head>
+                <lear>Hospitaler Earring</lear>
+                <rear>Bloodgem Earring</rear>
+                <body>Reverence Surcoat</body>
+                <hands>Homam Manopolas</hands>
+                <lring>Meridian Ring</lring>
+                <rring>Bloodbead Ring</rring>
+            </set>
+<!-- 1215 -->
+            <set name="CureKitPreCast4">
+                <head>Twilight Helm</head>
+                <lear>Hospitaler Earring</lear>
+                <rear>Loquacious Earring</rear>
+                <body>Shadow Breastplate</body>
+                <hands>Creed Gauntlets +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Shadow Mantle</back>
+                <waist>Nierenschutz</waist>
+                <legs>Perle Brayettes</legs>
+                <feet>Creed Sabatons +2</feet>
+            </set>
+<!-- 1686 -->
+            <set name="CureKitMidCast4">
+                <head>Adaman Barbuta</head>
+                <lear>Hospitaler Earring</lear>
+                <rear>Bloodgem Earring</rear>
+                <body>Reverence Surcoat</body>
+                <hands>Homam Manopolas</hands>
+                <lring>Meridian Ring</lring>
+                <rring>Bloodbead Ring</rring>
+                <back>Aenotherus Mantle</back>
+                <waist>Creed Baudrier</waist>
+                <legs>Enif Cosciales</legs>
+                <feet>Dornen Schuhs</feet>
+            </set>
+
+            <set name="Enhancing">
+                <neck>Enhancing Torque</neck>
+            </set>
+
+            <set name="CureWaltz">
+                <ammo>Sonia's Plectrum</ammo>
+                <head>Hero's Galea</head>
+                <body>Shadow Breastplate</body>
+            </set>
+            <set name="CureWaltzMe">
+                <ammo>Sonia's Plectrum</ammo>
+                <head>Hero's Galea</head>
+                <body>Shadow Breastplate</body>
+                <hands>Creed Gauntlets +2</hands>
+                <rring>Spiral Ring</rring>
+                <waist>Warwolf Belt</waist>
+            </set>
+        </group>
+
+        <group name="Abyssea-Group" inherit="Outside-Group">
+        </group>
+
+        <group name="Campaign-Group" inherit="Outside-Group">
+            <set name="TP-Sword-DualWield-Offense-Normal|TP-Sword-DualWield-Offense-*">
+                <ammo>Thunder Sachet</ammo>
+                <head>Walahra Turban</head>
+                <neck>Creed Collar</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <waist>Goading Belt</waist>
+                <body>Reverence Surcoat</body>
+                <hands>Creed Gauntlets +2</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Ulthalam's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Goading Belt</waist>
+                <legs>Creed Cuisses +2</legs>
+                <feet>Creed Sabatons +2</feet>
+            </set>
+        </group>
+
+        <group name="Voidwatch-Group" inherit="Outside-Group">
+        </group>
+    </Sets>
+
+    <Rules>
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='RunFirstUpdate']/*" />
+
+        <if BuffActive="Doom">
+            <equip when="all">
+                <head lock="true">Twilight Helm</head>
+                <body lock="true">Shadow Breastplate</body>
+            </equip>
+        </if>
+
+        <!-- Make sure locks are in place before auto-changing gear. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='EquipmentLockRules']/*" />
+        <!-- Auto-change gear call via Aftercast to limit lag. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ChangeGearAftercast']/*" />
+        <!-- Other general imports. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='LevelRequirement']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ReturnRules']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='CleanTransportation']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='RecastWarnings']/*" />
+
+
+        <!-- First: Adjust values based on status checks. -->
+
+        <!-- Check for weakness -->
+        <if BuffActive="Weakness">
+            <if BuffActive="Reraise">
+                <var cmd="set WeaknessArmor HPWeakSet" />
+            </if>
+            <else>
+                <var cmd="set WeaknessArmor WeakSet" />
+            </else>
+        </if>
+
+
+        <if NotEquipMain="$LastEquipMain">
+            <var cmd="set LastEquipMain %EquipMain" />
+
+            <if EquipMain="Kriegsmesser|Mercurial Sword">
+                <var cmd="set TPWeapon Greatsword" />
+            </if>
+            <elseif EquipMain="*Staff|*Pole">
+                <var cmd="set TPWeapon Staff" />
+            </elseif>
+            <elseif EquipMain="*Lance|*Spear">
+                <var cmd="set TPWeapon Polearm" />
+            </elseif>
+            <else>
+                <!-- This also covers use of club in mainhand -->
+                <if EquipSub="Aegis|Ochain|*Shield|*Buckler">
+                    <var cmd="set TPWeapon Sword+Shield" />
+                </if>
+                <elseif NotEquipSub="empty" Subjob="Nin|Dnc">
+                    <var cmd="set TPWeapon Sword+DualWield" />
+                </elseif>
+                <else>
+                    <var cmd="set TPWeapon Sword+Shield" />
+                </else>
+            </else>
+        </if>
+
+
+        <!-- Second: Update certain values when their status may drop, or when autoset changes. -->
+        <if spell="Update|autoset">
+            <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='AreaRules']/*" />
+
+            <!-- Reset trigger, or engage/idle, re-evaluate weapon and sub values. -->
+
+            <if status="Engaged" advanced='"$Movement"="Move"'>
+                <var cmd="set Movement None" />
+            </if>
+            <elseif status="Idle">
+                <var cmd="set Movement Move" />
+            </elseif>
+
+            <!-- Check for weakness -->
+            <if NotBuffActive="Weakness">
+                <var cmd="set WeaknessArmor None" />
+            </if>
+
+            <!-- On a manual update, report our current configuration. -->
+            <if SpellTargetRaw=".Manual">
+                <addtochat>Update gear. $TPWeapon - $OffenseMode/$DefenseMode, PD:$PhysicalDefense, MD:$MagicalDefense, $Movement</addtochat>
+            </if>
+        </if>
+
+        <!-- Third: Adjust configurations based on action/trigger. -->
+
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='UniversalTriggerRules']/*" />
+
+
+        <!-- Fourth: Adjust gear to account for changes in configuration -->
+
+        <if advanced='"$TPWeapon"="Sword+Shield" AND "$DefenseMode"="Shield"'>
+            <var cmd="set InterruptLayer Shield" />
+        </if>
+        <else>
+            <var cmd="set InterruptLayer None" />
+        </else>
+
+
+        <!-- Fifth: Compile all adjustments into the final gear set. -->
+
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='DefineBaseLayer']/*" />
+
+        <!-- Compile all subsets into a single final set -->
+        <var cmd="set CurrentSet $BaseLayer|$PhysicalDefense|$MagicalDefense|$WeaknessArmor|$Movement" />
+
+        <!-- And assign to appropriate sets for idle/aftercast/etc -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='HandleEquippingGear']/*" />
+
+
+        <!-- ************************************************************************ -->
+        <!-- The following sections are solely for setting precast/midcast equipment, -->
+        <!-- and should not be changing any configuration options.                    -->
+        <!-- ************************************************************************ -->
+
+        <if type="JobAbility">
+            <if spell="Sentinel|Rampart|Shield Bash|Chivalry|Divine Emblem">
+                <equip when="Precast" set="%Spell" />
+            </if>
+        </if>
+        <elseif type="WeaponSkill">
+            <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='DefineWeaponskillSet']/*" />
+            <equip when="Precast" set="$WSSet" />
+			
+			<command when="aftercast">input /echo %TP TP Returned</command>
+        </elseif>
+        <elseif type="Waltz">
+            <if NotSpell="Healing Waltz">
+                <if TargetType="Self">
+                    <equip when="Precast" set="CureWaltzMe" />
+                </if>
+                <else>
+                    <equip when="Precast" set="CureWaltz" />
+                </else>
+            </if>
+        </elseif>
+        <elseif type="WhiteMagic">
+            <equip when="Precast" set="FastCast" />
+
+            <if skill="HealingMagic" NotBuffActive="Weakness">
+                <var cmd="setcalc HPGap %HPMax - %HP" />
+
+                <if Spell="Cure II">
+                    <if SpellTargetType="SELF" advanced='"$HPGap" &lt; "80"'>
+                        <addtochat>Using Cure Kit for Cure 2</addtochat>
+                        <equip when="Precast" set="CureKitPreCast2" />
+                        <equip when="Midcast" delay="0.75" set="CureKitMidCast2" />
+                    </if>
+                    <else>
+                        <equip when="Midcast" set="CureCast|$InterruptLayer" />
+                    </else>
+                </if>
+                <elseif Spell="Cure III">
+                    <if SpellTargetType="SELF" advanced='"$HPGap" &lt; "160"'>
+                        <addtochat>Using Cure Kit for Cure 3</addtochat>
+                        <MidCastDelay delay="0.9" />
+                        <equip when="Precast" set="CureKitPreCast3" />
+                        <equip when="Midcast" set="CureKitMidCast3" />
+                    </if>
+                    <else>
+                        <equip when="Midcast" set="CureCast|$InterruptLayer" />
+                    </else>
+                </elseif>
+                <elseif Spell="Cure IV">
+                    <if SpellTargetType="SELF" advanced='"$HPGap" &lt; "300"'>
+                        <addtochat>Using Cure Kit for Cure 4</addtochat>
+                        <MidCastDelay delay="1.0" />
+                        <equip when="Precast" set="CureKitPreCast4" />
+                        <equip when="Midcast" set="CureKitMidCast4" />
+                    </if>
+                    <else>
+                        <equip when="Midcast" set="Enmity|CureCast|$InterruptLayer" />
+                    </else>
+                </elseif>
+            </if>
+            <elseif skill="EnhancingMagic">
+                <equip when="Precast" set="FastCast">
+                    <waist>Siegel Sash</waist>
+                </equip>
+
+                <if Spell="Reprisal">
+                    <equip when="Midcast" set="HasteCast" />
+                </if>
+                <elseif Spell="Phalanx">
+                    <equip when="Midcast" set="HasteCast|Enhancing|$InterruptLayer" />
+                </elseif>
+                <elseif Spell="Stoneskin">
+                    <equip when="Midcast" set="HasteCast|Stoneskin" />
+                </elseif>
+                <elseif Spell="Protect*|Shell*" TargetType="SELF">
+                    <equip when="all">
+                        <lring>Sheltered Ring</lring>
+                    </equip>
+                </elseif>
+            </elseif>
+            <elseif skill="DivineMagic">
+                <if Spell="Flash">
+                    <equip when="Midcast" set="Enmity|HasteCast" />
+                </if>
+                <elseif Spell="Enlight">
+                    <equip when="Midcast" set="HasteCast|Enhancing" />
+                </elseif>
+            </elseif>
+        </elseif>
+        <elseif type="Ninjutsu">
+            <if Spell="Utsusemi: Ichi">
+                <equip when="Precast" set="ShieldSkill|FastCast" />
+                <equip when="Midcast" set="ShieldSkill|HasteCast" />
+            </if>
+            <elseif Spell="Utsusemi: Ni">
+                <equip when="Precast" set="Enmity|FastCast" />
+                <equip when="Midcast" set="HasteCast" />
+            </elseif>
+        </elseif>
+        <elseif type="BlackMagic">
+            <if Spell="Stun">
+                <equip when="Precast" set="Enmity|HasteCast|FastCast" />
+            </if>
+            <else>
+                <equip when="Precast" set="FastCast" />
+            </else>
+        </elseif>
+    </Rules>
+</spellcast>

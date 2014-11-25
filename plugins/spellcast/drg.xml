@@ -1,0 +1,668 @@
+<?xml version="1.0" ?>
+<spellcast xmlns:xi="http://www.w3.org/2001/XInclude">
+	<!--
+		Created by Ihm
+		
+		If you're using this, leave this here please, credit the author and stuff :3.
+		
+		Version 1.4
+		
+		Groups:
+		Base
+		Basic-unbuffed				Basic-buffed
+		Abyssea-unbuffed			Abyssea-buffed
+		Voidwatch-low-unbuffed		Voidwatch-low-buffed
+		Voidwatch-high-unbuffed		Voidwatch-high-buffed
+		Legion-unbuffed				Legion-buffed
+		Legion-no-crit-unbuffed		Legion-no-crit-buffed
+		Sub-mage-unbuffed			Sub-mage-buffed
+	-->
+	<config debug="false" showgearswaps="false" showspellinfo="false" />
+	<variables clear="true">
+		<xi:include href="Ihms-includes.xml" xpointer="/includes/include[@name='ConfigVariables']/*" />
+		<var name="ZombieMode">0</var>
+		<var name="RefreshMode">0</var>
+		
+		<var name="WyvernReminder">1</var>
+		<var name="WyvernActions">0</var>
+		<var name="WyvernAMax">10</var>
+		
+		<var name="SSActive">0</var>
+		
+		<var name="FirstRun">1</var>
+		
+		<var name="AM3Active">0</var>
+		<var name="AMWSLock">1</var>
+		
+		<var name="AngonDuration">90</var>
+	</variables>
+	<sets>
+		<group name="miscgear">
+			<set name="miscgear">
+				<main>Ryunohige</main>
+				<sub>Claymore Grip</sub>
+			</set>
+		</group>
+		<group name="base">
+			<set name="Refresh0|Refresh1|Zombie0" />
+			<set name="Zombie1">
+				<head>Twilight Helm</head>
+				<body>Twilight Mail</body>
+			</set>
+			<set name="DT00EngagedBase" />
+			<set name="DT10EngagedBase">
+				<ammo>Demonry Stone</ammo>
+				<head>Lancer's Mezail +1</head>
+				<neck>Twilight Torque</neck>
+				<lear>Colossus's Earring</lear>
+				<rear>Ethereal Earring</rear>
+				<body>Porthos Byrnie</body>
+				<hands>Melaco Mittens</hands>
+				<lring>Dark Ring</lring>
+				<rring>Shadow Ring</rring>
+				<back>Mollusca Mantle</back>
+				<waist>Nierenschutz</waist>
+				<legs>Ogier's Breeches</legs>
+				<feet>Phorcys Schuhs</feet>
+			</set>
+			<set name="DT01EngagedBase">
+				<ammo>Demonry Stone</ammo>
+				<head>Lancer's Mezail +1</head>
+				<neck>Twilight Torque</neck>
+				<lear>Merman's Earring</lear>
+				<rear>Merman's Earring</rear>
+				<body>Porthos Byrnie</body>
+				<hands>Wym. Fng. Gnt. +2</hands>
+				<lring>Dark Ring</lring>
+				<rring>Shadow Ring</rring>
+				<back>Mollusca Mantle</back>
+				<waist>Nierenschutz</waist>
+				<legs>Coral Cuisses +1</legs>
+				<feet>Ogier's Leggings</feet>
+			</set>
+			<set name="DT11EngagedBase">
+				<ammo>Demonry Stone</ammo>
+				<head>Lancer's Mezail +1</head>
+				<neck>Twilight Torque</neck>
+				<lear>Colossus's Earring</lear>
+				<rear>Merman's Earring</rear>
+				<body>Porthos Byrnie</body>
+				<hands>Melaco Mittens</hands>
+				<lring>Dark Ring</lring>
+				<rring>Shadow Ring</rring>
+				<back>Mollusca Mantle</back>
+				<waist>Nierenschutz</waist>
+				<legs>Ogier's Breeches</legs>
+				<feet>Phorcys Schuhs</feet>
+			</set>
+			<set name="Idle">
+				<ammo>Demonry Stone</ammo>
+				<head>Twilight Helm</head>
+				<neck>Twilight Torque</neck>
+				<lear>Colossus's Earring</lear>
+				<rear>Merman's Earring</rear>
+				<body>Porthos Byrnie</body>
+				<hands>Melaco Mittens</hands>
+				<lring>Sheltered Ring</lring>
+				<rring>Shadow Ring</rring>
+				<back>Shadow Mantle</back>
+				<waist>Nierenschutz</waist>
+				<legs>Crimson Cuisses</legs>
+				<feet>Phorcys Schuhs</feet>
+			</set>a
+			<set name="Rest" />
+			<set name="RestWyvern" baseset="Rest" />
+			<set name="Angon">
+				<ammo>Angon</ammo>
+				<lear>Dragoon's Earring</lear>
+				<hands>Wym. Fng. Gnt. +2</hands>
+			</set>
+			<set name="AncientCircle">
+				<legs>Drachen Brais</legs>
+			</set>
+			<set name="WyvernHP|HealingBreath">
+				<head>Wym. Armet +2</head>
+				<neck>Lancer's Torque</neck>
+				<body>Wyvern Mail</body>
+				<rear>Lancer's Earring</rear>
+				<hands>Ostreger Mitts</hands>
+				<back>Lancer's Pelerine</back>
+				<waist>Glassblower's Belt</waist>
+				<legs>Drachen Brais</legs>
+				<feet>Wym. Greaves +2</feet>
+			</set>
+			<set name="SteadyWing" baseset="WyvernHP">
+				<neck>Chanoix's Gorget</neck>
+			</set>
+			<set name="ElementalBreath" baseset="WyvernHP">
+				<lear>Dragoon's Earring</lear>
+			</set>
+			<set name="SpiritLink" baseset="WyvernHP">
+				<head>Drachen Armet</head>
+				<hands>Lncr. Vmbrc. +2</hands>
+				<feet>Wym. Greaves +2</feet>
+			</set>
+			<set name="Range">
+				<ammo>Pebble</ammo>
+			</set>
+			<set name="CallWyvern">
+				<body>Wym. Mail +2</body>
+			</set>
+			<set name="SpiritSurge">
+				<body>Wym. Mail +2</body>
+			</set>
+		</group>
+		<group name="basic-unbuffed" default="yes" inherit="base">
+			<set name="EngagedAM0SS0">
+				<ammo>Hagneia Stone</ammo>
+				<head>Yaoyotl Helm</head>
+				<neck>Ganesha's Mala</neck>
+				<lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+				<body>Miki. Breastplate </body>
+				<hands>Miki. Gauntlets</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Ambuscade Ring</rring>
+				<back>Atheling Mantle</back>
+				<waist>Zoran's Belt</waist>
+				<legs>Cizin Breeches</legs>
+                <feet>Cizin greaves</feet>
+			</set>
+			<set name="EngagedAM1SS0">
+				<ammo>Hagneia Stone</ammo>
+				<head>Phorcys Salade</head>
+				<neck>Ganesha's Mala</neck>
+				<lear>Brutal Earring</lear>
+				<rear>Kokou's Earring</rear>
+				<body>Lncr. Plackart +2</body>
+				<hands>Ares' Gauntlets +1</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Tyrant's Ring</rring>
+				<back>Atheling Mantle</back>
+				<waist>Goading Belt</waist>
+				<legs>Phorcys Dirs</legs>
+				<feet>Lncr. Schynbld. +1</feet>
+			</set>
+			<set name="EngagedAM0SS1|EngagedAM1SS1" />
+			<set name="WSDrakesbaneAM0">
+				<ammo>Potestas Bomblet</ammo>
+				<head>Mekira-oto +1</head>
+				<neck>Justiciar's Torque</neck>
+				<lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+				<body>Phorcys korazin</body>
+				<hands>Lncr. Vmbrc. +2</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Pyrosoul Ring</rring>
+				<back>Rancorous Mantle</back>
+				<waist>Prosilio Belt</waist>
+				<legs>Lncr. Cuissots +2</legs>
+				<feet>Karieyh Sollerets</feet>
+			</set>
+			<set name="WSDrakesbaneAM1">
+				<ammo>Potestas Bomblet</ammo>
+				<head>Mekira-oto +1</head>
+				<neck>Justiciar's Torque</neck>
+				<lear>Moonshade Earring</lear>
+				<rear>Kokou's Earring</rear>
+				<body>Phorcys korazin</body>
+				<hands>Lncr. Vmbrc. +2</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Pyrosoul Ring</rring>
+				<back>Rancorous Mantle</back>
+				<waist>Prosilio Belt</waist>
+				<legs>Lncr. Cuissots +2</legs>
+				<feet>Karieyh Sollerets</feet>
+			</set>
+			<set name="WSDrakesbaneTPCapAM0" baseset="WSDrakesbaneAM1" />
+			<set name="WSDrakesbaneTPCapAM1" baseset="WSDrakesbaneAM1" />
+			<set name="WSStardiverAM0">
+				<ammo>Potestas Bomblet</ammo>
+				<head>Mekira-oto +1</head>
+				<neck>Light Gorget</neck>
+				<lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+				<body>Phorcys korazin</body>
+				<hands>Phorcys Mitts</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Pyrosoul Ring</rring>
+				<back>Atheling Mantle</back>
+				<waist>Light Belt</waist>
+				<legs>Karieyh Brayettes</legs>
+				<feet>Karieyh Sollerets</feet>
+			</set>
+			<set name="WSStardiverAM1" baseset="WSStardiverAM0">
+				<ammo>Potestas Bomblet</ammo>
+				<head>Mekira-oto +1</head>
+				<neck>Light Gorget</neck>
+				<lear>Kokou's Earring</lear>
+				<rear>Moonshade Earring</rear>
+				<body>Phorcys korazin</body>
+				<hands>Phorcys Mitts</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Pyrosoul Ring</rring>
+				<back>Atheling Mantle</back>
+				<waist>Light Belt</waist>
+				<legs>Karieyh Brayettes</legs>
+				<feet>Karieyh Sollerets</feet>
+			</set>
+			<set name="WSStardiverTPCapAM0" baseset="WSStardiverAM1" />
+			<set name="WSStardiverTPCapAM1" baseset="WSStardiverAM1" />
+			<set name="WSSonic">
+				<ammo>Potestas Bomblet</ammo>
+				<head>Mekira-oto +1</head>
+				<neck>Justiciar's Torque</neck>
+				<lear>Kokou's Earring</lear>
+				<rear>Moonshade Earring</rear>
+				<body>Phorcys korazin</body>
+				<hands>Phorcys Mitts</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Pyrosoul Ring</rring>
+				<back>Fortis Mantle</back>
+				<waist>Prosilio Belt</waist>
+				<legs>Karieyh Brayettes</legs>
+				<feet>Karieyh Sollerets</feet>
+			</set>
+			<set name="JumpAM0|JumpAM1">
+				<ammo>Hagneia Stone</ammo>
+				<head>Twilight Helm</head>
+				<neck>Ganesha's Mala</neck>
+				<lear>Brutal Earring</lear>
+				<rear>Kokou's Earring</rear>
+				<body>Lncr. Plackart +2</body>
+				<hands>Ogier's Gauntlets</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Tyrant's Ring</rring>
+				<back>Atheling Mantle</back>
+				<waist>Windbuffet Belt</waist>
+				<legs>Lncr. Cuissots +2</legs>
+				<feet>Karieyh Sollerets</feet>
+			</set>
+			<set name="SpiritJumpAM0|SpiritJumpAM1">
+				<ammo>Hagneia Stone</ammo>
+				<head>Phorcys Salade</head>
+				<neck>Ganesha's Mala</neck>
+				<lear>Brutal Earring</lear>
+				<rear>Kokou's Earring</rear>
+				<body>Lncr. Plackart +2</body>
+				<hands>Ogier's Gauntlets</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Tyrant's Ring</rring>
+				<back>Atheling Mantle</back>
+				<waist>Windbuffet Belt</waist>
+				<legs>Lncr. Cuissots +2</legs>
+				<feet>Lncr. Schynbld. +1</feet>
+			</set>
+			<set name="HighJumpAM0|HighJumpAM1">
+				<ammo>Hagneia Stone</ammo>
+				<head>Phorcys Salade</head>
+				<neck>Ganesha's Mala</neck>
+				<lear>Brutal Earring</lear>
+				<rear>Kokou's Earring</rear>
+				<body>Lncr. Plackart +2</body>
+				<hands>Ogier's Gauntlets</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Tyrant's Ring</rring>
+				<back>Atheling Mantle</back>
+				<waist>Windbuffet Belt</waist>
+				<legs>Lncr. Cuissots +2</legs>
+				<feet>Karieyh Sollerets</feet>
+			</set>
+			<set name="SoulJumpAM0|SoulJumpAM1">
+				<ammo>Hagneia Stone</ammo>
+				<head>Phorcys Salade</head>
+				<neck>Ganesha's Mala</neck>
+				<lear>Brutal Earring</lear>
+				<rear>Kokou's Earring</rear>
+				<body>Lncr. Plackart +2</body>
+				<hands>Ogier's Gauntlets</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Tyrant's Ring</rring>
+				<back>Atheling Mantle</back>
+				<waist>Windbuffet Belt</waist>
+				<legs>Phorcys Dirs</legs>
+				<feet>Karieyh Sollerets</feet>
+			</set>
+		</group>
+		<group name="basic-buffed" inherit="basic-unbuffed">
+			<set name="EngagedAM0SS1|EngagedAM1SS1">
+				<ammo>Hagneia Stone</ammo>
+				<head>Lancer's Mezail +1</head>
+				<neck>Ganesha's Mala</neck>
+				<lear>Brutal Earring</lear>
+				<rear>Kokou's Earring</rear>
+				<body>Lncr. Plackart +2</body>
+				<hands>Ogier's Gauntlets</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Tyrant's Ring</rring>
+				<back>Rancorous Mantle</back>
+				<waist>Goading Belt</waist>
+				<legs>Lncr. Cuissots +2</legs>
+				<feet>Lncr. Schynbld. +1</feet>
+			</set>
+			<set name="WSDrakesbaneAM0">
+				<ammo>Cheruski Needle</ammo>
+				<head>Mekira-oto +1</head>
+				<neck>Light Gorget</neck>
+				<lear>Brutal Earring</lear>
+				<rear>Moonshade Earring</rear>
+				<body>Lncr. Plackart +2</body>
+				<hands>Lncr. Vmbrc. +2</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Pyrosoul Ring</rring>
+				<back>Rancorous Mantle</back>
+				<waist>Wanion Belt</waist>
+				<legs>Lncr. Cuissots +2</legs>
+				<feet>Karieyh Sollerets</feet>
+			</set>
+			<set name="WSDrakesbaneAM1">
+				<ammo>Cheruski Needle</ammo>
+				<head>Mekira-oto +1</head>
+				<neck>Light Gorget</neck>
+				<lear>Moonshade Earring</lear>
+				<rear>Kokou's Earring</rear>
+				<body>Lncr. Plackart +2</body>
+				<hands>Lncr. Vmbrc. +2</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Pyrosoul Ring</rring>
+				<back>Rancorous Mantle</back>
+				<waist>Wanion Belt</waist>
+				<legs>Lncr. Cuissots +2</legs>
+				<feet>Karieyh Sollerets</feet>
+			</set>
+			<set name="WSDrakesbaneTPCapAM0" baseset="WSDrakesbaneAM1" />
+			<set name="WSDrakesbaneTPCapAM1" baseset="WSDrakesbaneAM1" />
+		</group>
+		<group name="abyssea-unbuffed" inherit="basic-unbuffed" />
+		<group name="abyssea-buffed" inherit="abyssea-unbuffed" />
+		<group name="voidwatch-low-unbuffed" inherit="basic-unbuffed" />
+		<group name="voidwatch-low-buffed" inherit="voidwatch-low-unbuffed" />
+		<group name="voidwatch-high-unbuffed" inherit="basic-unbuffed" />
+		<group name="voidwatch-high-buffed" inherit="voidwatch-high-unbuffed" />
+		<group name="legion-unbuffed" inherit="basic-unbuffed" />
+		<group name="legion-buffed" inherit="legion-unbuffed" />
+		<group name="legion-no-crit-unbuffed" inherit="basic-unbuffed" />
+		<group name="legion-no-crit-buffed" inherit="legion-no-crit-unbuffed" />
+		<group name="sub-mage-unbuffed" inherit="basic-unbuffed">
+			<set name="Refresh1">
+				<body>Twilight Mail</body>
+				<legs>Ogier's Breeches</legs>
+				<feet>Ogier's Leggings</feet>
+			</set>
+			<set name="Idle">
+				<ammo>Demonry Stone</ammo>
+				<head>Twilight Helm</head>
+				<neck>Twilight Torque</neck>
+				<lear>Colossus's Earring</lear>
+				<rear>Merman's Earring</rear>
+				<body>Twilight Mail</body>
+				<hands>Melaco Mittens</hands>
+				<lring>Sheltered Ring</lring>
+				<rring>Shadow Ring</rring>
+				<back>Shadow Mantle</back>
+				<waist>Nierenschutz</waist>
+				<legs>Crimson Cuisses</legs>
+				<feet>Phorcys Schuhs</feet>
+			</set>
+			<set name="Rest">
+				<body>Twilight Mail</body>
+				<legs>Ogier's Breeches</legs>
+				<feet>Ogier's Leggings</feet>
+			</set>
+			<set name="RestWyvern" baseset="Rest" />
+			<set name="HighHP">
+				<ammo>Egoist's Tathlum</ammo>
+				<head>Drachen Armet</head>
+				<neck>Bloodbead Gorget</neck>
+				<lear>Cassie Earring</lear>
+				<rear>Bloodgem Earring</rear>
+				<body>Feverish Korazin</body>
+				<hands>Wave Gages</hands>
+				<lring>Bomb Queen Ring</lring>
+				<rring>Meridian Ring</rring>
+				<back>Strendu Mantle</back>
+				<waist>Oneiros Belt</waist>
+				<legs>Ares's Flanchard</legs>
+				<feet>Marine F Boots</feet>
+			</set>
+		</group>
+		<group name="sub-mage-buffed" inherit="sub-mage-unbuffed" />
+	</sets>
+	<rules>
+		<!-- This will run once to setup basic things -->
+		<if advanced='"$FirstRun"=="1"'>
+			<xi:include href="Ihms-includes.xml" xpointer="/includes/include[@name='BuffModeDetection']/*" />
+			<command>
+				ae unregister 20000; ae unregister 20001; ae unregister 20002; ae unregister 20003; ae unregister 20004; ae unregister 20005;
+				wait 1;
+				ae register 20000 gainbuff_Aftermath:_Lv.3 trigger "Trigger0";
+				ae register 20001 losebuff_Aftermath:_Lv.3 trigger "Trigger1";
+				ae register 20002 gainbuff_Spirit_Surge trigger "Trigger3";
+				ae register 20003 losebuff_Spirit_Surge trigger "Trigger4";
+			</command>
+			<var cmd="set FirstRun 0" />
+		</if>
+
+		<!-- Includes -->
+		<xi:include href="Ihms-includes.xml" xpointer="/includes/include[@name='TargetAdjustment']/*" />
+		<xi:include href="Ihms-includes.xml" xpointer="/includes/include[@name='BuffCancel']/*" />
+		<xi:include href="Ihms-includes.xml" xpointer="/includes/include[@name='TeleportCancel']/*" />
+		<xi:include href="Ihms-includes.xml" xpointer="/includes/include[@name='ClassTriggerGroupSwitching']/*" />
+		<xi:include href="Ihms-includes.xml" xpointer="/includes/include[@name='WeaponHandling']/*" />
+		<xi:include href="Ihms-includes.xml" xpointer="/includes/include[@name='AutoSlotLocking']/*" />
+		<xi:include href="Ihms-includes.xml" xpointer="/includes/include[@name='DTModeSwitching']/*" />
+		
+		<!-- Refresh mode on low MP -->
+		<if Group="sub-mage-*">
+			<if advanced='"$RefreshMode"=="0"'>
+				<if MPPLT="20">
+					<var cmd="set RefreshMode 1" />
+				</if>
+			</if>
+			<else>
+				<if MPPGT="40">
+					<var cmd="set RefreshMode 0" />
+				</if>
+			</else>
+		</if>
+		
+		<!-- Zombie mode for Twilight lock -->
+		<if Spell="DarkTrigger">
+			<if advanced='"$ZombieMode"=="0"'>
+				<var cmd="set ZombieMode 1" />
+				<addtochat color="205">Zombie Mode Activated!</addtochat>
+			</if>
+			<else>
+				<var cmd="set ZombieMode 0" />
+				<addtochat color="205">Zombie Mode Deactivated!</addtochat>
+			</else>
+		</if>
+		
+		<!-- Control Aftermath Level 3 Activity -->
+		<if Spell="Trigger0">
+			<geardelay delay="2" />
+			<var cmd="set AM3Active 1" />
+		</if>
+		<if spell="Trigger1">
+			<var cmd="set AM3Active 0" />
+		</if>
+		
+		<!-- Auto Jump - Uses the better jump based on your wyvern -->
+		<if Spell="Trigger2">
+			<if SpellTargetRaw="_jump">
+				<if PetIsValid="false">
+					<changespell spell="Jump" />
+					<changetarget target="&lt;t&gt;" />
+				</if>
+				<else>
+					<changespell spell="Spirit Jump" />
+					<changetarget target="&lt;t&gt;" />
+				</else>
+			</if>
+			<if SpellTargetRaw="_hjump">
+				<if PetIsValid="false">
+					<changespell spell="High Jump" />
+					<changetarget target="&lt;t&gt;" />
+				</if>
+				<else>
+					<changespell spell="Soul Jump" />
+					<changetarget target="&lt;t&gt;" />
+				</else>
+			</if>
+		</if>
+		
+		<!-- Control Spirit Surge Activity -->
+		<if Spell="Trigger3">
+			<geardelay delay="2" />
+			<var cmd="set SSActive 1" />
+		</if>
+		<if spell="Trigger4">
+			<var cmd="set SSActive 0" />
+		</if>
+		
+		<!-- Idle and Engaged Autosets -->
+		<equip when="Idle" set="Idle|Zombie$ZombieMode" />
+		<equip when="Engaged" set="EngagedAM$AM3ActiveSS$SSActive|Refresh$RefreshMode|DT$_PDTMode$_MDTModeEngagedBase|Zombie$ZombieMode"/>
+		<!-- Resting -->
+		<if PetIsValid="false">
+			<if advanced='"$WyvernReminder"=="1"'>
+				<var cmd="inc WyvernActions"/>
+				<if advanced='"$CallWyvernActions">"$WyvernAMax"'>
+					<addtochat color="205">No Wyvern has been called, or it is dead!</addtochat>
+					<var cmd="set WyvernActions 0"/>
+				</if>
+			</if>
+			<equip when="Resting" set="Rest|Zombie$ZombieMode" />
+		</if>
+		<else>
+			<equip when="Resting" set="Rest-Wyvern|Zombie$ZombieMode" />
+		</else>
+		
+		<!-- Throwing Pebbles! -->
+		<if Spell="Ranged">
+			<castdelay delay="0.2" />
+			<equip when="precast" set="Range|Zombie$ZombieMode"/>
+		</if>
+		
+		<!-- Wyvern Commands -->
+		<elseif CommandPrefix="/pet">
+			<if Spell="Smiting Breath">
+				<equip when="precast" set="ElementalBreath|Zombie$ZombieMode"/>
+				<aftercastdelay delay="2.5"/>
+			</if>
+			<elseif Spell="Restoring Breath">
+				<equip when="precast" set="HealingBreath|Zombie$ZombieMode"/>
+				<aftercastdelay delay="5.5"/>
+			</elseif>
+			<elseif Spell="Steady Wing">
+				<equip when="precast" set="SteadyWing|Zombie$ZombieMode"/>
+				<aftercastdelay delay=".5"/>
+			</elseif>
+		</elseif>
+		
+		<!-- Weaponskill sets -->
+		<elseif CommandPrefix="/ws|/weaponskill">
+			<if TPGT="99">
+				<castdelay delay="0.2" />
+				<if TPLT="300">
+					<!--<if NotBuffActive="Aftermath: Lv.3" Spell="Drakesbane">
+						<if advanced='"$AMWSLock"=="1"'>
+							<var cmd="set AMWSLock 0"/>
+							<command>wait 3; sc var set AMWSLock 1;</command>
+							<addtochat color="205">WS Locked due to TP, use again to make it go off.</addtochat>
+							<cancelspell />
+							<return />
+						</if>
+					</if>-->
+				</if>
+				<if Mode="OR" TP="300" BuffActive="Sekkanoki">
+					<if Spell="Drakesbane">
+						<equip when="precast" set="WSDrakesbaneTPCapAM$AM3Active|Zombie$ZombieMode"/>
+					</if>
+					<elseif Spell="Sonic Thrust">
+						<equip when="precast" set="WSSonic|Zombie$ZombieMode"/>
+					</elseif>
+					<else>
+						<equip when="precast" set="WSStardiverTPCapAM$AM3Active|Zombie$ZombieMode"/>
+					</else>
+				</if>
+				<else>
+					<if Spell="Drakesbane">
+						<equip when="precast" set="WSDrakesbaneAM$AM3Active|Zombie$ZombieMode"/>
+					</if>
+					<elseif Spell="Sonic Thrust">
+						<equip when="precast" set="WSSonic|Zombie$ZombieMode"/>
+					</elseif>
+					<else>
+						<equip when="precast" set="WSStardiverAM$AM3Active|Zombie$ZombieMode"/>
+					</else>
+				</else>
+			</if>
+		</elseif>
+		
+		<!-- Job abilities -->
+		<elseif CommandPrefix="/ja|/jobability">
+			<if Spell="Jump">
+				<equip when="precast" set="JumpAM$AM3Active|Zombie$ZombieMode"/>
+			</if>
+			<elseif Spell="High Jump">
+				<equip when="precast" set="HighJumpAM$AM3Active|Zombie$ZombieMode"/>
+			</elseif>
+			<elseif Spell="Spirit Jump">
+				<equip when="precast" set="SpiritJumpAM$AM3Active|Zombie$ZombieMode"/>
+			</elseif>
+			<elseif Spell="Soul Jump">
+				<equip when="precast" set="SoulJumpAM$AM3Active|Zombie$ZombieMode"/>
+			</elseif>
+			<elseif Spell="Angon">
+				<castdelay delay=".5"/>
+				<equip when="precast" set="Angon|Zombie$ZombieMode"/>
+				<command when="aftercast">timers c "Angon" $AngonDuration down</command>
+			</elseif>
+			<elseif Spell="Spirit Link">
+				<equip when="precast" set="SpiritLink|Zombie$ZombieMode"/>
+			</elseif>
+			<elseif Spell="Ancient Circle">
+				<equip when="precast" set="AncientCircle|Zombie$ZombieMode"/>
+			</elseif>
+			<elseif Spell="Spirit Surge">
+				<equip when="precast" set="SpiritSurge|Zombie$ZombieMode"/>
+			</elseif>
+			<elseif Spell="Call Wyvern">
+				<equip when="precast" set="CallWyvern|Zombie$ZombieMode"/>
+				<aftercastdelay delay="1" />
+			</elseif>
+		</elseif>
+		
+		<!-- Magic -->
+		<if NotCommandPrefix="/trigger" CommandPrefix="/ma|/magic|/nin|/ninjutsu">
+			<equip when="precast" set="HighHP|Zombie$ZombieMode"/>
+			<aftercastdelay delay="0"/>
+			<equip when="aftercast" set="WyvernHP|Zombie$ZombieMode"/>
+			<if Status="Idle">
+				<command when="aftercast">wait 5; trigger "IdleMode"</command>
+			</if>
+			<else Status="Engaged">
+				<command when="aftercast">wait 5; trigger "CombatMode"</command>
+			</else>
+		</if>
+		<elseif CommandPrefix="/trigger">
+			<if Mode="OR" Status="Engaged" Spell="CombatMode">
+				<equip set="EngagedAM$AM3ActiveSS$SSActive|Refresh$RefreshMode|DT$_PDTMode$_MDTModeEngagedBase|Zombie$ZombieMode" />
+			</if>
+			<elseif Mode="OR" Status="Idle" Spell="IdleMode">
+				<equip set="Idle|Zombie$ZombieMode" />
+			</elseif>
+			<cancelspell />
+			<return />
+		</elseif>
+		<else>
+			<if Status="Idle">
+				<equip when="aftercast" set="Idle|Zombie$ZombieMode" />
+			</if>
+			<elseif Status="Engaged">
+				<equip when="aftercast" set="EngagedAM$AM3ActiveSS$SSActive|Refresh$RefreshMode|DT$_PDTMode$_MDTModeEngagedBase|Zombie$ZombieMode" />
+			</elseif>
+		</else>
+	</rules>
+</spellcast>

@@ -1,0 +1,1152 @@
+<?xml version="1.0" ?>
+<spellcast xmlns="http://www.windower.net/spellcast/"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.windower.net/spellcast/ spellcast.xsd">
+
+    <!-- Last modified: 11/28/2012  -->
+
+    <!--
+    Notes:
+	This xml works with the include files created by Motenten. I've slightly modified the include to have a Dynamis group. I use this to keep some relic +2 pieces equipped so I don't have to change my whole xml everytime I work on an xp trial. 
+	
+	This xml uses the following classtriggers. You will want to use these as macro's or keybinds. The first executes a ready move, the 2nd cycles thru and selects which ready move to execute. I like this for a simply 2 macro approach to use my ready moves. typically you use the same move several times in a row...
+	
+    Class trigger:
+    /ma ClassTrigger .ready  
+	/ma ClassTrigger .ready-cycle
+    
+    I also have the following macros:
+	
+	Killer Instinct
+	/item "$Kookie" <me>
+	/wait 5
+	/ja "Killer Instinct" <me>
+
+    -->
+
+
+  <config Debug="false"
+          ShowGearSwaps="false"
+          ShowSpellInfo="false"
+          RequireVersion="2.30"
+          />
+
+    <variables>
+        <!-- General configuration -->
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='ConfigurationVars']/*" />
+
+        <!-- Configuration var overrides. -->
+        <var name="CritWS">Rampage|Evisceration</var>
+        <var name="MagicalWS">Primal Rend|Cloudsplitter|Aeolian Edge</var>
+
+        <!-- General utility -->
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='UtilityVars']/*" />
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='RecastDurations']/*" />
+
+        <!-- Utility default var overrides. -->
+        <var name="TPWeapon">DualWield</var>
+		<var name="LastEquipMain">Unknown</var>
+		<var name="TankMode">Pet</var>
+        <var name="AggressiveLayer">Rancor</var>
+		<var name="CustomDefMode">Reraise</var>
+		<var name="CustomOffMode">Killer</var>
+		<var name="PullWeapons">Mamoolbane|Killer shortbow</var>
+
+        <!-- Local vars -->
+        <var name="PetEngaged">False</var>
+        <var name="PFood">Pet Food Theta</var>
+		<var name="Broth">None</var>
+		<var name="JugSpot">Satchel</var>
+		<var name="KillerFood">None</var>
+		<var name="Active-ready">Sic</var>
+		
+		<!-- Pet family > pet name vars -->
+		<var name="rabbit-Pets">HareFamiliar|KeeneeredSteffi|LuckyLulush</var>
+		<var name="mandragora-Pets">FlowerpotBill|FlowerpotBen|Homunculus|FlowerpotMerle</var>
+		<var name="sheep-Pets">SheepFamiliar|LullabyMelodia|NurseryNazuna</var>
+		<var name="tiger-Pets">TigerFamiliar|SaberSiravarde|GorefangHobs</var>
+		<var name="flytrap-Pets">FlytrapFamiliar|VoraciousAudrey|PrestoJulio</var>
+		<var name="lizard-Pets">LizardFamiliar|ColdbloodedComo|AudaciousAnna</var>
+		<var name="eft-Pets">EftFamiliar|AmbusherAllie|BugeyedBroncha</var>
+		<var name="beetle-Pets">BeetleFamiliar|PanzerGalahad</var>
+		<var name="antlion-Pets">AntlionFamiliar|ChopsueyChucky</var>
+		<var name="crab-Pets">CrabFamiliar|CourrierCarrie</var>
+		<var name="mite-Pets">MiteFamiliar|LifedrinkerLars</var>
+		<var name="funguar-Pets">FunguarFamiliar|DiscreetLouise</var>
+		<var name="couerl-Pets">CraftyClyvonne|BloodclawShasra</var>
+		<var name="fly-Pets">MayflyFamiliar|ShellbusterOrob|MailbusterCetas</var>
+	   
+	   
+		<!--Melee Weapons -->
+		<var name="Daggers">Twilight knife</var>
+        <var name="Axes">Ganelon|Astolfo|Guichard's Axe +3|Guichard's Axe +2|Zoraal Ja's Axe|Glyph Axe</var>
+		<var name="Scythes">Bounty Scythe|Suzaku's Scythe</var>
+    </variables>
+
+    <sets>
+        <group name="Outside-Group" default="true">
+            <set name="None">
+            </set>
+
+            <set name="Idle-Town-*">
+                <head>Ferine Cabasset +2</head>
+                <neck>Wiglen Gorget</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Ferine Gausape +2</body>
+                <hands>Ferine manoplas +2</hands>
+                <lring>Sheltered Ring</lring>
+                <rring>Paguroidea Ring</rring>
+                <back>Ferine mantle</back>
+                <waist>Moepapa stone</waist>
+                <legs>Ferine Quijotes +2</legs>
+                <feet>Ferine Ocreae +2</feet>
+            </set>
+            <set name="Idle-Field-Normal" BaseSet="Idle-Town-Normal|Regen">
+                <slot>example</slot>
+            </set>
+            <set name="Idle-Field-PetEngaged" BaseSet="Idle-Town-Normal|Regen">
+                <ammo>Demonry core</ammo>
+				<head>Anwig Salade</head>
+				<neck>Ferine necklace</neck>
+				<rear>Ferine Earring</rear>
+				<body>Mirke Wardecors</body>
+                <legs>Ferine quijotes +2</legs>
+                <feet>Armada Sollerets</feet>
+            </set>
+ 
+            <set name="Idle-Field-*" BaseSet="Idle-Town-Normal|Regen">
+            </set>
+ 
+ 
+            <set name="Move|Kite">
+                <feet>Skadi's Jambeaux</feet>
+            </set>
+ 
+            <set name="Regen">
+                <head>Twilight helm</head>
+                <neck>Wiglen Gorget</neck>  
+				<body>Twilight mail</body>
+                <lring>Sheltered Ring</lring>
+                <rring>Paguroidea Ring</rring>
+            </set>
+			<set name="Refresh">
+				<body>Twilight mail</body>
+			</set>
+ 
+            <!-- ***************************** -->
+            <!--  Sets for TP                  -->
+            <!-- ***************************** -->
+ 
+            <set name="Killer">
+				<!--<sub>Tatami shield</sub>
+				<ranged>Killer shortbow</ranged>
+				<head>Monster Helm +2</head>-->
+				<body>Ferine Gausape +2</body>
+			</set>
+                       
+ 
+                       
+            <set name="TP-DualWield-Normal-Normal">
+                <ammo>Hagneia stone</ammo>
+                <head>Ferine Cabasset +2</head>
+                <neck>Houyi's gorget</neck>
+                <lear>Suppanomimi</lear>
+                <rear>Brutal Earring</rear>
+                <body>Ferine Gausape +2</body>
+                <hands>Brego gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling mantle</back>
+                <waist>Twilight belt</waist>
+                <legs>Ferine Quijotes +2</legs>
+                <feet>Ferine Ocreae +2</feet>
+            </set>
+                       
+			<set name="TP-DualWield-Acc-Normal" baseset="TP-DualWield-Normal-Normal">
+				<waist>Anguinus belt</waist>
+			</set>
+
+			
+		   <!-- Crit is currently my Pet-priority tp mode. -->
+			<set name="TP-DualWield-Crit-Normal">
+				<ammo>Hagneia stone</ammo>
+				<head>Spurrer beret</head>
+				<neck>Ferine necklace</neck>
+				<lear>Suppanomimi</lear>
+				<rear>Brutal Earring</rear>
+				<body>Ferine Gausape +2</body>
+				<hands>Brego gloves</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Epona's Ring</rring>
+				<back>Atheling mantle</back>
+				<waist>Moepapa stone</waist>
+				<legs>Ferine Quijotes +2</legs>
+				<feet>Armada Sollerets</feet>
+			</set>
+			
+			<set name="TP-DualWield-Crit-PDT" baseset="TP-DualWield-Crit-Normal">
+				<head>Anwig Salade</head>
+				<neck>Shepherd's chain</neck>
+				<back>Oneiros Cappa</back>
+				<legs>Ferine Quijotes +2</legs>
+			</set>
+			
+			<set name="TP-DualWield-*-*" baseset="TP-DualWield-Normal-Normal" />
+
+			<set name="TP-1Hand-Normal-*" baseset="TP-DualWield-Normal-Normal">
+				<lear>Moonshade earring</lear>
+			</set>
+			
+			<set name="TP-1Hand-Crit-Normal" baseset="TP-1Hand-Normal-*">
+				
+				<ammo>Hagneia stone</ammo>
+				<head>Spurrer beret</head>
+				<neck>Ferine necklace</neck>
+				<lear>Moonshade Earring</lear>
+				<rear>Brutal Earring</rear>
+				<body>Ferine Gausape +2</body>
+				<hands>Brego gloves</hands>
+				<lring>Rajas Ring</lring>
+				<rring>Epona's Ring</rring>
+				<back>Atheling mantle</back>
+				<waist>Moepapa stone</waist>
+				<legs>Ferine Quijotes +2</legs>
+				<feet>Armada Sollerets</feet>
+			
+			</set>
+			<!-- Scythe Setup (It might be used someday! -->
+			<set name="TP-2Hand-*-*" baseset="TP-1Hand-Normal-*">
+				
+            </set>			
+
+		   <set name="TP-*-Crit-PDT" >
+				<head>Anwig Salade</head>
+				<neck>Shepherd's chain</neck>
+				<back>Oneiros Cappa</back>
+				<legs>Ferine Quijotes +2</legs>
+			</set>
+		   
+			<set name="TP-*-Crit-MDT">
+				<head>Anwig Salade</head>
+				<neck>Shepherd's chain</neck>
+				<waist>Solemnus belt</waist>
+				<legs>Ferine Quijotes +2</legs>
+			</set>
+		   
+			<set name="TP-*-Crit-EVA" >
+				<lear>Emerald earring</lear>
+			</set>
+ 
+ 
+            <!-- ***************************** -->
+            <!--  Sets for JA                  -->
+            <!-- ***************************** -->
+			<set name="Charm">
+				<main>Chatoyant Staff</main>
+				<sub>Amicus grip</sub>
+				<ammo>Light sachet</ammo>
+				<head>Twilight helm</head>
+				<neck>Ferine necklace</neck>
+				<lear>Melody earring +1</lear>
+				<rear>Melody earring +1</rear>
+				<body>Twilight mail</body>
+				<hands>Armada mufflers</hands>
+				<lring>Airy ring</lring>
+				<rring>Dawnsoul ring</rring>
+				<back>Ferine mantle</back>
+				<waist>Aristo belt</waist>
+				<legs>Ferine quijotes +2</legs>
+				<feet>Armada Sollerets</feet>          
+			</set>
+			<set name="Charm-Duration" baseset="Charm">
+				<head>Monster helm +2</head>
+				<body>Monster Jackcoat +2</body>
+				<hands>Monster gloves +2</hands>
+				<legs>Monster trousers+2</legs>
+				<feet>Monster gaiters +2</feet>
+			</set>
+			<set name="Gauge" baseset="Charm" />
+			<set name="Ready">
+				<ammo>Demonry core</ammo>
+				<head>Ferine Cabasset +2</head>
+				<neck>Ferine Necklace</neck>
+				<lear>Sapphire earring</lear>  <!--pet: Macc +2-->
+				<body>Mirke wardecors</body>    <!--Pet: DA/Crit+ & attack+ -->
+				<back>Ferine mantle</back>
+				<hands>Ferine Manoplas +2</hands>
+			</set>
+			<set name="Tame">
+				<head>Beast helm</head>
+			</set>
+			<set name="Reward">
+				<main>Zoraal Ja's Axe</main>
+				<sub>Pallas's Shield</sub>
+				<ammo>$Pfood</ammo>
+				<head>Brave's warbonnet</head>
+				<lear>Ferine Earring</lear>
+				<body>Mst. Jackcoat +2</body>c
+				<hands>Ogre Gloves</hands>
+				<lring>Solemn ring</lring>
+				<waist>Crudulis belt</waist>
+				<legs>Monster trousers +2</legs>
+				<feet>Monster gaiters +2</feet>
+			</set>
+			<set name="Reward-Max" baseset="Reward">
+				<head>Twilight helm</head>
+				<body>Twilight mail</body>
+			</set>
+			<set name="Call Beast">
+				<ammo>$Broth</ammo>
+				<!--- <body>Mirke Wardecors</body> (if augmented for Call Beast)--->  
+				<hands>Monster gloves +2</hands>
+			</set>
+			<set name="Spur">
+				<feet>Ferine Ocreae +2</feet>
+			</set>                 
+			<set name="Familiar">
+				<legs>Monster trousers +2</legs>
+			</set>
+			<set name="Feral Howl">
+				<body>Monster Jackcoat +2</body>
+			</set>
+			<set name="Killer Instinct">
+				<head>Monster helm +2</head>
+			</set>
+            <set name="CureWaltz" baseset="Charm">
+                <head>Twilight helm</head>
+                <body>Twilight Mail</body>
+            </set>
+            <set name="CureWaltzMe" baseset="CureWaltz">
+                <rring>Spiral Ring</rring>
+            </set>
+                       
+			<!-- ***************************** -->
+            <!--  Sets for WS                  -->
+            <!-- ***************************** -->
+ 
+ 
+            <set name="Weaponskill">
+				<ammo>Flame sachet</ammo>
+                <head>Mekira-oto</head>
+				<lear>Brutal Earring</lear>
+                <rear>Centaurus earring</rear>
+                <body>Twilight mail</body>
+                <hands>Ferine manoplas +2</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling mantle</back>
+				<waist>Anguinus belt</waist>
+                <legs>Avant Cuisses +1</legs>
+                <feet>Ferine Ocreae +2</feet>
+            </set>
+ 
+            <set name="WS-Ruinator-*" BaseSet="Weaponskill">
+                <neck>Breeze Gorget</neck>
+                <waist>Breeze Belt</waist>
+			</set>
+		   
+			<set name="WS-Rampage-*" BaseSet="Weaponskill">
+					<legs>Byakko's Haidate</legs>
+			</set>
+		   
+			<set name="WS-MAB">
+					<head>Twilight Helm</head>
+					<neck>Stoicheion Medal</neck>
+					<lear>Hecate's Earring</lear>
+					<rear>Moldavite Earring</rear>
+					<body>Twilight Mail</body>
+			</set>
+	   
+			<set name="WS-Primal Rend" baseset="WS-MAB">
+					<ammo>Light Sachet</ammo>                          
+					<hands>Armada Mufflers</hands>
+					<lring>Airy ring</lring>
+					<rring>Raj Ring</rring>
+					<back>Ferine Mantle</back>
+					<waist>Aristo Belt</waist>
+					<legs>Ferine Quijotes +2</legs>
+					<feet>Armada Sollerets</feet>
+			</set>
+	   
+	   
+			<set name="WS-Cloudsplitter" baseset="WS-MAB">
+					<ammo>Flame Sachet</ammo>
+					<hands>Heafoc Mitts</hands>
+					<lring>Spiral Ring</lring>
+					<rring>Rajas Ring</rring>
+					<back>Fortis Mantle</back>
+					<waist>Crudelis Belt</waist>
+					<legs>Avant Cuisses +1</legs>
+					<feet>Ferine Ocreae +2</feet>
+			</set>
+	   
+			<set name="WS-Aeolian Edge" baseset="WS-MAB">
+					<ammo>Demonry Core</ammo>
+					<hands>Armada Mufflers</hands>
+					<lring>Airy Ring</lring>
+					<rring>Rajas Ring</rring>
+					<back>Nifty Mantle</back>
+					<waist>Artful Belt</waist>
+					<legs>Byakko's Haidate</legs>
+					<feet>Ferine Ocreae +2</feet>
+			</set>
+ 
+            <set name="WS-*" BaseSet="Weaponskill">
+                <ammo>Flame sachet</ammo>
+            </set>
+ 
+ 
+            <set name="PhysDef-PDT">
+				<ranged>Killer shortbor</ranged>
+				<head>Monster helm +2</head>
+                <neck>Wiglen gorget</neck>
+				<lring>Darkness Earring</lring>
+				<rring>Ethereal earring</rring>
+				<body>Ferine Gausape +2</body>
+				<hands>Melaco mittens</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+				<back>Mollusca Mantle</back>
+				<waist>Nierenschutz</waist>
+                <legs>Desultor tassets</legs>
+            </set>
+ 
+            <set name="PhysDef-Evasion">               
+                <neck>Torero Torque</neck>
+                <body>Ferine Gausape +2</body>
+                <rring>Alert Ring</rring>
+                <back>Boxer's Mantle</back>
+                <legs>Ocelot Trousers</legs>
+            </set>
+                       
+			<set name="PhysDef-Reraise">               
+                <head>Twilight helm</head>
+                <body>Twilight mail</body> 
+            </set>
+ 
+            <set name="MDT-Any|MDT-All|MDT-None|Resist-Any|Resist-All|Resist-None">
+                <neck>Twilight Torque</neck>
+                <!--<rear>Merman's Earring</rear>-->
+                <body>Avalon Breastplate</body>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+            </set>
+            <set name="MDT-Earth|Resist-Earth" BaseSet="MDT-Any">
+                <ammo>Soil Sachet</ammo>
+            </set>
+            <set name="MDT-Water|Resist-Water" BaseSet="MDT-Any">
+                <ammo>Aqua Sachet</ammo>
+				<head>Genbu's Kabuto</head>
+            </set>
+            <set name="MDT-Wind|Resist-Wind" BaseSet="MDT-Any">
+                <ammo>Breeze Sachet</ammo>
+            </set>
+            <set name="MDT-Fire|Resist-Fire" BaseSet="MDT-Any">
+                <ammo>Flame Sachet</ammo>
+				<feet>Suzaku's Sune-ate</feet>
+            </set>
+            <set name="MDT-Ice|Resist-Ice" BaseSet="MDT-Any">
+                <ammo>Snow Sachet</ammo>
+            </set>
+            <set name="MDT-Thunder|Resist-Thunder" BaseSet="MDT-Any">
+                <ammo>Thunder Sachet</ammo>
+				<legs>Byakko's Haidate</legs>
+            </set>
+ 
+            <set name="Reraise|WeakSet">
+                <head>Twilight helm</head>
+				<neck>Twilight Torque</neck>
+                <rear>Bloodgem Earring</rear>
+				<body>Twilight mail</body>
+                <lring>Sheltered ring</lring>
+                <rring>Paguroidea ring</rring>
+                <feet>Skadi's Jambeaux</feet>
+            </set>
+ 
+            <set name="FastCast">
+                <rear>Loquacious Earring</rear>
+            </set>
+
+        </group>
+
+        <group name="Abyssea-Group" inherit="Outside-Group" />
+            
+        <group name="Campaign-Group" inherit="Outside-Group" />
+
+        <group name="Voidwatch-Group" inherit="Outside-Group" />
+
+        <group name="Legion-Group" inherit="Outside-Group" />
+		
+		<group name="Dynamis-Group" inherit="Outside-Group" />
+    </sets>
+
+    <rules>
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='RunFirstUpdate']/*" />
+		
+		<if BuffActive="Killer Instinct">
+            <equip when="all">
+                <body lock="true">Ferine Gausape +2</body>
+            </equip>
+        </if>
+		<if mode="OR" BuffActive="Doom" HPLT35="True">
+            <equip when="all">
+                <head lock="true">Twilight Helm</head>
+                <body lock="true">Twilight Mail</body>
+            </equip>
+        </if>
+
+
+        <!-- Make sure locks are in place before auto-changing gear. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='EquipmentLockRules']/*" />
+        <!-- Auto-change gear call via Aftercast to limit lag. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ChangeGearAftercast']/*" />
+        <!-- Other general imports. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='LevelRequirement']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ReturnRules']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='CleanTransportation']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='RecastWarnings']/*" />
+		<xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='SpellCancel']/*" />
+
+        <!-- First: Adjust values based on status checks. -->
+
+		<if PetIsValid="FALSE">
+            <var cmd="set IdleFeet Skadi's Jambeaux" />
+			<if advanced='"$PetEngaged"=="True"'>
+				<var cmd="set PetEngaged False" />
+			</if>
+			<if advanced='"$Active-ready" != "Sic"'>
+				<var cmd="set Active-ready Sic" />
+			</if>
+			<if advanced='"$KillerFood"!="None"'>
+				<var cmd="set KillerFood None" />
+			</if>
+        </if>
+		 <else>
+			<!-- Set Lizard Killer Food -->
+			<if PetName="&rabbit-Pet|$tiger-Pet|&coeurl-Pet|$sheep-Pet">
+				<var cmd="set KillerFood Hobgoblin Chocolate" /> <!--NQ: Goblin Chocolate; HQ: Hobgoblin Chocolate-->
+			</if>
+			<!-- Set Vermin Killer Food -->
+			<elseif PetName="&eft-Pet|$lizard-Pet|SwiftSeighard|CrudeRaphie">
+				<var cmd="set KillerFood Coin Cookie" />  <!--NQ: Cinna-Cookie; HQ: Coin Cookie-->
+			</elseif>
+			<!-- Set Plantoid Killer Food -->
+			<elseif PetName="&mayfly-Pet|$beetle-Pet|&antlioin-Pet|$mite-Pet|DipperYuly">
+				<var cmd="set KillerFood Wizard Cookie" /> <!--NQ: Ginger Cookie; HQ: Wizard Cookie-->
+			</elseif>
+			<!-- Set Beast Killer Food -->
+			<elseif PetName="&flytrap-Pet|$mandragora-Pet|&funguar-Pet">
+				<var cmd="set KillerFood Spicy Cracker" />  <!--NQ: Spicy Cracker; HQ: Red Hot Cracker-->
+			</elseif>
+			<!-- Set Bird Killer Food -->
+			<elseif PetName="FatsoFargann|GooeyGerard">
+				<var cmd="set KillerFood Juglan Jumble" /> 	<!--NQ: Walnut Cookie; HQ: Juglan Jumble-->
+			</elseif>
+			<!-- Set Aquan Killer Food -->
+			<elseif PetName="FaithfulFalcorr|DapperMac">
+				<var cmd="set KillerFood Acorn Cookie" />	<!--NQ: Acorn Cookie; HQ: Wild Cookie-->
+			</elseif>
+			<!-- Set Amorph Killer Food -->
+			<elseif PetName="&crab-Pet|TurbidToloi">
+				<var cmd="set KillerFood Shrimp Cracker +1" /><!--NQ: Shrimp Cracker; HQ: Shrimp Cracker +1-->
+			</elseif>
+			<!-- Movement Feet rules -->
+            <if status="Engaged">
+                <var cmd="set IdleFeet Armada sollerets" />
+            </if>
+		</else>
+		
+		<!-- This Check is based on if Battle Music is active or not (could be any party member) -->
+		<if PetIsValid="True" Advanced='"%IsInCombat"="0"'>
+			<var cmd="set PetEngaged False" />
+		</if>
+		
+		<!-- Check for Killer Instinct -->
+       <!-- <if NotBuffactive="Killer Instinct">
+            <if advanced='"$Use-OffenseMode"="Killer"'>
+				<var cmd="set Use-OffenseMode None" />    
+			</if>
+        </if>
+		<elseif BuffActive="Killer Instinct">
+			<var cmd="set Use-OffenseMode Killer" />
+		</elseif> -->
+		
+        <!-- Check for weakness -->
+        <if mode="or" BuffActive="Weakness" >
+            <var cmd="set WeaknessArmor WeakSet" />
+        </if>
+
+        <!-- Second: Update certain values when their status may drop, or when autoset changes. -->
+
+        <if spell="Update|autoset">
+            <!-- Autoset (engage/disengage/rest/etc) gets same checks as a Reset command -->
+
+            <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='AreaRules']/*" />
+
+            <!-- Check for buffs wearing off -->
+            <if NotBuffActive="Weakness">
+                <var cmd="set WeaknessArmor None" />
+            </if>
+
+            <!-- Ensure movement is set properly -->
+            <if status="Engaged" advanced='"$Movement"="Move"'>
+                <var cmd="set Movement None" />
+            </if>
+            <elseif status="Idle">
+                <if Spell="autoset">
+                    <var cmd="set PetEngaged False" />
+                </if>
+                
+                <var cmd="set Movement Move" />
+            </elseif>
+
+			<if NotEquipMain="$LastEquipMain">
+            <var cmd="set LastEquipMain %EquipMain" />
+ 
+            <if EquipMain="Bounty Scythe|Suzaku's Scythe">
+                <var cmd="set TPWeapon 2Hand" />
+            </if>
+            <else>
+                <!-- This also covers use of club in mainhand -->
+                <if EquipSub="*Shield|*Buckler">
+                    <var cmd="set TPWeapon 1Hand" />
+                </if>
+                <elseif NotEquipSub="empty" Subjob="Nin|Dnc">
+                    <var cmd="set TPWeapon DualWield" />
+                </elseif>
+                <else>
+                    <var cmd="set TPWeapon 1Hand" />
+                </else>
+            </else>
+        </if>
+			
+            <!-- Output current status if this is a manual update -->
+            <if SpellTargetRaw=".Manual">
+                <addtochat>Update. $TPWeapon - $OffenseMode/$DefenseMode, PD:$PhysicalDefense, MD:$MagicalDefense, $Movement</addtochat>
+
+                <if PetIsValid="true">
+                    <command>input /echo &lt;pet&gt; -- TP: &lt;pettp&gt; ~ HP: &lt;pethpp&gt; ~ MP: &lt;petmpp&gt; Ready: $Active-ready</command>
+                </if>
+            </if>
+        </if>
+
+        <!-- Third: Adjust configurations based on action/trigger. -->
+        <if Spell="ClassTrigger">
+			
+			<if SpellTargetRaw=".ready">
+				<equip when="midcast" set="Ready" />
+				<command>input /raw /pet "$Active-ready" &lt;me&gt;</command>
+			</if>
+						
+			<if SpellTargetRaw=".ready-cycle">
+				<if PetName="$rabbit-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Foot Kick" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Foot Kick"'>
+						<var cmd="set Active-ready Whirl Claws" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Whirl Claws"'>
+						<if PetName="LuckyLulush">
+							<var cmd="set Active-ready Snow Cloud" />
+						</if>
+						<else>
+							<var cmd="set Active-ready Dust Cloud" />
+						</else>
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Snow Cloud"'>
+						<var cmd="set Active-ready Wild Carrot" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Dust Cloud"'>
+						<var cmd="set Active-ready Foot Kick" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Wild Carrot"'>
+						<var cmd="set Active-ready Foot Kick" />
+					</elseif>
+				</if>
+				<elseif PetName="$mandragora-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Head Butt" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Head Butt"'>
+						<var cmd="set Active-ready Leaf Dagger" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Leaf Dagger"'>
+						<var cmd="set Active-ready Wild Oats" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Wild Oats"'>
+						<var cmd="set Active-ready Scream" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Scream"'>
+						<if PetName="FlowerpotMerle">
+							<var cmd="set Active-ready Head Butt" />
+						</if>
+						<else>
+							<var cmd="set Active-ready Dream Flower" />
+						</else>
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Dream Flower"'>
+						<var cmd="set Active-ready Head Butt" />
+					</elseif>
+				</elseif>
+				<elseif PetName="$sheep-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Lamb Chop" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Lamb Chop"'>
+						<var cmd="set Active-ready Rage" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Rage"'>
+						<var cmd="set Active-ready Sheep Charge" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Sheep Charge"'>
+						<var cmd="set Active-ready Sheep Song" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Sheep Song"'>
+						<var cmd="set Active-ready Lamb Chop" />
+					</elseif>		
+				</elseif>
+				<elseif PetName="$tiger-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Razor Fang" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Razor Fang"'>
+						<var cmd="set Active-ready Claw Cyclone" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Claw Cyclone"'>
+						<var cmd="set Active-ready Roar" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Roar"'>
+						<var cmd="set Active-ready Razor Fang" />
+					</elseif>
+				</elseif>
+				<elseif PetName="$flytrap-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Soporific" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Soporific"'>
+						<var cmd="set Active-ready Gloeosuccus" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Gloeosuccus"'>
+						<var cmd="set Active-ready Palsy Pollen" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Palsy Pollen"'>
+						<var cmd="set Active-ready Soporific" />
+					</elseif>
+				</elseif>
+				<elseif PetName="$lizard-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Tail Blow" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Tail Blow"'>
+						<var cmd="set Active-ready Fireball" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Fireball"'>
+						<var cmd="set Active-ready Blockhead" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Blockhead"'>
+						<var cmd="set Active-ready Brain Crush" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Brain Crush"'>
+						<var cmd="set Active-ready Infrasonics" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Infrasoncis"'>
+						<var cmd="set Active-ready Secretion" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Secretion"'>
+						<var cmd="set Active-ready Tail Blow" />
+					</elseif>
+				</elseif>
+				<elseif PetName="$eft-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Nimble Snap" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Nimble Snap"'>
+						<var cmd="set Active-ready Cyclotail" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Cyclotail"'>
+						<var cmd="set Active-ready Toxic Spit" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Toxic Spit"'>
+						<var cmd="set Active-ready Geist Wall" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Geist Wall"'>
+						<var cmd="set Active-ready Numbing Noise" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Numbing Noise"'>
+						<var cmd="set Active-ready Nimble Snap" />
+					</elseif>
+				</elseif>
+				<elseif PetName="$beetle-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Spoil" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Spoil"'>
+						<var cmd="set Active-ready Rhino Guard" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Rhino Guard"'>
+						<var cmd="set Active-ready Rhino Attack" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Rhino Attack"'>
+						<var cmd="set Active-ready Power Attack" />
+					</elseif>
+					<if advanced='"$Active-ready"="Power Attack"'>
+						<var cmd="set Active-ready Hi-Freq Field" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Hi-Freq Field"'>
+						<var cmd="set Active-ready Spoil" />
+					</elseif>
+				</elseif>
+				<elseif PetName="$antlion-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Sandpit" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Sandpit"'>
+						<var cmd="set Active-ready Sandblast" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Sandblast"'>
+						<var cmd="set Active-ready Venom Spray" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Venom Spray"'>
+						<var cmd="set Active-ready Mandibular Bite" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Mandibular Bite"'>
+						<var cmd="set Active-ready Sandpit" />
+					</elseif>
+				</elseif>
+				<elseif PetName="$crab-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Metallic Body" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Metallic Body"'>
+						<var cmd="set Active-ready Bubble Shower" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Bubble Shower"'>
+						<var cmd="set Active-ready Bubble Curtain" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Bubble Curtain"'>
+						<var cmd="set Active-ready  Scissor Guard" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Scissor Guard"'>
+						<var cmd="set Active-ready Big Scissors" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Big Scissors"'>
+						<var cmd="set Active-ready Metallic Body" />
+					</elseif>
+				</elseif>
+				<elseif PetName="$mite-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Grapple" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Grapple"'>
+						<var cmd="set Active-ready Spinning Top" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Spinning Top"'>
+						<var cmd="set Active-ready Double Claw" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Double Claw"'>
+						<var cmd="set Active-ready Filamented Hold" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Filamented Hold"'>
+						<var cmd="set Active-ready Grapple" />
+					</elseif>
+				</elseif>
+				<elseif PetName="$funguar-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Frog Kick" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Frog Kick"'>
+						<var cmd="set Active-ready Queasyshroom" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Queasyshroom"'>
+						<var cmd="set Active-ready Silence Gas" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Silence Gas"'>
+						<var cmd="set Active-ready Numbshroom" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Numbshroom"'>
+						<var cmd="set Active-ready Spore" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Spore"'>
+						<var cmd="set Active-ready Dark Spore" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Dark Spore"'>
+						<var cmd="set Active-ready Shakeshroom" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Shakeshroom"'>
+						<var cmd="set Active-ready Frog Kick" />
+					</elseif>
+				</elseif>
+				<elseif PetName="$fly-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Cursed Sphere" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Cursed Sphere"'>
+						<var cmd="set Active-ready Venom" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Venom"'>
+						<var cmd="set Active-ready Cursed Sphere" />
+					</elseif>
+				</elseif>
+				<elseif PetName="$couerl-Pets">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Chaotic Eye" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Chaotic Eye"'>
+						<var cmd="set Active-ready Blaster" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Blaster"'>
+						<if PetName="BloodclawShasra">
+							<var cmd="set Active-ready Charged Whisker" />
+						</if>
+						<else>
+							<var cmd="set Active-ready Chaotic Eye" />
+						</else>
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Charged Whisker"'>
+						<var cmd="set Active-ready Chaotic Eye" />
+					</elseif>
+				</elseif>
+				<elseif PetName="DipperYuly">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Spiral Spin" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Spiral Spin"'>
+						<var cmd="set Active-ready Noisome Powder" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Noisome Powder"'>
+						<var cmd="set Active-ready Sudden Lunge" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Sudden Lunge"'>
+						<var cmd="set Active-ready Spiral Spin" />
+					</elseif>
+				</elseif>
+				<elseif PetName="FatsoFargann">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Suction" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Suction"'>
+						<var cmd="set Active-ready Drainkiss" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Drainkiss"'>
+						<var cmd="set Active-ready Acid Mist" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Acid Mist"'>
+						<var cmd="set Active-ready TP Drainkiss" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="TP Drainkiss"'>
+						<var cmd="set Active-ready Suction" />
+					</elseif>
+				</elseif>
+				<elseif PetName="SwiftSieghard">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Scythe Tail" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Scythe Tail"'>
+						<var cmd="set Active-ready Ripper Fang" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Ripper Fang"'>
+						<var cmd="set Active-ready Chomp Rush" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Chomp Rush"'>
+						<var cmd="set Active-ready Scythe Tail" />
+					</elseif>
+				</elseif>
+				<elseif PetName="FaithfulFalcorr">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Back Heel" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Back Heel"'>
+						<var cmd="set Active-ready Jettatura" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Jettatura"'>
+						<var cmd="set Active-ready Choke Breath" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Choke Breath"'>
+						<var cmd="set Active-ready Fantod" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Fantod"'>
+						<var cmd="set Active-ready Back Heel" />
+					</elseif>		
+				</elseif>
+				<elseif PetName="GooeyGerard">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Purulent Ooze" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Purulent Ooze"'>
+						<var cmd="set Active-ready Corrosive Ooze" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Corrosive Ooze"'>
+						<var cmd="set Active-ready Purulent Ooze" />
+					</elseif>
+				</elseif>
+				<elseif PetName="CrudeRaphie">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Tortoise Stomp" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Tortoise Stomp"'>
+						<var cmd="set Active-ready Harden Shell" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Hardenn Shell"'>
+						<var cmd="set Active-ready Aqua Breath" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Aqua Breath"'>
+						<var cmd="set Active-ready Tortoise Stomp" />
+					</elseif>
+				</elseif>
+				<elseif PetName="DapperMac">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Wing Slap" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Wing Slap"'>
+						<var cmd="set Active-ready Beak Lunge" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Beak Lunge"'>
+						<var cmd="set Active-ready Wing Slap" />
+					</elseif>
+				</elseif>
+				<elseif PetName="TurbidToloi">
+					<if advanced='"$Active-ready"="Sic"'>
+						<var cmd="set Active-ready Intimidate" />
+					</if>
+					<elseif  advanced='"$Active-ready"="Intimidate"'>
+						<var cmd="set Active-ready Recoil Dive" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Recoil Dive"'>
+						<var cmd="set Active-ready Water Wall" />
+					</elseif>
+					<elseif  advanced='"$Active-ready"="Water Wall"'>
+						<var cmd="set Active-ready Intimidate" />
+					</elseif>
+				</elseif>
+				<else>
+					<var cmd="set Active-ready Sic" />
+				</else>
+					<addtochat>Active Ready Move: $Active-ready</addtochat>
+			</if>		
+		</if>
+       
+	   <if Spell="foxfire">  <!-- Itemizer does not like ClassTriggers-->
+				<if advanced='"$JugSpot"="Inventory"'>
+					<changespell Spell="Call Beast" />
+					<changetarget target="&lt;me&gt;" />
+                </if>
+                <else>
+					<cancelspell />
+					<command>input /get "$Broth" $JugSpot; pause 1; input /equip ammo "$Broth"; CallBeast</command>
+                </else>				
+			</if>
+	   
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='UniversalTriggerRules']/*" />
+
+        <!-- Fourth: Compile all adjustments into the final gear set. -->
+        
+        <if PetIsValid="true">
+            <if mode="OR" Spell="Fight" advanced='"$PetEngaged"="True"'>
+                <var cmd="set IdleMode PetEngaged" />
+            </if>
+            <else>
+                <var cmd="set IdleMode Normal" />
+            </else>
+        </if>
+        <else>
+            <var cmd="set IdleMode Normal" />
+        </else>
+
+        <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='DefineBaseLayer']/*" />
+
+        <!-- Compile all subsets into a single final set -->
+        <var cmd="set CurrentSet $BaseLayer|$WeaknessArmor|$PhysicalDefense|$MagicalDefense|$Movement" />
+
+        <!-- And assign to appropriate sets for idle/aftercast/etc -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='HandleEquippingGear']/*" />
+
+
+        <!-- Set variables dependant on current conditions. -->
+
+
+        <!-- Set gear for JAs and WSs -->
+		<!-- Special shortcuts for pet ready moves. -->
+		
+
+		
+		
+         <if type="JobAbility">
+            <if spell="Call Beast" PetIsValid="False">
+				<var cmd="set PetEngaged False" />
+				<castdelay delay="1" />
+				<equip when="precast" set="%Spell" />
+				<command when="Aftercast">input /ma ClassTrigger .ready-cycle</command>
+            </if>
+			<if spell="Charm|Gauge" PetIsValid="False">
+                <var cmd="set PetEngaged False" />
+				<equip when="precast" set="%Spell" />
+            </if>
+			<if spell="Familiar" PetIsValid="False">
+				<equip when="precast" set="%Spell" />
+            </if>
+			<if spell="Reward">
+				<castdelay delay="1" />
+                <equip when="precast" set="%Spell" />
+            </if>
+			
+			<elseif spell="Killer Instinct">
+				<if PetIsValid="False">	
+					<cancelspell />
+					<addtochat>No Pet!</addtochat>				
+				</if>
+				<else>
+                <equip when="precast" set="%Spell" />
+				
+				</else>
+			</elseif>
+			<elseif type="*Waltz">
+            <if NotSpell="Healing Waltz">
+                <if TargetType="Self">
+                    <equip when="Precast" set="CureWaltzMe" />
+                </if>
+                <else>
+                    <equip when="Precast" set="CureWaltz" />
+                </else>
+            </if>
+        </elseif>
+        </if>
+        <elseif type="PetCommand">
+            <AfterCastDelay Delay="0.5" />
+			<if spell="Spur|Sic">
+				<equip when="precast" set="%Spell" />
+			</if>
+			<if spell="Leave">
+				<var cmd="set PetEngaged False" />
+			</if>
+			<elseif spell="Fight">
+				<var cmd="set PetEngaged True" />
+			</elseif>
+			<elseif spell="Heel">
+				<var cmd="set PetEngaged False" />
+			</elseif>
+			
+			
+        </elseif>
+
+        <!-- Weaponskill equip rules -->
+        <elseif type="WeaponSkill">
+            <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='DefineWeaponskillSet']/*" />
+
+            <equip when="Precast" set="$WSSet" />
+        </elseif>
+
+        <!-- Ninjutsu spells -->
+        <elseif type="Ninjutsu">
+            <if Spell="Utsusemi: Ichi">
+                <equip when="Precast" delay="0.05" set="PhysDef-Evasion|FastCast" />
+            </if>
+            <elseif Spell="Utsusemi: Ni">
+                <equip when="Precast" delay="0.05" set="FastCast" />
+            </elseif>
+        </elseif>
+
+    </rules>
+</spellcast>

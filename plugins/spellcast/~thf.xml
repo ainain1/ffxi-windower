@@ -1,0 +1,1134 @@
+<?xml version="1.0" ?>
+<spellcast xmlns:xi="http://www.w3.org/2001/XInclude">
+    <!-- Last modified: 9/1/2012 1:44:17 AM -->
+
+    <config Debug="false"
+            ShowGearSwaps="false"
+            ShowSpellInfo="false"
+            RequireVersion="2.30"
+            />
+
+    <variables clear="True">
+        <!-- General configuration -->
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='ConfigurationVars']/*" />
+
+        <!-- Configuration var overrides. -->
+        <var name="CritWS">Evisceration</var>
+        <var name="MagicalWS">Aeolian Edge</var>
+        <var name="PullWeapons">Velocity Bow|Raider's Boomerang|Aliyat Chakram</var>
+
+        <!-- General utility -->
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='UtilityVars']/*" />
+
+        <!-- Utility default var overrides. -->
+        <var name="TPWeapon">Dagger</var>
+
+
+        <!--
+            TH Modes: Conservative, Active, Aggressive, Always
+            Trigger JA: "ClassTrigger cycle(THMode)"
+
+            None: Does not swap in TH gear.  For testing purposes, primarily, and
+                 is usually commented out.
+            Conservative: Swaps in TH gear other than weapon when you engage,
+                 but only if SA/TA are not active.
+            Active: Swaps in TH gear other than weapon when you engage, even if SA/TA are active.
+            Aggressive: Swaps in TH gear when you engage, even if SA/TA are active.
+                 Will swap offhand to Thief's Knife if less than 30 TP.
+            Always: Swaps in TH gear, including weapon (regardless of TP) when you engage,
+                 even if SA/TA are active.  Will not try to swap weapon back.
+
+            In all cases, will attempt to reset back to normal gear 4 seconds (configurable)
+            after engaging, and periodically every 4 seconds after that until TP has changed
+            from what it was when you engaged (Max of 5 attempts; after that it force-resets).
+
+            In THMode 'Always', weapon is not reverted.  In THMode 'Aggressive', weapon will
+            be changed to an appropriate offhand weapon, either explicitly defined ($Offhand set),
+            or dependant on accuracy (AccWeapon if using HeavyAcc offense mode), defense
+            (EvaWeapon if in evasion tank mode),  mainhand weapon (TPWeapon if using Twilight
+            Knife or Twashtar; Twilight for AE burn, Twash for Rudra's Storm), or the default
+            DmgWeapon.
+        -->
+        <!-- Default starting THMode -->
+        <var name="THMode">Conservative</var>
+        <var name="THLayer">None</var>
+
+        <var name="TankMode">Evasion</var>
+
+        <var name="PhysicalDefType">Evasion</var>
+
+        <var name="EngagedTP">-1</var>
+        <var name="ResetTries">0</var>
+        <var name="ResetTryLimit">5</var>
+        <!-- Can configure the TP threshold for swapping weapons. -->
+        <var name="DaggerSwapTP">30</var>
+        <!-- Can tweak the delay for a reset check -->
+        <var name="ResetDelay">4</var>
+
+        <var name="AllowAftercast">Yes</var>
+
+        <var name="UsedRanged">No</var>
+
+        <!-- Explicitly define this if you want to control which weapon is swapped
+             back in in place of Thief's Knife. -->
+        <var name="Offhand">Thokcha</var>
+        <var name="UseHasteOffhand">No</var>
+
+        <var name="TripleLayer">None</var>
+        <var name="AggressiveLayer">Rancor</var>
+
+        <var name="SAFlag">Off</var>
+        <var name="TAFlag">Off</var>
+        <var name="SATAFlag">Off</var>
+
+        <var name="FeintPrep">No</var>
+        <var name="FeintOn">No</var>
+
+        <var name="TestVal">0</var>
+
+        <var name="AutoSetUsed">No</var>
+
+    </variables>
+
+    <sets>
+        <!-- <xi:include href="Mote-Config-Include.xml" xpointer="//include[@name='Base-Group']/*" /> -->
+
+        <group name="Outside-Group" default="yes">
+            <set name="None">
+            </set>
+
+            <set name="Idle-Town-*">
+                <head>Ocelomeh Headpiece</head>
+                <neck>Wiglen Gorget</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat </body>
+                <hands>Thaumas Gloves</hands>
+                <lring>Sheltered Ring</lring>
+                <rring>Paguroidea Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Thaumas Kecks</legs>
+                <feet>Raider's Poulaines +2</feet>
+            </set>
+
+            <set name="Idle-Field-*" BaseSet="Idle-Town-Normal|Regen">
+            </set>
+
+            <set name="Regen">
+                <head>Ocelomeh Headpiece</head>
+                <neck>Wiglen Gorget</neck>
+                <hands>Garden Bangles</hands>
+                <lring>Sheltered Ring</lring>
+                <rring>Paguroidea Ring</rring>
+            </set>
+
+            <set name="Move|Kite">
+                <feet>Fajin Boots</feet>
+            </set>
+
+            <set name="THGear">
+                <hands>Assassin's Armlets +2</hands>
+                <feet>Raider's Poulaines +2</feet>
+            </set>
+
+            <set name="HasteWeapon">
+                <sub>Oynos Knife</sub>
+            </set>
+
+            <!-- ***************************** -->
+            <!--  Sets for TP                  -->
+            <!-- ***************************** -->
+
+            <set name="TP-Dagger-Normal-Normal">
+                <head>Raider's Bonnet +1</head>
+                <neck>Agasaya's Collar</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat </body>
+                <hands>Thaumas Gloves</hands>
+                <!-- <hands>Brego Gloves</hands> -->
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Thaumas Kecks</legs>
+                <feet>Homam Gambieras</feet>
+                <!-- <feet>Athos's Boots</feet> -->
+            </set>
+            <set name="TP-Dagger-Acc-Normal" BaseSet="TP-Dagger-Normal-Normal">
+                <neck>Agasaya's Collar</neck>
+                <back>Belenos' Mantle</back>
+            </set>
+            <set name="TP-Dagger-MaxAcc-Normal" BaseSet="TP-Dagger-Normal-Normal">
+                <neck>Agasaya's Collar</neck>
+                <back>Belenos' Mantle</back>
+            </set>
+
+
+            <set name="TP-Dagger-Normal-Evasion">
+                <head>Raider's Bonnet +1</head>
+                <neck>Torero Torque</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat </body>
+                <!-- <hands>Denali Wristbands</hands> -->
+                <hands>Thaumas Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Blur Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Ocelot Trousers</legs>
+                <feet>Athos's Boots</feet>
+            </set>
+            <set name="TP-Dagger-*-Evasion" BaseSet="TP-Dagger-Normal-Evasion">
+            </set>
+
+
+            <set name="TP-Dagger-Normal-PDT">
+                <range>Raider's Boomerang</range>
+                <head>Raider's Bonnet +1</head>
+                <neck>Twilight Torque</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat </body>
+                <hands>Denali Wristbands</hands>
+                <lring>Dark Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Blur Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Ocelot Trousers</legs>
+                <feet>Athos's Boots</feet>
+            </set>
+            <set name="TP-Dagger-*-PDT" BaseSet="TP-Dagger-Normal-PDT">
+            </set>
+            
+            <set name="TripleDamage">
+                <lring>Demonry Ring</lring>
+                <feet>Homam Gambieras</feet>
+                <waist>Chiner's Belt</waist>
+            </set>
+
+            <set name="Rancor">
+                <neck>Rancor Collar</neck>
+            </set>
+
+            <!-- ***************************** -->
+            <!--  Sets for JAs                 -->
+            <!-- ***************************** -->
+
+            <set name="Flee">
+                <feet>Rogue's Poulaines +1</feet>
+            </set>
+            <set name="Steal">
+                <head>Assassin's Bonnet +2</head>
+                <hands>Rogue's Armlets +1</hands>
+                <feet>Rogue's Poulaines +1</feet>
+            </set>
+            <set name="Despoil">
+                <legs>Thaumas Kecks</legs>
+                <feet>Raider's Poulaines +2</feet>
+            </set>
+            <set name="Hide">
+                <body>Rogue's Vest</body>
+            </set>
+            <set name="Collaborator|Accomplice">
+                <head>Raider's Bonnet +1</head>
+            </set>
+            <set name="Conspirator">
+                <head>Thaumas Coat </head>
+            </set>
+            <set name="Perfect Dodge">
+                <hands>Assassin's Armlets +2</hands>
+            </set>
+
+            <set name="CureWaltz">
+            </set>
+            <set name="CureWaltzMe">
+            </set>
+
+            <!-- ***************************** -->
+            <!--  Defense Sets                 -->
+            <!-- ***************************** -->
+
+            <set name="PhysDef-Evasion">
+                <head>Fugacity Beret</head>
+                <neck>Torero Torque</neck>
+                <body>Aurore Doublet</body>
+                <hands>Denali Wristbands</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Blur Mantle</back>
+                <legs>Ocelot Trousers</legs>
+                <feet>Raider's Poulaines +2</feet>
+            </set>
+
+            <set name="PhysDef-PDT">
+                <head>Fugacity Beret</head>
+                <neck>Twilight Torque</neck>
+                <hands>Denali Wristbands</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+            </set>
+            <set name="MDT-*|Resist-*">
+                <neck>Twilight Torque</neck>
+                <body>Avalon Breastplate</body>
+                <hands>Denali Wristbands</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Lamia Mantle +1</back>
+            </set>
+
+            <set name="Resting-Normal">
+            </set>
+
+            <set name="WeakSet">
+            </set>
+
+
+            <!-- ***************************** -->
+            <!--  SA/TA Sets                   -->
+            <!-- ***************************** -->
+
+            <set name="PreSA">
+                <!-- <ammo>Qirmiz Tathlum</ammo> -->
+                <head>Ocelomeh Headpiece</head>
+                <neck>Moepapa Medal</neck>
+                <body>Toci's Harness</body>
+                <hands>Thaumas Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Jupiter's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Cuchulain's Belt</waist>
+                <legs>Thaumas Kecks</legs>
+            </set>
+            <set name="SAFeet">
+                <feet>Homam Gambieras</feet>
+            </set>
+
+            <set name="PreTA">
+                <!-- <ammo>Qirmiz Tathlum</ammo> -->
+                <head>Ocelomeh Headpiece</head>
+                <neck>Moepapa Medal</neck>
+                <body>Toci's Harness</body>
+                <hands>Rogue's Armlets +1</hands>
+                <lring>Solemn Ring</lring>
+                <back>Atheling Mantle</back>
+                <waist>Crudelis Belt</waist>
+                <legs>Urja Trousers</legs>
+            </set>
+            <set name="TAFeet">
+                <feet>Raider's Poulaines +2</feet>
+            </set>
+
+            <set name="SA" BaseSet="PreSA|SAFeet">
+            </set>
+            <set name="TA" BaseSet="PreTA|TAFeet">
+            </set>
+            <set name="SATA" BaseSet="TA|SA">
+            </set>
+
+            <!-- ***************************** -->
+            <!--  Utility Sets                 -->
+            <!-- ***************************** -->
+
+            <set name="FastCast">
+                <lear>Loquacious Earring</lear>
+				<hands>Thaumas Gloves</hands>
+                <legs>Homam Cosciales</legs>
+            </set>
+
+            <set name="HasteCast">
+                <head>Ocelomeh Headpiece</head>
+                <lear>Loquacious Earring</lear>
+                <body>Thaumas Coat </body>
+                <hands>Thaumas Gloves</hands>
+                <waist>Twilight Belt</waist>
+                <legs>Thaumas Kecks</legs>
+                <feet>Athos's Boots</feet>
+            </set>
+
+            <set name="Utsusemi" BaseSet="FastCast">
+                <neck>Magoraga Beads</neck>
+                <back>Blur Mantle</back>
+                <feet>Raider's Poulaines +2</feet>
+            </set>
+
+            <!-- For ranged attacks -->
+            <set name="Ranged">
+                <head>Ocelomeh Headpiece</head>
+                <neck>Peacock Charm</neck>
+                <body>Aurore Doublet</body>
+                <hands>Assassin's Armlets +2</hands>
+                <waist>Aqualine Belt</waist>
+                <legs>Aurore Brais</legs>
+                <feet>Raider's Poulaines +2</feet>
+            </set>
+
+            <!-- ***************************** -->
+            <!--  Weaponskills                 -->
+            <!-- ***************************** -->
+
+            <set name="WS-Exenterator-Att">
+                <head>Ocelomeh Headpiece</head>
+                <neck>Moepapa Medal</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Aesir Ear Pendant</rear>
+                <body>Denali Jacket</body>
+                <hands>Mustela Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Crudelis Belt</waist>
+                <legs>Urja Trousers</legs>
+                <feet>Raider's Poulaines +2</feet>
+            </set>
+            <set name="WS-Exenterator-Acc" BaseSet="WS-Exenterator-Att">
+                <waist>Anguinus Belt</waist>
+            </set>
+            <set name="WS-Exenterator-SA" BaseSet="WS-Exenterator-Att">
+                <neck>Moepapa Medal</neck>
+                <body>Toci's Harness</body>
+                <hands>Athos's Gloves</hands>
+            </set>
+            <set name="WS-Exenterator-TA" BaseSet="WS-Exenterator-Att">
+                <body>Toci's Harness</body>
+                <lring>Solemn Ring</lring>
+            </set>
+            <set name="WS-Exenterator-SATA" BaseSet="WS-Exenterator-Att">
+                <neck>Moepapa Medal</neck>
+                <body>Toci's Harness</body>
+                <hands>Athos's Gloves</hands>
+            </set>
+            <set name="WS-Exenterator-*" BaseSet="WS-Exenterator-Att">
+            </set>
+
+
+            <set name="WS-Dancing Edge-Att">
+                <head>Aias Bonnet</head>
+                <neck>Soil Gorget</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Aesir Ear Pendant</rear>
+                <body>Thaumas Coat </body>
+                <hands>Athos's Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Cuchulain's Belt</waist>
+                <legs>Tumbler Trunks</legs>
+                <feet>Homam Gambieras</feet>
+            </set>
+            <set name="WS-Dancing Edge-Acc" BaseSet="WS-Dancing Edge-Att">
+                <waist>Anguinus Belt</waist>
+            </set>
+            <set name="WS-Dancing Edge-SA" BaseSet="WS-Dancing Edge-Att">
+                <head>Ocelomeh Headpiece</head>
+                <neck>Moepapa Medal</neck>
+                <body>Toci's Harness</body>
+                <rring>Jupiter's Ring</rring>
+            </set>
+            <set name="WS-Dancing Edge-TA" BaseSet="WS-Dancing Edge-Att">
+                <head>Ocelomeh Headpiece</head>
+                <neck>Moepapa Medal</neck>
+                <body>Toci's Harness</body>
+                <rring>Epona's Ring</rring>
+            </set>
+            <set name="WS-Dancing Edge-SATA" BaseSet="WS-Dancing Edge-Att">
+                <head>Ocelomeh Headpiece</head>
+                <neck>Moepapa Medal</neck>
+                <body>Toci's Harness</body>
+                <rring>Jupiter's Ring</rring>
+            </set>
+            <set name="WS-Dancing Edge-*" BaseSet="WS-Dancing Edge-Att">
+            </set>
+
+
+            <set name="WS-Evisceration-Att">
+                <head>Aias Bonnet</head>
+                <neck>Rancor Collar</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Aesir Ear Pendant</rear>
+                <body>Toci's Harness</body>
+                <hands>Athos's Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Jupiter's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Cuchulain's Belt</waist>
+                <legs>Thaumas Kecks</legs>
+                <feet>Athos's Boots</feet>
+            </set>
+            <set name="WS-Evisceration-Acc" BaseSet="WS-Evisceration-Att">
+                <waist>Anguinus Belt</waist>
+            </set>
+            <set name="WS-Evisceration-SA" BaseSet="WS-Evisceration-Att">
+            </set>
+            <set name="WS-Evisceration-TA" BaseSet="WS-Evisceration-Att">
+                <head>Ocelomeh Headpiece</head>
+            </set>
+            <set name="WS-Evisceration-SATA" BaseSet="WS-Evisceration-Att">
+                <head>Ocelomeh Headpiece</head>
+            </set>
+            <set name="WS-Evisceration-*" BaseSet="WS-Evisceration-Att">
+            </set>
+
+
+            <set name="WS-Shark Bite-Att">
+                <head>Aias Bonnet</head>
+                <neck>Thunder Gorget</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Aesir Ear Pendant</rear>
+                <body>Thaumas Coat </body>
+                <hands>Thaumas Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Cuchulain's Belt</waist>
+                <legs>Tumbler Trunks</legs>
+                <feet>Homam Gambieras</feet>
+            </set>
+            <set name="WS-Shark Bite-Acc" BaseSet="WS-Shark Bite-Att">
+                <waist>Anguinus Belt</waist>
+            </set>
+            <set name="WS-Shark Bite-SA" BaseSet="WS-Shark Bite-Att">
+                <head>Ocelomeh Headpiece</head>
+                <body>Toci's Harness</body>
+                <rring>Jupiter's Ring</rring>
+                <!-- <legs>Matre Bragezenn</legs> -->
+            </set>
+            <set name="WS-Shark Bite-TA" BaseSet="WS-Shark Bite-Att">
+                <head>Ocelomeh Headpiece</head>
+                <body>Toci's Harness</body>
+            </set>
+            <set name="WS-Shark Bite-SATA" BaseSet="WS-Shark Bite-Att">
+                <head>Ocelomeh Headpiece</head>
+                <body>Toci's Harness</body>
+            </set>
+            <set name="WS-Shark Bite-*" BaseSet="WS-Shark Bite-Att">
+            </set>
+
+
+            <set name="WS-Mandalic Stab-Att">
+                <head>Ocelomeh Headpiece</head>
+                <neck>Light Gorget</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Aesir Ear Pendant</rear>
+                <body>Thaumas Coat </body>
+                <hands>Athos's Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Cuchulain's Belt</waist>
+                <!-- <legs>Matre Bragezenn</legs> -->
+                <legs>Tumbler Trunks</legs>
+                <feet>Homam Gambieras</feet>
+            </set>
+            <set name="WS-Mandalic Stab-Acc" BaseSet="WS-Mandalic Stab-Att">
+                <waist>Anguinus Belt</waist>
+            </set>
+            <set name="WS-Mandalic Stab-SA" BaseSet="WS-Mandalic Stab-Att">
+                <!-- <legs>Matre Bragezenn</legs> -->
+            </set>
+            <set name="WS-Mandalic Stab-TA" BaseSet="WS-Mandalic Stab-Att">
+                <!-- <legs>Matre Bragezenn</legs> -->
+            </set>
+            <set name="WS-Mandalic Stab-SATA" BaseSet="WS-Mandalic Stab-Att">
+                <!-- <legs>Matre Bragezenn</legs> -->
+            </set>
+            <set name="WS-Mandalic Stab-*" BaseSet="WS-Mandalic Stab-Att">
+            </set>
+
+
+            <set name="WS-Aeolian Edge">
+                <head>Chimera Hairpin</head>
+                <neck>Stoicheion Medal</neck>
+                <lear>Hecate's Earring</lear>
+                <rear>Moldavite Earring</rear>
+                <body>Thaumas Coat </body>
+                <hands>Athos's Gloves</hands>
+                <lring>Strendu Ring</lring>
+                <rring>Demon's Ring</rring>
+                <waist>Thunder Belt</waist>
+                <legs>Denali Kecks</legs>
+                <feet>Athos's Boots</feet>
+            </set>
+
+            <set name="WS-*">
+                <head>Aias Bonnet</head>
+                <neck>Agasaya Collar</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Aesir Ear Pendant</rear>
+                <!-- <body>Mirke Wardecors</body> --> <!-- preferred -->
+                <body>Thaumas Coat </body>
+                <hands>Thaumas Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Cuchulain's Belt</waist>
+                <legs>Tumbler Trunks</legs>
+                <feet>Homam Gambieras</feet>
+            </set>
+
+        </group>
+
+        <group name="Abyssea-Group" inherit="Outside-Group">
+            <set name="TP-Dagger-Offense-Normal">
+                <range>Raider's Boomerang</range>
+                <head>Ocelomeh Headpiece</head>
+                <neck>Rancor Collar</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat </body>
+                <hands>Thaumas Gloves</hands>
+                <lring>Demonry Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Thaumas Kecks</legs>
+                <feet>Homam Gambieras</feet>
+            </set>
+            <set name="TP-Dagger-Offense-LightAcc" BaseSet="TP-Dagger-Offense-Normal">
+                <neck>Agasaya's Collar</neck>
+                <back>Belenos' Mantle</back>
+            </set>
+            <set name="TP-Dagger-Offense-HeavyAcc" BaseSet="TP-Dagger-Offense-Normal">
+                <neck>Agasaya's Collar</neck>
+                <back>Belenos' Mantle</back>
+            </set>
+            <set name="TP-Dagger-Offense-CapAtt" BaseSet="TP-Dagger-Offense-Normal">
+            </set>
+
+        </group>
+
+        <group name="Campaign-Group" inherit="Outside-Group">
+            <set name="PhysDef-PDT">
+                <head>Fugacity Beret</head>
+                <neck>Twilight Torque</neck>
+                <hands>Denali Wristbands</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <!-- <rring>Patronus Ring</rring> -->
+            </set>
+
+        </group>
+
+        <group name="Voidwatch-Group" inherit="Outside-Group">
+        </group>
+    </sets>
+
+    <rules>
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='RunFirstUpdate']/*" />
+
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ReturnRules']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='CleanTransportation']/*" />
+        <!-- Make sure locks are in place before auto-changing gear. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='EquipmentLockRules']/*" />
+        <!-- Auto-change gear call via Aftercast to limit lag. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ChangeGearAftercast']/*" />
+
+        <!-- First: Adjust values based on status checks. -->
+
+        <var cmd="set AllowAftercast Yes" />
+
+        <!-- Custom Toggles -->
+        <if Spell="ClassTrigger">
+            <if SpellTargetRaw="Cycle(THMode)">
+                <if advanced='"$THMode" = "Conservative"'>
+                    <var cmd="set THMode Active" />
+                </if>
+                <elseif advanced='"$THMode" = "Active"'>
+                    <var cmd="set THMode Aggressive" />
+                </elseif>
+                <elseif advanced='"$THMode" = "Aggressive"'>
+                    <var cmd="set THMode Always" />
+                </elseif>
+                <elseif advanced='"$THMode" = "Always"'>
+                    <var cmd="set THMode None" />
+                </elseif>
+                <else>
+                    <var cmd="set THMode Conservative" />
+                </else>
+    
+                <addtochat>TH Mode: $THMode</addtochat>
+            </if>
+        </if>
+
+        <var cmd="set THLayer None" />
+
+        <!-- Check for weakness -->
+        <if BuffActive="Weakness">
+            <var cmd="set WeaknessArmor WeakSet" />
+        </if>
+        
+        <!-- Second: Update certain values when their status may drop, or when autoset changes. -->
+
+        <if spell="Update">
+            <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='AreaRules']/*" />
+
+            <!-- Check for buffs wearing off -->
+            <if NotBuffActive="Weakness">
+                <var cmd="set WeaknessArmor None" />
+            </if>
+
+            <!-- Ensure movement is set properly -->
+            <if status="Engaged" advanced='"$Movement"="Move"'>
+                <var cmd="set Movement None" />
+            </if>
+            <elseif status="Idle">
+                <var cmd="set Movement Move" />
+            </elseif>
+
+            <if NotBuffActive="Assassin's Charge">
+                <var cmd="set TripleLayer None" />
+            </if>
+            
+            <!-- Flags used solely to indicate SA/TA have been used, but a BuffActive check
+                 may not show the status if the next action is performed too quickly.
+                 Reset to off once a reset trigger call is made. -->
+            <var cmd="set SAFlag Off" />
+            <var cmd="set TAFlag Off" />
+            <var cmd="set SATAFlag Off" />
+            
+            <!-- If SpellTargetRaw=Auto, this is automatic update (not user-initiated).
+                 Do necessary testing to see if it's safe to return to normal
+                 operation after SA/TA/etc.
+             -->
+            <if SpellTargetRaw=".Auto">
+                <if advanced='$EngagedTP &gt; -1'>
+                    <if BuffActive="Sneak Attack|Trick Attack">
+                        <var cmd="set AllowAftercast No" />
+                        <command when="Precast">wait $ResetDelay;$UpdateCommand</command>
+                        
+                        <if NotStatus="Engaged" advanced='"$UsedRanged"="Yes"'>
+                            <var cmd="set EngagedTP %TP" />
+                            <var cmd="set UsedRanged No" />
+                        </if>
+                    </if>
+                    <elseif NotStatus="Engaged">
+                        <var cmd="set EngagedTP -1" />
+                        <var cmd="set UsedRanged No" />
+                    </elseif>
+                    <elseif advanced='%TP=$EngagedTP AND %TP &lt; 300 AND $ResetTries &lt; $ResetTryLimit'>
+                        <var cmd="inc ResetTries" />
+                        <command when="Precast">wait $ResetDelay;$UpdateCommand</command>
+                        <return />
+                    </elseif>
+                    <else>
+                        <if advanced='%TP=300'>
+                            <addtochat>Capped TP. Reset.</addtochat>
+                        </if>
+                        <elseif advanced='%TP=$EngagedTP'>
+                            <addtochat>Exceeded try limit ($ResetTries). Reset.</addtochat>
+                        </elseif>
+                        <else>
+                            <addtochat>TP changed ($EngagedTP :: %TP). Reset.</addtochat>
+                        </else>
+                        
+                        <var cmd="set EngagedTP -1" />
+                        <var cmd="set UsedRanged No" />
+    
+                        <if advanced='"$THMode" = "Aggressive"' TPLT="$DaggerSwapTP">
+                            <if advanced='"$Offhand"!="None"'>
+                                <equip set="$Offhand" />
+                            </if>
+                            <elseif advanced='"$PhysicalDefense"="PhysDef-Evasion"'>
+                                <equip set="EvaWeapon" />
+                            </elseif>
+                            <elseif advanced='"$OffenseMode" = "MaxAcc"'>
+                                <equip set="AccWeapon" />
+                            </elseif>
+                            <elseif advanced='"$DefenseMode"="Evasion"'>
+                                <equip set="EvaWeapon" />
+                            </elseif>
+                            <elseif EquipMain="Twashtar|Twilight Knife">
+                                <equip set="TPWeapon" />
+                            </elseif>
+                            <else>
+                                <equip set="DmgWeapon" />
+                            </else>
+                        </if>
+                        <elseif advanced='"$UseHasteOffhand" = "Yes"' BuffActive="Haste" TPLT="$DaggerSwapTP">
+                            <if advanced='"$Offhand"!="None"'>
+                                <equip set="$Offhand" />
+                            </if>
+                            <elseif advanced='"$PhysicalDefense"="PhysDef-Evasion"'>
+                                <equip set="EvaWeapon" />
+                            </elseif>
+                            <elseif advanced='"$OffenseMode" = "MaxAcc"'>
+                                <equip set="AccWeapon" />
+                            </elseif>
+                            <elseif advanced='"$DefenseMode"="Evasion"'>
+                                <equip set="EvaWeapon" />
+                            </elseif>
+                            <elseif EquipMain="Twashtar|Twilight Knife">
+                                <equip set="TPWeapon" />
+                            </elseif>
+                            <else>
+                                <equip set="DmgWeapon" />
+                            </else>
+                        </elseif>
+                    </else>
+                </if>
+                <else>
+                    <!-- If we get here, this is an auto-update, but EngagedTP is -1. -->
+                    <addtochat>Auto-Update. $TPWeapon - $OffenseMode/$DefenseMode, PD:$PhysicalDefense, MD:$MagicalDefense, $Movement</addtochat>
+                </else>
+            </if>
+            <elseif SpellTargetRaw=".Manual">
+                <!-- User-initiated reset can reset the EngagedTP value. -->
+                <if advanced='%TP!=$EngagedTP OR %TP=300 OR $ResetTries &gt;= $ResetTryLimit'>
+                    <var cmd="set EngagedTP -1" />
+                    <var cmd="set UsedRanged No" />
+                </if>
+
+                <!-- User-initiated reset can force weapon back in place. -->
+                <if advanced='"$THMode" = "Aggressive"' TPLT="$DaggerSwapTP">
+                    <if advanced='"$Offhand"!="None"'>
+                        <equip set="$Offhand" />
+                    </if>
+                    <elseif advanced='"$OffenseMode" = "MaxAcc"'>
+                        <equip set="AccWeapon" />
+                    </elseif>
+                    <elseif advanced='"$DefenseMode"="Evasion"'>
+                        <equip set="EvaWeapon" />
+                    </elseif>
+                    <elseif EquipMain="Twashtar|Twilight Knife">
+                        <equip set="TPWeapon" />
+                    </elseif>
+                    <else>
+                        <equip set="DmgWeapon" />
+                    </else>
+                </if>
+                <elseif advanced='"$UseHasteOffhand" = "Yes"' BuffActive="Haste" TPLT="$DaggerSwapTP">
+                    <if advanced='"$Offhand"!="None"'>
+                        <equip set="$Offhand" />
+                    </if>
+                    <elseif advanced='"$OffenseMode" = "MaxAcc"'>
+                        <equip set="AccWeapon" />
+                    </elseif>
+                    <elseif advanced='"$DefenseMode"="Evasion"'>
+                        <equip set="EvaWeapon" />
+                    </elseif>
+                    <elseif EquipMain="Twashtar|Twilight Knife">
+                        <equip set="TPWeapon" />
+                    </elseif>
+                    <else>
+                        <equip set="DmgWeapon" />
+                    </else>
+                </elseif>
+
+                <addtochat>Update. $TPWeapon - $OffenseMode/$DefenseMode, PD:$PhysicalDefense, MD:$MagicalDefense, $Movement</addtochat>
+            </elseif>
+            <else>
+                <addtochat>Update error?  SpellTargetRaw=[%SpellTargetRaw]</addtochat>
+            </else>
+        </if>
+        <elseif spell="autoset">
+            <!-- Autoset (engage/disengage/rest/etc).  Do same Area and weakness check as Reset. -->
+
+            <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='AreaRules']/*" />
+
+            <!-- Check for buffs wearing off -->
+            <if NotBuffActive="Weakness">
+                <var cmd="set WeaknessArmor None" />
+            </if>
+
+            <!-- Ensure movement is set properly -->
+            <if status="Engaged" advanced='"$Movement"="Move"'>
+                <var cmd="set Movement None" />
+            </if>
+            <elseif status="Idle">
+                <var cmd="set Movement Move" />
+            </elseif>
+
+            <!-- Handle gear configuration when engaging the enemy after accounting for THMode -->
+            <if status="Engaged">
+
+                <if advanced='"$THMode" != "None"'>
+                    <if advanced='$EngagedTP = -1'>
+                        <var cmd="set EngagedTP %TP" />
+                    </if>
+
+                    <var cmd="set ResetTries 0" />
+                    <command when="all">wait $ResetDelay;$UpdateCommand</command>
+                </if>
+
+                <if advanced='"$THMode"="Aggressive"' TPLT="$DaggerSwapTP">
+                    <equip when="engaged">
+                        <sub>Thief's Knife</sub>
+                    </equip>
+                </if>
+                <elseif advanced='"$THMode"="Always"'>
+                    <equip when="engaged">
+                        <sub>Thief's Knife</sub>
+                    </equip>
+                </elseif>
+                <elseif advanced='"$UseHasteOffhand"="Yes"' NotBuffActive="Haste" TPLT="$DaggerSwapTP">
+                    <equip when="engaged">
+                        <sub>Oynos Knife</sub>
+                    </equip>
+                </elseif>
+                
+                <if BuffActive="Sneak Attack">
+                    <!-- If SA/TA/Feint are being used, don't reset gear afterwards. -->
+                    <!-- Do, however, make sure the proper SA/TA feet are in use when engaging the mob with SA/TA active. -->
+                    <if advanced='"$THMode" = "Conservative" OR "$THMode" = "None"'>
+                        <var cmd="set THLayer SAFeet" />
+                    </if>
+                    <else>
+                        <var cmd="set THLayer SAFeet|THGear" />
+                    </else>
+                </if>
+                <elseif BuffActive="Trick Attack">
+                    <!-- If SA/TA/Feint are being used, don't reset gear afterwards. -->
+                    <!-- Do, however, make sure the proper SA/TA feet are in use when engaging the mob with SA/TA active. -->
+                    <if advanced='"$THMode" = "Conservative" OR "$THMode" = "None"'>
+                        <var cmd="set THLayer TAFeet" />
+                    </if>
+                    <else>
+                        <var cmd="set THLayer TAFeet|THGear" />
+                    </else>
+                </elseif>
+                <else>
+                    <if advanced='"$THMode" != "None"'>
+                        <var cmd="set THLayer THGear" />
+                    </if>
+                </else>
+            </if>
+            <elseif status="Idle">
+                <if NotBuffActive="Sneak Attack|Trick Attack">
+                    <var cmd="set EngagedTP -1" />
+                    <var cmd="set UsedRanged No" />
+                </if>
+            </elseif>
+        </elseif>
+
+        <!-- Use of various JAs will change what we want to equip -->
+        <if type="JobAbility">
+            <if Spell="Sneak Attack">
+                <if mode="OR" BuffActive="Trick Attack" advanced='"$TAFlag"="On"'>
+                    <equip when="Precast" set="SATA" />
+                    <var cmd="set SATAFlag On" />
+                    <var cmd="set TAFlag Off" />
+                </if>
+                <else>
+                    <var cmd="set SAFlag On" />
+                    <if status="Engaged">
+                        <equip when="Precast" set="SA" />
+                    </if>
+                    <else>
+                        <!-- If not engaged, don't change out shoes so that movement speed can be kept. -->
+                        <!-- Shoes get added on Engaged. -->
+                        <equip when="Precast" set="PreSA" />
+                    </else>
+                </else>
+
+                <var cmd="set AllowAftercast No" />
+                <if advanced='$EngagedTP = -1'>
+                    <var cmd="set EngagedTP %TP" />
+                </if>
+                <var cmd="set ResetTries 0" />
+                <command when="Aftercast">wait $ResetDelay;$UpdateCommand</command>
+            </if>
+            <elseif Spell="Trick Attack">
+                <if mode="OR" BuffActive="Sneak Attack" advanced='"$SAFlag"="On"'>
+                    <equip when="Precast" set="SATA" />
+                    <var cmd="set SATAFlag On" />
+                    <var cmd="set SAFlag Off" />
+                </if>
+                <else>
+                    <var cmd="set TAFlag On" />
+                    <if status="Engaged">
+                        <equip when="Precast" set="TA" />
+                    </if>
+                    <else>
+                        <!-- If not engaged, don't change out shoes so that movement speed can be kept. -->
+                        <!-- Shoes get added on Engaged. -->
+                        <equip when="Precast" set="PreTA" />
+                    </else>
+                </else>
+
+                <var cmd="set AllowAftercast No" />
+                <if advanced='$EngagedTP = -1'>
+                    <var cmd="set EngagedTP %TP" />
+                </if>
+                <var cmd="set ResetTries 0" />
+                <command when="Aftercast">wait $ResetDelay;$UpdateCommand</command>
+            </elseif>
+            <elseif Spell="Feint">
+                <equip when="Precast" set="TP-Dagger-Acc-Normal" />
+
+                <var cmd="set AllowAftercast No" />
+                <if advanced='$EngagedTP = -1'>
+                    <var cmd="set EngagedTP %TP" />
+                </if>
+                <var cmd="set ResetTries 0" />
+                <command when="Aftercast">wait $ResetDelay;$UpdateCommand</command>
+            </elseif>
+            <elseif Spell="Assassin's Charge">
+                <equip when="Precast" set="TripleDamage" />
+                <var cmd="set TripleLayer TripleDamage" />
+
+                <var cmd="set AllowAftercast No" />
+                <if advanced='$EngagedTP = -1'>
+                    <var cmd="set EngagedTP %TP" />
+                </if>
+                <var cmd="set ResetTries 0" />
+                <command when="Aftercast">wait $ResetDelay;$UpdateCommand</command>
+            </elseif>
+            <elseif Spell="Hide">
+                <var cmd="set KiteMode Kite" />
+            </elseif>
+        </if>
+
+
+        <!-- Third: Adjust configurations based on action/trigger. -->
+
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='UniversalTriggerRules']/*" />
+
+        <if spell="Autoset" status="Engaged">
+            <equip when="engaged" set="$THLayer" />
+            <var cmd="set AllowAftercast No" />
+        </if>
+        <elseif NotType="Weaponskill" BuffActive="Sneak Attack|Trick Attack|Feint">
+            <var cmd="set AllowAftercast No" />
+        </elseif>
+
+        <!-- Fourth: Compile all adjustments into the final gear set. -->
+
+        <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='DefineBaseLayer']/*" />
+
+        <!-- Compile all subsets into a single final set -->
+        <var cmd="set CurrentSet $BaseLayer|$WeaknessArmor|$PhysicalDefense|$MagicalDefense|$TripleLayer|$THLayer|$Movement|$KiteMode" />
+
+        <!-- And assign to appropriate sets for idle/aftercast/etc -->
+        <!-- And assign to appropriate sets for idle/aftercast/etc -->
+        <if advanced='"$AllowAftercast" = "Yes"'>
+            <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='HandleEquippingGear']/*" />
+        </if>
+        <elseif type="Trigger">
+            <return />
+        </elseif>
+
+
+        <!-- ************************************************************************ -->
+        <!-- The following sections are solely for setting precast/midcast equipment, -->
+        <!-- and should not be changing any configuration options.                    -->
+        <!-- ************************************************************************ -->
+
+
+
+        <!-- Weaponskill equip rules -->
+        <if type="WeaponSkill">
+            <!-- Figure out which, if any, SA/TA buffs are to be stacked with the WS. -->
+            <if mode="OR" BuffActive="Sneak Attack" advanced='"$SAFlag"="On" || "$SATAFlag"="On"'>
+                <if mode="OR" BuffActive="Trick Attack" advanced='"$SATAFlag"="On"'>
+                    <var cmd="set Use-WSMode SATA" />
+                </if>
+                <else>
+                    <var cmd="set Use-WSMode SA" />
+                </else>
+            </if>
+            <elseif mode="OR" BuffActive="Trick Attack" advanced='"$TAFlag"="On"'>
+                <var cmd="set Use-WSMode TA" />
+            </elseif>
+            <else>
+                <var cmd="set Use-WSMode None" />
+            </else>
+
+            <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='DefineWeaponskillSet']/*" />
+
+            <!-- Use set constructed from combined stack buffs and weaponskill name. -->
+            <equip when="precast" set="$WSSet|$TripleLayer" />
+            
+            <!-- Equip Athos's Gloves on appropriate days for fTP bonus -->
+            <if Spell="Exenterator" DayElement="Earth|Wind|Thunder">
+                <equip when="Precast">
+                    <hands>Athos's Gloves</hands>
+                </equip>
+            </if>
+            <elseif Spell="Evisceration" DayElement="Earth|Dark">
+                <equip when="Precast">
+                    <hands>Athos's Gloves</hands>
+                </equip>
+            </elseif>
+            <elseif Spell="Dancing Edge" DayElement="Earth|Wind">
+                <equip when="Precast">
+                    <hands>Athos's Gloves</hands>
+                </equip>
+            </elseif>
+            
+
+            <var cmd="set TripleLayer None" />
+            <var cmd="set SAFlag Off" />
+            <var cmd="set TAFlag Off" />
+            <var cmd="set SATAFlag Off" />
+			
+			<command when="aftercast">input /echo %TP TP Returned</command>
+        </if>
+
+        <!-- Job Ability equip rules -->
+        <elseif type="JobAbility">
+            <if Spell="Collaborator|Accomplice|Flee|Hide|Conspirator|Steal|Despoil|Perfect Dodge">
+                <equip when="Precast" set="%Spell" />
+            </if>
+        </elseif>
+
+        <elseif type="Ninjutsu">
+            <if Spell="Utsusemi*">
+                <equip when="Precast" set="PhysDef-$PhysicalDefType|Utsusemi" />
+                <equip when="Midcast" set="HasteCast" />
+            </if>
+        </elseif>
+
+        <elseif type="Samba">
+            <!-- Override DSII if on /nin to save macro space -->
+            <if Spell="Drain Samba II" SubJob="Nin">
+                <action type="ChangeSpell" Spell="Utsusemi: Ichi" />
+                <equip when="Precast" set="Utsusemi" />
+                <equip when="Midcast" set="HasteCast" />
+                <addtochat>Casting Utsusemi instead of Drain Samba; change macro pallette.</addtochat>
+            </if>
+        </elseif>
+        <elseif type="Step|Flourish1">
+            <equip when="Precast" set="THGear" />
+        </elseif>
+        <elseif type="Waltz">
+            <!-- <CastDelay delay="0" /> -->
+            <!-- Waltzes for /dnc 
+            <if NotSpell="Healing Waltz">
+                <if TargetType="Self">
+                    <equip when="Precast" set="CureWaltzMe" />
+                </if>
+                <else>
+                    <equip when="Precast" set="CureWaltz" />
+                </else>
+            </if>
+            -->
+        </elseif>
+
+        <!-- Other stuff -->
+        <elseif type="Misc">
+            <if Spell="Ranged">
+                <!-- Generate Pulling messages if we're firing at a mob while not engaged and not already in a fight. -->
+                <if PartyCountGT="2">
+                    <if SpellTargetType="MONSTER" IsInCombat="0" NotStatus="Engaged" NotArea="Dynamis*">
+                        <!--
+                        <command when="precast">input /p Fishing >> %target</command>
+                        <command when="aftercast">input /p Target: %target &lt;call14&gt;</command>
+                         -->
+                    </if>
+                </if>
+
+                <MidCastDelay Delay="2.5" />
+                <AfterCastDelay Delay="2.5" />
+
+                <equip when="Precast" delay="0.1" set="Ranged" />
+
+                <if NotStatus="Engaged">
+                    <var cmd="set UsedRanged Yes" />
+                </if>
+            </if>
+        </elseif>
+
+    </rules>
+</spellcast>

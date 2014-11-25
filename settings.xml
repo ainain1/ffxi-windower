@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<settings>
+  <autoload>
+    <addon>battlemod</addon>
+    <addon>vwhl</addon>
+    <addon>reive</addon>
+    <addon>plasmon</addon>
+    <addon>porter</addon>
+    <addon>autojoin</addon>
+    <addon>thtracker</addon>
+    <addon>GearSwap</addon>
+    <addon>aecho</addon>
+    <addon>autocontrol</addon>
+    <addon>shortcuts</addon>
+    <addon>SpeedChecker</addon>
+    <addon>update</addon>
+    <addon>pointwatch</addon>
+    <addon>MobCompass</addon>
+    <addon>zonetimer</addon>
+    <plugin>BoxHelper</plugin>
+    <plugin>ChatLink</plugin>
+    <plugin>Cancel</plugin>
+    <plugin>ConsoleBG</plugin>
+    <plugin>Distance</plugin>
+    <plugin>DrawDistance</plugin>
+    <plugin>Find</plugin>
+    <plugin>LightLuggage</plugin>
+    <plugin>PetTP</plugin>
+    <plugin>Run</plugin>
+    <plugin>SSOrganizer</plugin>
+    <plugin>StatusTimer</plugin>
+    <plugin>Text</plugin>
+    <plugin>Tickle</plugin>
+    <plugin>Timers</plugin>
+    <plugin>Timestamp</plugin>
+    <plugin>TParty</plugin>
+    <plugin>WeatherMon</plugin>
+    <plugin>Guildwork</plugin>
+    <plugin>WinControl</plugin>
+    <plugin>FFXIDB</plugin>
+    <plugin>Itemizer</plugin>
+    <plugin>Sandbox</plugin>
+    <plugin>Bidder</plugin>
+    <plugin>JaZero</plugin>
+    <plugin>AutoExec</plugin>
+    <plugin>FishingCrashFix</plugin>
+    <plugin>DelayMeNot</plugin>
+  </autoload>
+  <profile name="">
+    <region>US</region>
+    <consolekey>Insert</consolekey>
+    <width>1920</width>
+    <height>1040</height>
+    <mipmaplevel>6</mipmaplevel>
+    <uiscale>1</uiscale>
+    <supersampling>2</supersampling>
+  </profile>
+  <profile name="Ganat">
+    <consolekey>Insert</consolekey>
+    <width>1680</width>
+    <height>1050</height>
+    <mipmaplevel>6</mipmaplevel>
+    <uiscale>1</uiscale>
+    <supersampling>2</supersampling>
+  </profile>
+</settings>

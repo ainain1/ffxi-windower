@@ -1,0 +1,1058 @@
+<?xml version="1.0" ?>
+<spellcast xmlns="http://www.windower.net/spellcast/"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.windower.net/spellcast/ spellcast.xsd">
+
+    <!-- Last modified: 11/21/2013 2:03:13 AM -->
+
+    <config Debug="false"
+            ShowGearSwaps="false"
+            ShowSpellInfo="false"
+            RequireVersion="2.30"
+            />
+
+    <!-- Set default variable values -->
+    <variables clear="true">
+        <!-- General configuration -->
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='ConfigurationVars']/*" />
+
+        <!-- Override basic values -->
+        <var name="CritWS">Hexa Strike</var>
+        <var name="MagicalWS">Flash Nova</var>
+        <var name="Options.DefenseModes">PDT</var>
+        <var name="Options.OffenseModes">Normal</var>
+        <var name="Options.WSModes">Default</var>
+
+        <!-- <var name="Options.AreaGroups">Abyssea</var> -->
+
+
+        <xi:include href="Mote-Config-Include.xml" xpointer="//include[@name='UtilityVars']/*" />
+        <xi:include href="Mote-Config-Include.xml" xpointer="//include[@name='ElementalStaves']/*" />
+        <xi:include href="Mote-Config-Include.xml" xpointer="//include[@name='ElementalGear']/*" />
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='RecastDurations']/*" />
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='FastCastVars']/*" />
+
+        <!-- How much fast cast is available in gear, either for general fast cast,
+             or for specific skill types (or Cure for cures).  This is used for
+             calculating how long to wait before swapping back into idle gear. -->
+             
+        <!-- Nahtirah Hat, Orvail Pants, Orison neck, Loquacious, Prolix, Swith Cape, Chelona Boots +1, Incantor Stone -->
+        <var name="FastCastGear-General">34</var>
+        <!-- Cure Clogs | Heka body, Orison +2 legs, Pahtli Cape, Orison neck, Loquacious, Prolix, Witful -->
+        <var name="FastCastGear-Cure">47</var>
+        <!-- Nahtirah Hat, Orison +2 legs, Orison neck, Loquacious, Prolix, Swith Cape, Chelona Boots +1, Incantor Stone -->
+        <var name="FastCastGear-HealingMagic">41</var>
+        <!-- Nahtirah Hat, Orvail Pants, Orison neck, Loquacious, Prolix, Swith Cape, Chelona Boots +1, Incantor Stone, Siegel Sash -->
+        <var name="FastCastGear-EnhancingMagic">42</var>
+
+
+        <!-- Custom binds -->
+        <var name="ClassBindCtrlTilde">input /ma Sandstorm &lt;me&gt;</var>
+        <var name="ClassBindAltTilde">input /ma CastingMode Cycle(stal)</var>
+
+
+        <!-- ********* USER SET VARIABLES ************ -->
+
+        <!-- Default status of Afflatus on first load -->
+        <var name="Afflatus">Misery</var>
+        <!-- Cure Mode:
+             Staff (magian staff, Terra Staff, if PDT is active or don't need the refresh from Owleyes)
+             Club (Tefnut wand, if Owleyes is being used for refresh)
+             Melee (Molva Maul and meleeing)
+         -->
+        <var name="CureMode">Staff</var>
+
+        <!-- StaffOrClubCuring is a variable to indicate which equipment you want to use for cures.
+             Possible values:
+             Staff - Only cure with staff (Light/Apollo's/Arka IV/etc)
+             Club - Only cure with club (Tefnut Wand/etc)
+             Both - Allow the spellcast to choose based on current status
+             Note: Melee cure mode ignores this value
+         -->
+        <var name="StaffOrClubCuring">Staff</var>
+
+        <!-- MP percentage under which we should swap to Owleyes for refresh: -->
+        <var name="OwleyesMPP">90</var>
+
+        <!-- Set this to whatever clubs you use for meleeing. -->
+        <var name="MeleeWeapons">Mondaha Cudgel</var>
+        <!-- Set this to Yes if you want main weapon locked when you get over 100 TP, even
+             if it's not one of the above MeleeWeapons.
+             Set to No if you don't want to lock under such conditions. -->
+        <var name="LockWeaponWithTP">No</var>
+
+        <var name="ConvertSet">None</var>
+
+        <!-- Default town body.  If you change this, also adjust value that gets set
+             in rules section. -->
+        <var name="TownBody">Heka's Kalasiris</var>
+
+        <var name="CarbySet">None</var>
+
+        <!-- ********* END USER SET VARIABLES ************ -->
+    </variables>
+
+    <sets>
+        <!-- Groups with constant sets, regardless of Area: Common, BasicJAs, BasicMagic. -->
+
+        <!-- CommonGroup is for idle, resting, PDT/MDT, movement, and various job-specific stuff -->
+        <group name="Common" default="true">
+            <set name="None">
+            </set>
+
+            <set name="Idle-Field-Normal">
+                <ammo>Incantor Stone</ammo>
+                <head>Nefer Khat +1</head>
+                <neck>Wiglen Gorget</neck>
+                <lear>Bloodgem Earring</lear>
+                <rear>Loquacious Earring</rear>
+                <body>Heka's Kalasiris</body>
+                <hands>Serpentes Cuffs</hands>
+                <lring>Sheltered Ring</lring>
+                <rring>Paguroidea Ring</rring>
+                <back>Umbra Cape</back>
+                <waist>Witful Belt</waist>
+                <legs>Nares Trews</legs>
+                <feet>Serpentes Sabots</feet>
+            </set>
+
+            <set name="Idle-Town-Normal" BaseSet="Idle-Field-Normal">
+                <body>$TownBody</body>
+            </set>
+
+            <set name="Owleyes">
+                <main>Owleyes</main>
+                <sub>Genbu's Shield</sub>
+            </set>
+            <set name="NonOwleyes">
+                <main>$Staff-PDT</main>
+                <sub>Achaq Grip</sub>
+            </set>
+
+            <set name="Move">
+            </set>
+            <set name="Kite">
+                <feet>Frisky Sabots</feet>
+            </set>
+            <set name="SandstormFeet">
+                <feet>Desert Boots</feet>
+            </set>
+
+            <set name="PhysDef-PDT">
+                <main>$Staff-PDT</main>
+                <sub>Achaq Grip</sub>
+                <head>Nahtirah Hat</head>
+                <neck>Twilight Torque</neck>
+                <body>Bokwus Robe</body>
+                <hands>Yaoyotl Gloves</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Umbra Cape</back>
+                <legs>Gendewitha Spats</legs>
+                <feet>Gendewitha Galoshes</feet>
+            </set>
+
+            <set name="MDT-*|Resist-*">
+                <main>$Staff-PDT</main>
+                <sub>Achaq Grip</sub>
+                <head>Nahtirah Hat</head>
+                <neck>Twilight Torque</neck>
+                <body>Bokwus Robe</body>
+                <hands>Yaoyotl Gloves</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Umbra Cape</back>
+                <legs>Gendewitha Spats</legs>
+                <feet>Gendewitha Galoshes</feet>
+            </set>
+
+            <set name="Resting-Normal">
+                <main>$Staff-HMP</main>
+                <head>Nefer Khat +1</head>
+                <body>Heka's Kalasiris</body>
+                <hands>Serpentes Cuffs</hands>
+                <waist>Austerity Belt</waist>
+                <legs>Nares Trews</legs>
+                <feet>Chelona Boots +1</feet>
+            </set>
+
+            <set name="Convert">
+                <head>Nahtirah Hat</head>
+                <lear>Bloodgem Earring</lear>
+                <rear>Loquacious Earring</rear>
+                <body>Orison Bliaud +2</body>
+                <hands>Orison Mitts +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <legs>Nares Trews</legs>
+                <feet>Orison Duckbills +2</feet>
+            </set>
+            
+            <set name="Carby">
+                <main>Chatoyant Staff</main>
+                <sub>Achaq Grip</sub>
+                <hands>Carbuncle Mitts</hands>
+            </set>
+        </group>
+
+        <!-- BasicJA group is for gear sets designed to enhance JAs used on self or other players,
+             that won't vary by Area. -->
+        <group name="BasicJAs">
+            <set name="CureWaltz">
+                <ammo>Sonia's Plectrum</ammo>
+                <head>Nahtirah Hat</head>
+                <!-- <rear>Roundel Earring</rear> -->
+                <body>Bokwus Robe</body>
+                <hands>Yaoyotl Gloves</hands>
+                <back>Refraction Cape</back>
+                <legs>Gendewitha Spats</legs>
+                <feet>Gendewitha Galoshes</feet>
+            </set>
+        </group>
+
+        <!-- BasicMagic group is for magic casting that won't vary by area, such as fast cast,
+             cures and enhancing magic. -->
+        <group name="BasicMagic">
+            <!--
+                Single gear set for precast and cast (solace cures).
+                Cure potency: 24 (staff) + 14 (head) + 13 (hands) + 2 (ear) = 53%
+                Instant cast: 5%
+                Precast speed: 20 (merits) + 5 (neck) + 2 (ear) +
+                               15 (feet) + 2 (ring) + 8 (back) + 3 (waist) +
+                               12 (legs) = 67%
+                Recast speed: 6 (12% fast cast) + 5 (hat) + 3 (hands) +
+                              3 (waist) + 3 (feet) = 20%
+             -->
+            <set name="CureSolaceStaff">
+                <main>$Staff-Cures</main>
+                <sub>Achaq Grip</sub>
+                <ammo>Impatiens</ammo>
+                <head>Gendewitha Caubeen</head>
+                <neck>Orison Locket</neck>
+                <lear>Orison Earring</lear>
+                <rear>Loquacious Earring</rear>
+                <body>Orison Bliaud +2</body>
+                <hands>Bokwus Gloves</hands>
+                <lring>Prolix Ring</lring>
+                <rring>Mediator's Ring</rring>
+                <back>Pahtli Cape</back>
+                <waist>Witful Belt</waist>
+                <legs>Orison Pantaloons +2</legs>
+                <feet>Cure Clogs</feet>
+            </set>
+            
+
+            <!--
+                Single gear set for precast and cast (cura/curaga spells, or misery cures).
+                Cure potency: 24 (staff) + 15 (body) + 13 (hands) + 2 (ear) = 54%
+                Instant cast: 5%
+                Precast speed: 20 (merits) + 10 (hat) + 5 (neck) + 2 (ear) +
+                               15 (body) + 2 (ring) + 8 (back) + 3 (waist) +
+                               12 (legs) = 77%
+                Recast speed: 11 (22% fast cast) + 5 (hat) + 3 (hands) +
+                              3 (waist) + 3 (feet) = 25%
+             -->
+            <set name="CureMiseryStaff|CuragaStaff">
+                <main>$Staff-Cures</main>
+                <sub>Achaq Grip</sub>
+                <ammo>Impatiens</ammo>
+                <head>Nahtirah Hat</head>
+                <neck>Orison Locket</neck>
+                <lear>Orison Earring</lear>
+                <rear>Loquacious Earring</rear>
+                <body>Heka's Kalasiris</body>
+                <hands>Bokwus Gloves</hands>
+                <lring>Prolix Ring</lring>
+                <rring>Mediator's Ring</rring>
+                <back>Pahtli Cape</back>
+                <waist>Witful Belt</waist>
+                <legs>Orison Pantaloons +2</legs>
+                <feet>Gendewitha Galoshes</feet>
+            </set>
+
+
+            <!--
+                Single gear set for precast and cast (curing while in melee).
+                Cure potency: 14 (head) + 15 (body) + 13 (hands) + 2 (ear) + 3 (shield) = 47%
+                Instant cast: 5%
+                Precast speed: 20 (merits) + 6 (shield) + 5 (neck) + 2 (ear)
+                               15 (body) + 2 (ring) + 8 (back) + 3 (waist) +
+                               12 (legs) = 73%
+                Recast speed: 6 (12% fast cast) + 3 (hands) +
+                              3 (waist) + 3 (feet) = 15%
+             -->
+            <set name="CureSolaceMelee|CureMiseryMelee|CuragaMelee">
+                <ammo>Impatiens</ammo>
+                <head>Gendewitha Caubeen</head>
+                <neck>Orison Locket</neck>
+                <lear>Orison Earring</lear>
+                <rear>Loquacious Earring</rear>
+                <body>Heka's Kalasiris</body>
+                <hands>Bokwus Gloves</hands>
+                <lring>Prolix Ring</lring>
+                <rring>Mediator's Ring</rring>
+                <back>Pahtli Cape</back>
+                <waist>Witful Belt</waist>
+                <legs>Orison Pantaloons +2</legs>
+                <feet>Gendewitha Galoshes</feet>
+            </set>
+
+
+
+            <set name="FastRecast">
+                <ammo>Incantor Stone</ammo>
+                <head>Nahtirah Hat</head>
+                <neck>Orison Locket</neck>
+                <rear>Loquacious Earring</rear>
+                <body>Goliard Saio</body>
+                <hands>Gendewitha Gages</hands>
+                <back>Swith Cape</back>
+                <waist>Goading Belt</waist>
+                <legs>Gendewitha Spats</legs>
+                <feet>Gendewitha Galoshes</feet>
+            </set>
+
+            <set name="HealingMagic">
+                <main>Beneficus</main>
+                <sub>Genbu's Shield</sub>
+                <neck>Colossus's Torque</neck>
+                <body>Orison Bliaud +2</body>
+                <hands>Healer's Mitts</hands>
+                <lring>Sirona's Ring</lring>
+                <rring>Ephedra Ring</rring>
+                <back>Tempered Cape</back>
+                <legs>Cleric's Pantaloons +2</legs>
+            </set>
+
+            <!-- For general enhancing spells that benefit from higher skill. -->
+            <set name="Enhancing">
+                <main>Beneficus</main>
+                <sub>Genbu's Shield</sub>
+                <neck>Colossus's Torque</neck>
+                <body>Manasa Chasuble</body>
+                <hands>Ayao's Gages</hands>
+                <legs>Cleric's Pantaloons +2</legs>
+                <feet>Orison Duckbills +2</feet>
+            </set>
+
+            <set name="Bars">
+                <head>Orison Cap +2</head>
+                <body>Orison Bliaud +2</body>
+                <hands>Orison Mitts +2</hands>
+                <legs>Cleric's Pantaloons +2</legs>
+                <feet>Orison Duckbills +2</feet>
+            </set>
+            
+            
+            <!-- Don't have Tamaxchi right now -->
+            
+            <!--
+                Single gear set for precast and cast (Solace, using Tamaxchi).
+                Cure potency: 22 (club) + 3 (shield) + 10 (head) + 13 (hands) + 2 (ear) = 50%
+                Instant cast: 5%
+                Precast speed: 20 (merits) + 6 (shield) + 5 (neck) + 2 (ear) +
+                               2 (ring) + 8 (back) + 3 (waist) +
+                               12 (legs) + 15 (feet) = 73%
+                Recast speed: 5 (10% fast cast) + 3 (hands) +
+                              3 (waist) + 3 (feet) = 14%
+             -->
+            <set name="CureSolaceClub">
+                <main>Tamaxchi</main>
+                <sub>Genbu's Shield</sub>
+                <ammo>Impatiens</ammo>
+                <head>Gendewitha Caubeen</head>
+                <neck>Orison Locket</neck>
+                <lear>Orison Earring</lear>
+                <rear>Loquacious Earring</rear>
+                <body>Orison Bliaud +2</body>
+                <hands>Bokwus Gloves</hands>
+                <lring>Prolix Ring</lring>
+                <rring>Mediator's Ring</rring>
+                <back>Pahtli Cape</back>
+                <waist>Witful Belt</waist>
+                <legs>Orison Pantaloons +2</legs>
+                <feet>Cure Clogs</feet>
+            </set>
+
+            <!--
+                Single gear set for precast and cast (Solace, using Tamaxchi).
+                Cure potency: 22 (club) + 3 (shield) + 15 (body) + 13 (hands) + 2 (ear) = 55%
+                Instant cast: 5%
+                Precast speed: 20 (merits) + 6 (shield) + 10 (hat) + 5 (neck) + 2 (ear) +
+                               15 (body) + 2 (ring) + 8 (back) + 3 (waist) + 12 (legs) = 83%
+                Recast speed: 11 (22% fast cast) + 5 (hat) + 3 (hands) +
+                              3 (waist) + 3 (feet) = 25%
+             -->
+            <set name="CureMiseryClub|CuragaClub">
+                <main>Tamaxchi</main>
+                <sub>Genbu's Shield</sub>
+                <ammo>Impatiens</ammo>
+                <head>Nahtirah Hat</head>
+                <neck>Orison Locket</neck>
+                <lear>Orison Earring</lear>
+                <rear>Loquacious Earring</rear>
+                <body>Heka's Kalasiris</body>
+                <hands>Bokwus Gloves</hands>
+                <lring>Prolix Ring</lring>
+                <rring>Mediator's Ring</rring>
+                <back>Pahtli Cape</back>
+                <waist>Witful Belt</waist>
+                <legs>Orison Pantaloons +2</legs>
+                <feet>Gendewitha Galoshes</feet>
+            </set>
+        </group>
+
+        <group name="FastCast">
+            <!-- Construct fast cast sets for a set amount of fast cast gear. -->
+            <!-- Break down by spell category (either Cure, or the skill type). -->
+            <!-- Do not include traits or merits. -->
+            <!-- Tiers are: 10, 20, 30, 40, 50, 60, 65, 70, 75, 80. -->
+            <!-- Can use a wildcard when it's not possible to go any higher. -->
+
+            <!-- Currently cures are done using all-in-one sets, so no fast cast. -->
+            <set name="FastCast-Cure-*">
+            </set>
+
+
+            <set name="FastCast-HealingMagic-10">
+                <legs>Orison Pantaloons +2</legs>
+            </set>
+            <set name="FastCast-HealingMagic-20">
+                <ammo>Incantor Stone</ammo>
+                <neck>Orison Locket</neck>
+                <rear>Loquacious Earring</rear>
+                <legs>Orison Pantaloons +2</legs>
+            </set>
+            <set name="FastCast-HealingMagic-30">
+                <ammo>Incantor Stone</ammo>
+                <head>Nahtirah Hat</head>
+                <neck>Orison Locket</neck>
+                <rear>Loquacious Earring</rear>
+                <legs>Orison Pantaloons +2</legs>
+            </set>
+            <set name="FastCast-HealingMagic-40">
+                <ammo>Incantor Stone</ammo>
+                <head>Nahtirah Hat</head>
+                <neck>Orison Locket</neck>
+                <rear>Loquacious Earring</rear>
+                <hands>Gendewitha Gages</hands>
+                <back>Swith Cape</back>
+                <legs>Orison Pantaloons +2</legs>
+            </set>
+            <set name="FastCast-HealingMagic-*">
+                <ammo>Incantor Stone</ammo>
+                <head>Nahtirah Hat</head>
+                <neck>Orison Locket</neck>
+                <rear>Loquacious Earring</rear>
+                <hands>Gendewitha Gages</hands>
+                <lring>Prolix Ring</lring>
+                <back>Swith Cape</back>
+                <legs>Orison Pantaloons +2</legs>
+                <feet>Chelona Boots +1</feet>
+            </set>
+
+
+            <set name="FastCast-EnhancingMagic-10">
+                <rear>Loquacious Earring</rear>
+                <waist>Siegel Sash</waist>
+            </set>
+            <set name="FastCast-EnhancingMagic-20">
+                <ammo>Incantor Stone</ammo>
+                <rear>Loquacious Earring</rear>
+                <hands>Gendewitha Gages</hands>
+                <waist>Siegel Sash</waist>
+            </set>
+            <set name="FastCast-EnhancingMagic-30">
+                <ammo>Incantor Stone</ammo>
+                <head>Nahtirah Hat</head>
+                <rear>Loquacious Earring</rear>
+                <hands>Gendewitha Gages</hands>
+                <waist>Siegel Sash</waist>
+            </set>
+            <set name="FastCast-EnhancingMagic-40">
+                <ammo>Incantor Stone</ammo>
+                <head>Nahtirah Hat</head>
+                <neck>Orison Locket</neck>
+                <rear>Loquacious Earring</rear>
+                <hands>Gendewitha Gages</hands>
+                <waist>Siegel Sash</waist>
+                <feet>Chelona Boots +1</feet>
+            </set>
+            <set name="FastCast-EnhancingMagic-*">
+                <ammo>Incantor Stone</ammo>
+                <head>Nahtirah Hat</head>
+                <neck>Orison Locket</neck>
+                <rear>Loquacious Earring</rear>
+                <hands>Gendewitha Gages</hands>
+                <lring>Prolix Ring</lring>
+                <back>Swith Cape</back>
+                <waist>Siegel Sash</waist>
+                <legs>Orvail Pants</legs>
+                <feet>Chelona Boots +1</feet>
+            </set>
+
+
+            <set name="FastCast-*-10">
+                <ammo>Incantor Stone</ammo>
+                <rear>Loquacious Earring</rear>
+                <hands>Gendewitha Gages</hands>
+            </set>
+            <set name="FastCast-*-20">
+                <ammo>Incantor Stone</ammo>
+                <head>Nahtirah Hat</head>
+                <rear>Loquacious Earring</rear>
+                <hands>Gendewitha Gages</hands>
+            </set>
+            <set name="FastCast-*-30">
+                <ammo>Incantor Stone</ammo>
+                <head>Nahtirah Hat</head>
+                <neck>Orison Locket</neck>
+                <rear>Loquacious Earring</rear>
+                <hands>Gendewitha Gages</hands>
+                <feet>Chelona Boots +1</feet>
+            </set>
+            <set name="FastCast-*">
+                <ammo>Incantor Stone</ammo>
+                <head>Nahtirah Hat</head>
+                <neck>Orison Locket</neck>
+                <rear>Loquacious Earring</rear>
+                <hands>Gendewitha Gages</hands>
+                <lring>Prolix Ring</lring>
+                <back>Swith Cape</back>
+                <legs>Orvail Pants</legs>
+                <feet>Chelona Boots +1</feet>
+            </set>
+        </group>
+                
+
+        <!-- Groups that vary by Area/Situation (prefix with Area/Situation name): Melee, Actions, Magic -->
+
+        <!-- Melee is for TP sets (melee or ranged) -->
+        <group name="Outside-Melee">
+            <set name="Melee">
+                <head>Zelus Tiara</head>
+                <neck>Peacock Charm</neck>
+                <lear>Bladeborn Earring</lear>
+                <rear>Steelflash Earring</rear>
+                <body>Bokwus Robe</body>
+                <hands>Blessed Mitts</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Ulthalam's Ring</rring>
+                <back>Umbra Cape</back>
+                <waist>Goading Belt</waist>
+                <legs>Gendewitha Spats</legs>
+                <feet>Gendewitha Galoshes</feet>
+            </set>
+        </group>
+
+        <!-- Actions is for JA-type actions (weaponskills, jumps, steps, etc) -->
+        <group name="Outside-Actions">
+            <!-- Weaponskills -->
+
+            <set name="Weaponskill">
+                <lear>Bladeborn Earring</lear>
+                <rear>Steelflash Earring</rear>
+                <body>Bokwus Robe</body>
+                <hands>Yaoyotl Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <legs>Gendewitha Spats</legs>
+                <feet>Gendewitha Galoshes</feet>
+            </set>
+
+            <set name="WS-Hexa Strike-*" BaseSet="Weaponskill">
+                <neck>Rancor Collar</neck>
+                <rring>Spiral Ring</rring>
+                <waist>Light Belt</waist>
+            </set>
+
+            <set name="WS-Black Halo-*" BaseSet="Weaponskill">
+                <neck>Thunder Gorget</neck>
+                <rring>Aquasoul Ring</rring>
+                <waist>Thunder Belt</waist>
+            </set>
+
+            <set name="WS-Mystic Boon-*" BaseSet="Weaponskill">
+                <neck>Peacock Charm</neck>
+                <lring>Aquasoul Ring</lring>
+                <rring>Aquasoul Ring</rring>
+            </set>
+
+            <set name="WS-Randgrith-*" BaseSet="Weaponskill">
+                <neck>Thunder Gorget</neck>
+                <rring>Spiral Ring</rring>
+                <waist>Thunder Belt</waist>
+            </set>
+
+            <set name="WS-Flash Nova">
+                <head>Nahtirah Hat</head>
+                <neck>Stoicheion Medal</neck>
+                <lear>Friomisi Earring</lear>
+                <rear>Hecate's Earring</rear>
+                <body>Bokwus Robe</body>
+                <hands>Yaoyotl Gloves</hands>
+                <lring>Icesoul Ring</lring>
+                <rring>Demon's Ring</rring>
+                <back>Searing Cape </back>
+                <legs>Gendewitha Spats</legs>
+                <feet>Gendewitha Galoshes</feet>
+            </set>
+
+            <set name="WS-*" BaseSet="Weaponskill">
+            </set>
+        </group>
+
+        <!-- Magic is for offensive magic (nukes, enfeebling, etc) -->
+        <group name="Outside-Magic">
+            <!-- This is the sets of gear for mnd-based enfeebles.  Low acc focuses
+                 mostly on +mnd for max potentcy; as it moves to high acc, mnd is
+                 replaced by skill and +m.acc where that's an improvement. -->
+            <set name="Enf-Mnd">
+                <sub>Mephitis Grip</sub>
+                <head>Nahtirah Hat</head>
+                <neck>Weike Torque</neck>
+                <lear>Psystorm Earring</lear>
+                <rear>Lifestorm Earring</rear>
+                <body>Manasa Chasuble</body>
+                <hands>Yaoyotl Gloves</hands>
+                <lring>Aquasoul Ring</lring>
+                <rring>Mediator's Ring</rring>
+                <back>Refraction Cape</back>
+                <legs>Gendewitha Spats</legs>
+                <feet>Bokwus Boots</feet>
+            </set>
+            
+            <!-- This is the sets of gear for banish/holy nukes.  Low acc focuses
+                 mostly on MAB and +mnd for max potentcy; as it moves to high acc,
+                 replace with skill and +m.acc where that's an improvement. -->
+            <set name="Nuke-Mnd">
+                <head>Nahtirah Hat</head>
+                <neck>Stoicheion Medal</neck>
+                <lear>Friomisi Earring</lear>
+                <rear>Hecate's Earring</rear>
+                <body>Bokwus Robe</body>
+                <hands>Yaoyotl Gloves</hands>
+                <lring>Aquasoul Ring</lring>
+                <rring>Strendu Ring</rring>
+                <back>Refraction Cape</back>
+                <waist>Demonry Sash</waist>
+                <legs>Gendewitha Spats</legs>
+                <feet>Gendewitha Galoshes</feet>
+            </set>
+
+            <!-- This is the sets of gear for dark magic spells.  Since
+                 dark magic is influenced only by skill and m.acc, adjust
+                 only that and haste. -->
+            <set name="DarkMagic">
+                <neck>Aesir Torque</neck>
+                <body>Manasa Chasuble</body>
+                <hands>Yaoyotl Gloves</hands>
+                <lring>Mediator's Ring</lring>
+                <rring>Strendu Ring</rring>
+                <back>Refraction Cape</back>
+                <legs>Portent Pants</legs>
+                <feet>Bokwus Boots</feet>
+            </set>
+
+            <!-- This is the sets of gear for int-based enfeebles.  Low acc focuses
+                 mostly on +int for max potentcy; as it moves to high acc, int is
+                 replaced by skill and +m.acc where that's an improvement. -->
+            <set name="Enf-Int">
+                <head>Nahtirah Hat</head>
+                <neck>Weike Torque</neck>
+                <lear>Psystorm Earring</lear>
+                <rear>Lifestorm Earring</rear>
+                <body>Manasa Chasuble</body>
+                <hands>Yaoyotl Gloves</hands>
+                <lring>Mediator's Ring</lring>
+                <rring>Icesoul Ring</rring>
+                <back>Refraction Cape</back>
+                <waist>Demonry Sash</waist>
+                <legs>Orvail Pants</legs>
+                <feet>Bokwus Boots</feet>
+            </set>
+
+            <!-- This is the sets of gear for nukes.  Low acc focuses
+                 mostly on MAB and +int for max potentcy; as it moves to high acc,
+                 switch out for skill and +m.acc where that's an improvement. -->
+            <set name="Nuke-Int">
+                <head>Nahtirah Hat</head>
+                <neck>Aesir Torque</neck>
+                <lear>Friomisi Earring</lear>
+                <rear>Hecate's Earring</rear>
+                <body>Bokwus Robe</body>
+                <hands>Yaoyotl Gloves</hands>
+                <lring>Strendu Ring</lring>
+                <rring>Icesoul Ring</rring>
+                <back>Refraction Cape</back>
+                <waist>Demonry Sash</waist>
+                <legs>Gendewitha Spats</legs>
+                <feet>Gendewitha Galoshes</feet>
+            </set>
+        </group>
+    </sets>
+
+
+    <rules>
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='RunFirstUpdate']/*" />
+
+        <if mode="OR" EquipMain="$MeleeWeapons" status="Engaged">
+            <changelock slot="main|sub|range" when="All" lock="true" />
+            <var cmd="set CureMode Melee" />
+        </if>
+        <elseif advanced='"$LockWeaponWithTP"="Yes"' tpgt="99">
+            <changelock slot="main|sub|range" when="All" lock="true" />
+            <var cmd="set CureMode Melee" />
+        </elseif>
+        <else>
+            <if advanced='"$StaffOrClubCuring"="Both"'>
+                <if mode="OR" advanced='"$PhysicalDefense" != "None"' mppgt="$OwleyesMPP">
+                    <var cmd="set CureMode Staff" />
+                </if>
+                <else>
+                    <var cmd="set CureMode Club" />
+                </else>
+            </if>
+            <else>
+                <var cmd="set CureMode $StaffOrClubCuring" />
+            </else>
+        </else>
+
+        <if Spell="Paralyna" SpellTargetType="Self">
+            <!-- Don't equip swap while trying to un-paralyze myself -->
+            <addtochat>No gear swaps for self-paralyna.</addtochat>
+            <return />
+        </if>
+
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ConvertSTALTargets']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ReturnRules']/*" />
+        <!-- Make sure locks are in place before auto-changing gear. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='EquipmentLockRules']/*" />
+        <!-- Auto-change gear call via Aftercast to limit lag. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ChangeGearAftercast']/*" />
+        <!-- Other general imports. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='RecastWarnings']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='FastCastCalculations']/*" />
+
+        <!-- First: Adjust values based on status checks. -->
+
+        <if area="Port Windurst|Windurst Walls|Windurst Woods|Windurst Waters">
+            <var cmd="set TownBody Federation Aketon" />
+        </if>
+        <else>
+            <var cmd="set TownBody Heka's Kalasiris" />
+        </else>
+
+        <!-- Second: Update certain values when their status may drop, or when autoset changes. -->
+
+        <if spell="Update|autoset">
+            <!-- Autoset (engage/disengage/rest/etc) gets same checks as a Reset command -->
+            <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='AreaRules']/*" />
+
+            <!-- Check for buffs wearing off -->
+
+            <var cmd="set ConvertSet None" />
+
+            <!-- Ensure movement is set properly -->
+            <if status="Engaged" advanced='"$Movement"="Move"'>
+                <var cmd="set Movement None" />
+            </if>
+            <elseif status="Idle">
+                <var cmd="set Movement Move" />
+            </elseif>
+
+            <if BuffActive="Afflatus Solace">
+                <var cmd="set Afflatus Solace" />
+            </if>
+            <else>
+                <!-- Anything non-Solace can be classed as Misery -->
+                <var cmd="set Afflatus Misery" />
+            </else>
+            
+            <if NotBuffActive="Afflatus*" advanced='"$IdleArea"="Field"'>
+                <command>wait 0.2;input /ja 'Afflatus Solace' &lt;me&gt;</command>
+            </if>
+            <elseif Subjob="Sch" NotBuffActive="Light Arts|Dark Arts|Addendum: White|Addendum: Black" advanced='"$IdleArea"="Field"'>
+                <command>wait 0.2;input /ja 'Light Arts' &lt;me&gt;</command>
+            </elseif>
+
+            <!-- Output current status if this is a manual update -->
+            <if SpellTargetRaw=".Manual">
+                <addtochat>Casting: [$CastingMode/$STALMode], Melee: [$OffenseMode/$DefenseMode], Def: $PhysicalDefense</addtochat>
+            </if>
+        </if>
+
+
+        <!-- Third: Adjust configurations based on action/trigger. -->
+
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='UniversalTriggerRules']/*" />
+
+        <!-- Job Ability equip rules -->
+        <if type="JobAbility">
+            <if spell="Convert">
+                <equip when="precast" set="Convert" />
+                <var cmd="set ConvertSet Convert" />
+                <command when="Aftercast">wait 15;$UpdateCommand</command>
+            </if>
+            <elseif Spell="Afflatus Solace">
+                <var cmd="set Afflatus Solace" />
+            </elseif>
+            <elseif Spell="Afflatus Misery">
+                <var cmd="set Afflatus Misery" />
+            </elseif>
+        </if>
+
+
+        <!-- Fourth: compile the variables into the sets we intend to use. -->
+        <!-- Values of note: BaseLayer, BaseGroup, AdditionalSets -->
+
+        <if status="engaged">
+            <var cmd="set BaseGroup $GroupArea-Melee" />
+            <var cmd="set BaseLayer Melee" />
+            <var cmd="set Movement None" />
+        </if>
+        <else>
+            <var cmd="set BaseGroup Common" />
+
+            <if mpplt="$OwleyesMPP">
+                <var cmd="set BaseLayer Idle-$IdleArea-$IdleMode|Owleyes" />
+            </if>
+            <else>
+                <var cmd="set BaseLayer Idle-$IdleArea-$IdleMode|NonOwleyes" />
+            </else>
+
+            <!-- Switches in desert boots when earth weather is active -->
+            <if mode="OR" WeatherElement="Earth" Spell="Sandstorm" BuffActive="Sandstorm">
+                <var cmd="set Movement SandstormFeet" />
+            </if>
+            <else>
+                <var cmd="set Movement Move" />
+            </else>
+            
+            <if PetName="Carbuncle">
+                <var cmd="set CarbySet Carby" />
+            </if>
+            <else>
+                <var cmd="set CarbySet None" />
+            </else>
+        </else>
+
+        <var cmd="set AdditionalSets $ConvertSet|$Movement|$PhysicalDefense|$MagicalDefense|$KiteMode|$CarbySet" />
+
+
+        <!-- Fifth: Send the compiled sets to the handler. -->
+
+        <!-- And assign to appropriate sets for idle/aftercast/etc -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='HandleEquippingGear']/*" />
+
+        <!-- ************************************************************************ -->
+        <!-- The following sections are solely for setting precast/midcast equipment, -->
+        <!-- and should not be changing any configuration options.                    -->
+        <!-- ************************************************************************ -->
+
+        <if advanced='"$UseFastCastAftercast"="Yes"' NotSpell="Cure*|Cura*">
+            <if advanced='$FastCastTierActual &gt; 0'>
+                <equip when="Precast" setgroup="FastCast" set="FastCast-$FastCastCategory-$FastCastTierActual" />
+            </if>
+        </if>
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ElementalStaffRules']/*" />
+
+        <if type="WhiteMagic">
+            <if Skill="HealingMagic">
+                <if Spell="Cure*">
+                    <equip when="Precast" setgroup="BasicMagic" set="Cure$Afflatus$CureMode" />
+                    
+                    <if advanced='"$CastingMode"="Enmity"'>
+                        <equip when="Precast">
+                            <ammo>Leisure Musk</ammo>
+                            <neck>Phrenic Torque</neck>
+                            <waist>Pythia Sash</waist>
+                        </equip>
+                    </if>
+                    
+                    <!-- If in salvage, and no weapon unlocked, use Heka body for everything. -->
+                    <if EquipMain="empty">
+                        <equip when="$EquipSpellGear">
+                            <body>Heka's Kalasiris</body>
+                        </equip>
+                    </if>
+
+                    <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='ObiRingCape-HealingMagic']/*" />
+                    <var cmd="set ConvertSet None" />
+                </if>
+                <elseif Spell="Cura*">
+                    <!-- Use single gear set for precast/midcast. -->
+                    <equip when="Precast" setgroup="BasicMagic" set="Curaga$CureMode" />
+
+                    <if advanced='"$CastingMode"="Enmity"'>
+                        <equip when="Precast">
+                            <ammo>Leisure Musk</ammo>
+                            <neck>Phrenic Torque</neck>
+                            <waist>Pythia Sash</waist>
+                        </equip>
+                    </if>
+
+                    <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='ObiRingCape-HealingMagic']/*" />
+                    <var cmd="set ConvertSet None" />
+                </elseif>
+                <else>
+                    <if Spell="Arise|Raise III|Raise II|Raise|Reraise III|Reraise II|Reraise|Esuna|Sacrifice">
+                        <equip when="$EquipSpellGear" setgroup="BasicMagic" set="FastRecast" />
+                    </if>
+                    <else>
+                        <!-- All other -na spells -->
+                        <equip when="$EquipSpellGear" setgroup="BasicMagic" set="FastRecast">
+                            <head>Orison Cap +2</head>
+                            <legs>Orison Pantaloons +2</legs>
+                        </equip>
+
+                        <if Spell="Cursna">
+                            <equip when="$EquipSpellGear" setgroup="BasicMagic" set="HealingMagic">
+                                <neck>Malison Medallion</neck>
+                                <hands>Hieros Mittens</hands>
+                                <rring>Ephedra Ring</rring>
+                                <feet>Gendewitha Galoshes</feet>
+                            </equip>
+                        </if>
+
+                        <if BuffActive="Divine Caress">
+                            <equip when="$EquipSpellGear">
+                                <hands>Orison Mitts +2</hands>
+                            </equip>
+                        </if>
+                    </else>
+                </else>
+            </if>
+            <elseif Skill="EnhancingMagic">
+                <if Spell="Stoneskin">
+                    <equip when="Precast">
+                        <hands>Carapacho Cuffs</hands>
+                    </equip>
+
+                    <!-- Build for exactly enough mnd/skill to max stoneskin.
+                         Lowest mnd is whm/blm with 88.
+                         With 394 skill (naked)
+                         need ~50 total mnd to max stoneskin.  Don't need any +mnd in gear.
+                         Add haste for recast, and Siegel Sash for bonus damage absorbed.
+                          -->
+                    <equip when="$EquipSpellGear" setgroup="BasicMagic" set="FastRecast">
+                        <waist>Siegel Sash</waist>
+                    </equip>
+                </if>
+                <elseif Spell="Erase">
+                    <equip when="$EquipSpellGear" setgroup="BasicMagic" set="FastRecast">
+                        <head>Orison Cap +2</head>
+                    </equip>
+                </elseif>
+                <elseif Spell="Bar*">
+                    <equip when="$EquipSpellGear" setgroup="BasicMagic" set="Enhancing|Bars" />
+                </elseif>
+                <elseif Spell="Auspice">
+                    <equip when="$EquipSpellGear">
+                        <feet>Orison Duckbills +2</feet>
+                    </equip>
+                </elseif>
+                <elseif Spell="Regen*">
+                    <equip when="$EquipSpellGear" setgroup="BasicMagic" set="FastRecast">
+                        <body>Cleric's Briault</body>
+                        <hands>Orison Mitts +2</hands>
+                    </equip>
+                </elseif>
+                <elseif Spell="Phalanx|Boost*|*Spikes|En*">
+                    <equip when="$EquipSpellGear" setgroup="BasicMagic" set="FastRecast|Enhancing" />
+                </elseif>
+                <elseif Spell="Shell*|Protect*">
+                    <equip when="$EquipSpellGear" setgroup="BasicMagic" set="FastRecast" />
+                    <equip when="all">
+                        <lring>Sheltered Ring</lring>
+                    </equip>
+                    <if Spell="Shellra V">
+                        <equip when="all">
+                            <legs>Cleric's Pantaloons +2</legs>
+                        </equip>
+                    </if>
+                </elseif>
+                <else>
+                    <equip when="$EquipSpellGear" setgroup="BasicMagic" set="FastRecast" />
+                </else>
+            </elseif>
+            <elseif Skill="EnfeeblingMagic">
+                <equip when="$EquipSpellGear" setgroup="$GroupArea-Magic" set="Enf-Mnd" />
+            </elseif>
+            <elseif Skill="DivineMagic">
+                <if Spell="Repose">
+                    <equip when="$EquipSpellGear" setgroup="BasicMagic" set="FastRecast" />
+                </if>
+                <elseif Spell="Banish*|Holy*">
+                    <equip when="$EquipSpellGear" setgroup="$GroupArea-Magic" set="Nuke-Mnd" />
+    
+                    <!-- <if Spell="Banish*">
+                        <equip when="Midcast">
+                            <hands>Cleric's Mitts</hands>
+                        </equip>
+                    </if> -->
+    
+                    <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='ObiRingCape-DivineMagic']/*" />
+                </elseif>
+            </elseif>
+        </if>
+
+        <elseif type="BlackMagic">
+            <if Skill="DarkMagic">
+                <if NotSpellTargetType="Monster|NPC" NotSpell="Klimaform">
+                    <changetarget target="&lt;bt&gt;" />
+                </if>
+                
+                <if Spell="Stun" NotSubjob="Blm|Drk">
+                    <changespell spell="Flash" />
+                    <equip when="$EquipSpellGear" setgroup="BasicMagic" set="FastRecast" />
+                </if>
+                <else>
+                    <equip when="$EquipSpellGear" setgroup="$GroupArea-Magic" set="DarkMagic" />
+    
+                    <if Spell="Drain|Aspir">
+                        <equip when="midcast">
+                            <rring>Excelsis Ring</rring>
+                        </equip>
+                    </if>
+    
+                    <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='ObiRingCape-DarkMagic']/*" />
+                </else>
+            </if>
+            <elseif Skill="ElementalMagic">
+                <equip when="$EquipSpellGear" setgroup="$GroupArea-Magic" set="Nuke-Int" />
+            </elseif>
+            <elseif Skill="EnfeeblingMagic">
+                <equip when="$EquipSpellGear" setgroup="$GroupArea-Magic" set="Enf-Int" />
+
+                <if Spell="Sleep*|Bind|Gravity">
+                    <equip when="Midcast" setgroup="BasicMagic" set="FastRecast">
+                        <body>Manasa Chasuble</body>
+                        <back>Refraction Cape</back>
+                    </equip>
+                </if>
+            </elseif>
+            <elseif Skill="EnhancingMagic">
+                <!-- Spikes -->
+                <equip when="$EquipSpellGear" setgroup="BasicMagic" set="FastRecast" />
+            </elseif>
+        </elseif>
+
+        <elseif type="WeaponSkill">
+            <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='DefineWeaponskillSet']/*" />
+            <equip when="Precast" setgroup="$GroupArea-Actions" set="$WSSet" />
+        </elseif>
+
+        <elseif type="Waltz">
+            <if NotSpell="Healing Waltz">
+                <equip when="Precast" setgroup="BasicJAs" set="CureWaltz" />
+            </if>
+        </elseif>
+
+        <elseif type="Ninjutsu">
+            <if Spell="Utsusemi*">
+                <equip when="$EquipSpellGear" setgroup="BasicMagic" set="FastRecast" />
+            </if>
+        </elseif>
+    </rules>
+</spellcast>

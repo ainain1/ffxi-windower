@@ -1,0 +1,6 @@
+<settings>
+    <global>
+        <!--Set this to true to display the 2D-distance (as used for in-game mechanics).-->
+        <Show2D>true</Show2D>
+    </global>
+</settings>

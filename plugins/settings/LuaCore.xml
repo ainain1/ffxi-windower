@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<settings>
+    <!--
+	This file controls the settings for the GearCollector plugin.
+	Settings in the <global> section apply to all characters.
+    You can override global settings on a per-character basis below.
+    -->
+    <global>
+        <!--If set to true will display the error message on a new line.-->
+        <ErrorNewLine>false</ErrorNewLine>
+        <!--If set to true will display a shortened file path.-->
+        <CondenseError>false</CondenseError>
+        <!-- Condenses error messages by minimizing the file path -->
+    </global>
+    <!--
+    Insert per-character settings here, with the character name as
+    the name of the XML element.
+    -->
+</settings>

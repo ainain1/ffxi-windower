@@ -1,0 +1,63 @@
+<?xml version="1.1" ?>
+<settings>
+	<global>
+        <bg>
+        <!-- Background settings. -->
+            <alpha>102</alpha>
+            <blue>0</blue>
+            <green>0</green>
+            <red>0</red>
+        </bg>
+        <display>
+            <bg>
+            <!-- Background settings. -->
+                <alpha>102</alpha>
+                <blue>0</blue>
+                <green>0</green>
+                <red>0</red>
+                <visible>true</visible>
+            </bg>
+            <flags>
+                <bold>false</bold>
+                <bottom>false</bottom>
+                <draggable>true</draggable>
+                <italic>false</italic>
+                <right>false</right>
+            </flags>
+            <padding>0</padding>
+            <pos>
+            <!-- Screen position. -->
+                <x>0</x>
+                <y>0</y>
+            </pos>
+            <text>
+            <!-- Text settings. -->
+                <alpha>255</alpha>
+                <blue>255</blue>
+                <font>Consolas</font>
+                <fonts>
+                </fonts>
+                <green>255</green>
+                <red>255</red>
+                <size>12</size>
+            </text>
+        </display>
+        <pos>
+        <!-- Screen position. -->
+            <x>0</x>
+            <y>0</y>
+        </pos>
+        <showfullid>false</showfullid> <!-- Set to true if you want the full ID displayed. -->
+        <showhexid>true</showhexid>    <!-- Set to true if you want the shortened hex ID to be displayed (often used to describe mob IDs). -->
+        <showspeed>false</showspeed>   <!-- Set to true if you want movement speed to be displayed. -->
+        <text>
+        <!-- Text settings. -->
+            <alpha>255</alpha>
+            <blue>255</blue>
+            <font>Arial</font>
+            <green>255</green>
+            <red>255</red>
+            <size>12</size>
+        </text>
+	</global>
+</settings>

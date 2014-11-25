@@ -1,0 +1,43 @@
+Release Date: 9:30 AM, 3-28-12.Author Comment: This document is whitespace sensitive, which means that you need the same number of spaces between things as exist in this initial settings file.
+Author Comment: It looks at the first two words separated by spaces and then takes anything as the value in question if the first two words are relevant.
+Author Comment: If you ever mess it up so that it does not work, you can just delete it and battlemod will regenerate it upon reload.
+Author Comment: For the output customization lines, ${user} denotes a value to be replaced. The options are user, damg, abil, and targ.
+Author Comment: Options for the other modes are either true or false.
+Author Comment: Colors are customizable based on party / alliance position. Use the colortest command to view the available colors.
+Author Comment: If you wish for a color to be unchanged from its normal color, set it to 0.
+File Settings: Fill in below
+Output Full: [${user}] ${damg} ${abil} Å® ${targ}
+Output NoUser: ${abil} ${damg} Å® ${targ}
+Output NoDamg: [${user}] ${abil} Å® ${targ}
+Output Shadow: [${targ}] ${abil} ${damg}
+Condense Battle: true
+Condense Buffs: true
+Comma Mode: false
+Oxford Comma: true
+Colorful Names: true
+Super Silence: true
+Target Number: true
+Color p0: 501
+Color p1: 204
+Color p2: 410
+Color p3: 492
+Color p4: 259
+Color p5: 260
+Color a10: 205
+Color a11: 359
+Color a12: 167
+Color a13: 038
+Color a14: 125
+Color a15: 185
+Color a20: 429
+Color a21: 257
+Color a22: 200
+Color a23: 481
+Color a24: 483
+Color a25: 208
+Color mob: 69
+Color mobdmg: 8
+Color mydmg: 8
+Color partydmg: 8
+Color allydmg: 8
+Color otherdmg: 8

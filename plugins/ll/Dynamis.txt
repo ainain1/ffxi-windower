@@ -1,0 +1,285 @@
+//Dynamis LightLuggage
+// ========== Relic Armor and Relic Armor-1 ==========
+// ===== WAR (Warrior) =====
+//if item is 15072 then pass //Head
+if item is 15087 then pass //Body
+//if item is 15102 then pass //Hands
+if item is 15117 then pass //Legs
+//if item is 15132 then pass //Feet
+if item is 13194 then pass //Waist
+
+//if item is 2033 then pass //Head -1
+//if item is 2034 then pass //Body -1
+//if item is 2035 then pass //Hands -1
+//if item is 2036 then pass //Legs -1
+//if item is 2037 then pass //Feet -1
+
+// ===== MNK (Melee) =====
+if item is 15073 then pass //Head
+if item is 15088 then pass //Body
+if item is 15103 then pass //Hands
+if item is 15118 then pass //Legs
+if item is 15133 then pass //Feet
+if item is 15478 then pass //Back
+
+//if item is 2038 then pass //Head -1
+//if item is 2039 then pass //Body -1
+if item is 2040 then pass //Hands -1
+//if item is 2041 then pass //Legs -1
+if item is 2042 then pass //Feet -1
+
+// ===== WHM (Cleric) =====
+if item is 15074 then pass //Head
+//if item is 15089 then pass //Body
+//if item is 15104 then pass //Hands
+if item is 15119 then pass //Legs
+//if item is 15134 then pass //Feet
+if item is 15872 then pass //Waist
+
+//if item is 2043 then pass //Head -1
+//if item is 2044 then pass //Body -1
+//if item is 2045 then pass //Hands -1
+//if item is 2046 then pass //Legs -1
+//if item is 2047 then pass //Feet -1
+
+// ===== BLM (Sorcerer) =====
+if item is 15075 then pass //Head
+//if item is 15090 then pass //Body
+//if item is 15105 then pass //Hands
+//if item is 15120 then pass //Legs
+//if item is 15135 then pass //Feet
+if item is 15874 then pass //Waist
+
+//if item is 2048 then pass //Head -1
+//if item is 2049 then pass //Body -1
+//if item is 2050 then pass //Hands -1
+//if item is 2051 then pass //Legs -1
+//if item is 2052 then pass //Feet -1
+
+// ===== RDM (Duelist) =====
+if item is 15076 then pass //Head
+if item is 15091 then pass //Body
+if item is 15106 then pass //Hands
+if item is 15121 then pass //Legs
+if item is 15136 then pass //Feet
+if item is 15873 then pass //Waist
+
+//if item is 2053 then pass //Head -1
+//if item is 2054 then pass //Body -1
+//if item is 2055 then pass //Hands -1
+//if item is 2056 then pass //Legs -1
+//if item is 2057 then pass //Feet -1
+
+// ===== THF (Assassin) =====
+if item is 15077 then pass //Head
+if item is 15092 then pass //Body
+if item is 15107 then pass //Hands
+//if item is 15122 then pass //Legs
+if item is 15137 then pass //Feet
+if item is 15480 then pass //Back
+
+//if item is 2058 then pass //Head -1
+//if item is 2059 then pass //Body -1
+//if item is 2060 then pass //Hands -1
+//if item is 2061 then pass //Legs -1
+//if item is 2062 then pass //Feet -1
+
+// ===== PLD (Valor) =====
+if item is 15078 then pass //Head
+if item is 15093 then pass //Body
+//if item is 15108 then pass //Hands
+if item is 15123 then pass //Legs
+//if item is 15138 then pass //Feet
+if item is 15481 then pass //Back
+
+//if item is 2063 then pass //Head -1
+//if item is 2064 then pass //Body -1
+//if item is 2065 then pass //Hands -1
+//if item is 2066 then pass //Legs -1
+//if item is 2067 then pass //Feet -1
+
+// ===== DRK (Abyss) =====
+if item is 15079 then pass //Head
+if item is 15094 then pass //Body
+//if item is 15109 then pass //Hands
+//if item is 15124 then pass //Legs
+//if item is 15139 then pass //Feet
+if item is 15479 then pass //Back
+
+//if item is 2068 then pass //Head -1
+//if item is 2069 then pass //Body -1
+//if item is 2070 then pass //Hands -1
+//if item is 2071 then pass //Legs -1
+//if item is 2072 then pass //Feet -1
+
+// ===== BST (Monster) =====
+//if item is 15080 then pass //Head
+//if item is 15095 then pass //Body
+if item is 15110 then pass //Hands
+//if item is 15125 then pass //Legs
+if item is 15140 then pass //Feet
+if item is 15875 then pass //Waist
+
+//if item is 2073 then pass //Head -1
+//if item is 2074 then pass //Body -1
+//if item is 2075 then pass //Hands -1
+//if item is 2076 then pass //Legs -1
+//if item is 2077 then pass //Feet -1
+
+// ===== BRD (Bard) =====
+//if item is 15081 then pass //Head
+if item is 15096 then pass //Body
+//if item is 15111 then pass //Hands
+//if item is 15126 then pass //Legs
+//if item is 15141 then pass //Feet
+if item is 15482 then pass //Back
+
+//if item is 2078 then pass //Head -1
+//if item is 2079 then pass //Body -1
+//if item is 2080 then pass //Hands -1
+//if item is 2081 then pass //Legs -1
+//if item is 2082 then pass //Feet -1
+
+// ===== RNG (Scout) =====
+if item is 15082 then pass //Head
+if item is 15097 then pass //Body
+if item is 15112 then pass //Hands
+if item is 15127 then pass //Legs
+if item is 15142 then pass //Feet
+if item is 15876 then pass //Waist
+
+//if item is 2083 then pass //Head -1
+//if item is 2084 then pass //Body -1
+//if item is 2085 then pass //Hands -1
+//if item is 2086 then pass //Legs -1
+//if item is 2087 then pass //Feet -1
+
+// ===== SAM (Saotome) =====
+if item is 15083 then pass //Head
+if item is 15098 then pass //Body
+if item is 15113 then pass //Hands
+//if item is 15128 then pass //Legs
+if item is 15143 then pass //Feet
+if item is 15879 then pass //Waist
+
+//if item is 2088 then pass //Head -1
+//if item is 2089 then pass //Body -1
+//if item is 2090 then pass //Hands -1
+//if item is 2091 then pass //Legs -1
+//if item is 2092 then pass //Feet -1
+
+// ===== NIN (Koga) =====
+if item is 15084 then pass //Head
+//if item is 15099 then pass //Body
+if item is 15114 then pass //Hands
+if item is 15129 then pass //Legs
+//if item is 15144 then pass //Feet
+if item is 15877 then pass //Waist
+
+//if item is 2093 then pass //Head -1
+//if item is 2094 then pass //Body -1
+//if item is 2095 then pass //Hands -1
+//if item is 2096 then pass //Legs -1
+//if item is 2097 then pass //Feet -1
+
+// ===== DRG (Wyrm) =====
+if item is 15085 then pass //Head
+if item is 15100 then pass //Body
+if item is 15115 then pass //Hands
+//if item is 15130 then pass //Legs
+//if item is 15145 then pass //Feet
+if item is 15878 then pass //Waist
+
+//if item is 2098 then pass //Head -1
+//if item is 2099 then pass //Body -1
+//if item is 2100 then pass //Hands -1
+//if item is 2101 then pass //Legs -1
+//if item is 2102 then pass //Feet -1
+
+// ===== SMN (Summoner) =====
+if item is 15086 then pass //Head
+//if item is 15101 then pass //Body
+//if item is 15116 then pass //Hands
+if item is 15131 then pass //Legs
+//if item is 15146 then pass //Feet
+if item is 15484 then pass //Back
+
+//if item is 2103 then pass //Head -1
+//if item is 2104 then pass //Body -1
+//if item is 2105 then pass //Hands -1
+//if item is 2106 then pass //Legs -1
+//if item is 2107 then pass //Feet -1
+
+// ===== BLU (Mirage) =====
+//if item is 11465 then pass //Head
+//if item is 11292 then pass //Body
+//if item is 15025 then pass //Hands
+//if item is 16346 then pass //Legs
+//if item is 11382 then pass //Feet
+if item is 16244 then pass //Back
+
+//if item is 2662 then pass //Head -1
+//if item is 2663 then pass //Body -1
+//if item is 2664 then pass //Hands -1
+//if item is 2665 then pass //Legs -1
+//if item is 2666 then pass //Feet -1
+
+// ===== COR (Commodore) =====
+if item is 11468 then pass //Head
+if item is 11295 then pass //Body
+//if item is 15028 then pass //Hands
+//if item is 16349 then pass //Legs
+//if item is 11385 then pass //Feet
+if item is 15920 then pass //Waist
+
+//if item is 2667 then pass //Head -1
+//if item is 2668 then pass //Body -1
+//if item is 2669 then pass //Hands -1
+//if item is 2670 then pass //Legs -1
+//if item is 2671 then pass //Feet -1
+
+// ===== PUP (Pantin) =====
+if item is 11471 then pass //Head
+if item is 11298 then pass //Body
+//if item is 15031 then pass //Hands
+//if item is 16352 then pass //Legs
+//if item is 11388 then pass //Feet
+if item is 16245 then pass //Back
+
+//if item is 2672 then pass //Head -1
+//if item is 2673 then pass //Body -1
+//if item is 2674 then pass //Hands -1
+//if item is 2675 then pass //Legs -1
+//if item is 2676 then pass //Feet -1
+
+// ===== DNC (Etoile) =====
+//if item is 11478 then pass //Head
+if item is 11305 then pass //Body
+//if item is 15038 then pass //Hands
+//if item is 16360 then pass //Legs
+if item is 11396 then pass //Feet
+if item is 16248 then pass //Back
+
+//if item is 2718 then pass //Head -1
+//if item is 2719 then pass //Body -1
+//if item is 2720 then pass //Hands -1
+//if item is 2721 then pass //Legs -1
+//if item is 2722 then pass //Feet -1
+
+// ====== SCH (Argute) ======
+//if item is 11480 then pass //Head
+//if item is 11307 then pass //Body
+//if item is 15040 then pass //Hands
+//if item is 16362 then pass //Legs
+//if item is 11398 then pass //Feet
+if item is 15925 then pass //Waist
+
+//if item is 2723 then pass //Head -1
+//if item is 2724 then pass //Body -1
+//if item is 2725 then pass //Hands -1
+//if item is 2726 then pass //Legs -1
+//if item is 2727 then pass //Feet -1
+
+// ====== Dynamis Currency =====
+//if item is 1449,1452,1455 then lot // Singles:  T. Whiteshell (Win), O. Bronzepiece (San), 1 Byne Bill (Bas)
+//if item is 1450,1453,1456 then lot  // 100s:  L. Jadeshell (Win), M. Silverpiece (San), 100 Byne Bill (Bas)

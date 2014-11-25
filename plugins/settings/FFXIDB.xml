@@ -1,0 +1,174 @@
+<?xml version="1.0" ?>
+<settings>
+    <!--
+	This file controls the settings for the FFXIDB plugin.
+	Settings in the <global> section apply to all characters.
+
+    <zoom> is a percentage of a 50 yalms radius area.
+
+    <ranges> lets you define a range to show on the map;
+    the pattern is <radius>[,<red>,<green>,<blue>][|<radius>[,<red>,<green>,<blue>]];
+    ex.: 50,250,0,255|30 will draw a 50 yalms magenta circumference and a 30 yalms black circumference
+	-->
+    <global>
+        <x>0</x>
+        <y>0</y>
+        <zoom>100</zoom>
+        <!-- 0~1000 -->
+        <opacity>75</opacity>
+        <!-- 0~100 -->
+        <showpc>true</showpc>
+        <shownpc>true</shownpc>
+        <showmob>true</showmob>
+        <showmarker>true</showmarker>
+        <targetline>true</targetline>
+        <ranges />
+        <debugMode>false</debugMode>
+        <Zoom>100</Zoom>
+        <Opacity>75</Opacity>
+        <ShowPC>true</ShowPC>
+        <ShowNPC>true</ShowNPC>
+        <ShowMob>true</ShowMob>
+        <ShowMarker>true</ShowMarker>
+        <ShowTargetLine>true</ShowTargetLine>
+        <Ranges />
+        <X>1500</X>
+        <Y>5</Y>
+    </global>
+    <!--
+	You may also override specific settings on a per-character basis here.
+	-->
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <Tanag>
+        <X>1492</X>
+        <Y>3</Y>
+        <Zoom>30</Zoom>
+    </Tanag>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <>
+    <X>1500</X>
+    <>
+    <Y>5</Y>
+    <Ganat>
+        <X>1314</X>
+        <Y>59</Y>
+    </Ganat>
+</settings>

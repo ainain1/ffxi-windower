@@ -1,0 +1,15 @@
+[1:40:36 AM] 5732:<57034> Attempting to auto load XML.
+[1:40:36 AM] 5732:<0> Checking: Liralyn/WHM_SCH
+[1:40:36 AM] 5732:<0> Loading filename: Liralyn/WHM_SCH.xml
+[1:40:36 AM] 5732:<0> Checking: Liralyn/WHM
+[1:40:36 AM] 5732:<0> Loading filename: Liralyn/WHM.xml
+[1:40:36 AM] 5732:<0> Checking: Liralyn_WHM_SCH
+[1:40:36 AM] 5732:<0> Loading filename: Liralyn_WHM_SCH.xml
+[1:40:36 AM] 5732:<0> Checking: Liralyn_WHM
+[1:40:36 AM] 5732:<0> Loading filename: Liralyn_WHM.xml
+[1:40:36 AM] 5732:<0> Checking: WHM_SCH
+[1:40:36 AM] 5732:<0> Loading filename: WHM_SCH.xml
+[1:40:36 AM] 5732:<0> Checking: WHM
+[1:40:36 AM] 5732:<0> Loading filename: WHM.xml
+[1:40:37 AM] 5732:<187> Valid XML. Checking for Validity
+[1:40:37 AM] 5732:<0> Documented WHM.xml loaded successfully!

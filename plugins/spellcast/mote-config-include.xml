@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Last modified: 2/19/2013 1:09:08 AM -->
+
+<!-- IMPORTANT -->
+
+<!--
+     This include, and the xmls based on it, make use of new custom trigger spells
+     from the "radsources" resources.  Current updated resources should include these
+     in the standard client.  If things don't appear to be working, check that first.
+ -->
+
+<!-- REQUIRED -->
+
+<!-- The following include entries must be imported for this include to be properly functional. -->
+
+<!-- Vars section:
+     ConfigurationVars (required)
+     UtilityVars (required)
+
+     RecastDurations (if using RecastWarnings)
+     ElementalStaves (if using ElementalStaffRules or FastCastCalculations)
+     FastCastVars (if using FastCastCalculations)
+     ElementalGear (if using ObiRingCape-*)
+ -->
+
+<!-- Sets section:
+     Base-Group (recommended as base for inheritance)
+
+     Outside-Group (group required for normal outside areas; inherit from Base-Group)
+     Abyssea-Group (group for inside Abyssea) [Visitant status]
+     Campaign-Group (group for when in Campaign) [Allied Tags status]
+     Voidwatch-Group (group for when in Voidwatch) [Voidwatcher status]
+     Salvage-Group (group for when in Salvage) [*Remnants zone]
+     Legion-Group (group for when in Legion) [??? status]
+
+     These groups are only required if using the AreaRules include, which automatically switches
+     based on where you currently are.  Most of the time, only the Outside-Group needs to
+     have sets defined, and the remainder can be empty groups that inherit from that one.
+ -->
+
+<!-- Rules section:
+     UniversalTriggerRules - The fundamental include that this Include file is based around.
+ -->
+
+
+<!-- Notes:
+     <addtochat color="12"></addtochat> - This color triggers the /tell chime.
+-->
+
+
+<includes xmlns="http://www.windower.net/spellcast/"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.windower.net/spellcast/ spellcastIncludeVars.xsd">
+  <!-- ***************** Variables ***************** -->
+
+    <!-- This is a REQUIRED include. -->
+    <include name="ConfigurationVars">
+        <!-- This include is for variables that allow you to customize the configuration
+             of the behavior of this include file.  You can change the values here to
+             have them affect all job xmls globally, or change them in each job xml
+             where you want them to be different.
+
+             The values of these vars should only ever be set in the Vars section.
+             They should not be modified in code.
+         -->
+        <!-- Set Debug to 1 to allow certain debug info to be printed. -->
+        <var name="Debug">0</var>
+
+        <!-- Use UpdateCommand to initiate an update from within the code. -->
+        <var name="UpdateCommand">input //Update .auto</var>
+        <!-- UpdateAftercast is used only for triggering the equipping after
+             the action has completed, to reduce lag. -->
+        <var name="UpdateAftercast">input //Update .Aftercast</var>
+
+
+        <!-- Modify the Options.DefenseModes variable in each job xml if different
+             from the default.
+             Possible values: Evasion, PDT, Counter, Shield, Defense, Custom. -->
+        <var name="Options.DefenseModes">Evasion|PDT</var>
+        
+        <!-- The value can be tested with the following rule:
+             <if Advanced='Regex("Evasion", "$DefenseModeOptions")'>
+         -->
+
+        <!-- Same for Offense Modes.  Each job can limit the number of modes
+             they want to deal with.
+             Possible values: Normal, Att, Acc, MaxAcc, Str, Crit, LowDmg, Custom -->
+        <var name="Options.OffenseModes">Normal|Acc</var>
+
+        <!-- Same for WS Modes.  Each job can limit the number of modes
+             they want to deal with.
+             Possible values: Default, Att, Acc, Mod, Crit, 2HR, Custom
+             Note: The auto-calculated mode (if current mode is Default) will
+              only be used if that mode is also included in these options.
+              If Default yields "Crit", but defined options are "Default|Acc",
+              it will use "Normal". -->
+        <var name="Options.WSModes">Default|Acc</var>
+         
+
+        <!-- Job xml's should define these weaponskills.    -->
+        <!-- Only crit weaponskills can use CapCrit WSMode. -->
+        <var name="CritWS">0</var>
+        <!-- Single hit weaponskills don't use acc WSMode.  -->
+        <var name="SingleHitWS">0</var>
+        <!-- Magical weaponskills ignore WSMode.            -->
+        <var name="MagicalWS">0</var>
+
+        <!-- TrialWeapon can be set so that the weapon (primarily staves) is never swapped out. -->
+        <var name="TrialWeapon">None</var>
+
+        <!-- PullWeapons is any ranged weapon that a job has access to that we don't want
+             to swap out.  This allows gear sets to mostly be configured around ammo
+             items (which are safe to change around without losing TP), but to be
+             overridden when you need to have a weapon to pull with.
+             It's locked in the EquipmentLockRules include. The Soulgauger
+             camera is locked without needing to set this variable. -->
+        <var name="PullWeapons">Mamoolbane</var>
+
+    </include>
+
+    <!-- This is a REQUIRED include. -->
+    <include name="UtilityVars">
+        <!-- These are vars that are expected to be used in the course of the code.
+             They are defined here to provide defaults, and to be sure that the var
+             actually exists before use. -->
+
+        <!-- Flag for an initial update immediately after the job xml is (re)loaded.
+             This allows various status vars to be properly set. -->
+        <var name="FirstUpdate">No</var>
+        
+        <!-- ******************************************* -->
+        <!--        Vars for various modes used.         -->
+
+        <!-- Temporary working variable -->
+        <var name="TempMode">Normal</var>
+
+        <!-- Rest mode: Normal, PetFighting, etc. -->
+        <var name="RestMode">Normal</var>
+        <!-- Idle mode: Normal, Refresh, PDT, PetFighting, etc. -->
+        <var name="IdleMode">Normal</var>
+
+        <!-- Keep a record of the last area we were in, to minimize changes. -->
+        <var name="LastKnownArea">None</var>
+        <!-- Group identifier: Outside, Abyssea, Legion, Salvage, Assault, etc -->
+        <var name="Area">Outside</var>
+        <!-- Differentiate town gear from outside gear: Town, Field -->
+        <var name="IdleArea">Town</var>
+        
+        <!-- Movement = Kite, Move, None -->
+        <var name="Movement">Move</var>
+        <!-- Specifically for whether or not in kite mode. -->
+        <var name="KiteMode">None</var>
+
+
+        <!-- TP set to use:  TP-$TPWeapon-$OffenseMode-$DefenseMode -->
+
+        <!-- TPWeapon should be set as needed in each job xml. -->
+        <var name="TPWeapon">Default</var>
+        <!-- OffenseMode = Normal|Acc|MaxAcc|Att|Crit|Str|2HR|LowDmg -->
+        <var name="OffenseMode">Normal</var>
+        <!-- DefenseMode = Normal|PDT|Evasion|Shield|Counter -->
+        <var name="DefenseMode">Normal</var>
+
+        <!-- Use-OffenseMode can be set to a value other than "None" in order
+             to override the current OffenseMode value without changing OffenseMode.
+             Useful for temporary effects such as 2hrs, as well as adjusting
+             which accuracy layer to use based on current buffs, etc. -->
+        <var name="Use-OffenseMode">None</var>
+        <!-- Temporary holding var. -->
+        <var name="OMode">None</var>
+
+        <!-- For activating +dmg gear options -->
+        <var name="AggressiveMode">Off</var>
+        <!-- Aggressive layer can be defined by each job XML.  It does not need
+             to be changed, but can be if there are multiple possible layers. -->
+        <var name="AggressiveLayer">None</var>
+        <!-- UseAggressive is the var to insert into the $CurrentSet construction. -->
+        <var name="UseAggressive">None</var>
+
+        <!-- WS set to use:  WS-%Spell-$WSMode (Default auto-selects one of the other modes) -->
+
+        <!-- WSMode = Default, Acc, Att, Mod, Crit, 2HR -->
+        <var name="WSMode">Default</var>
+        <!-- Same as Use-OffenseMode, but for weaponskills. -->
+        <var name="Use-WSMode">None</var>
+
+        <!-- Set the max distance a weaponskill can be performed from -->
+        <var name="WSDistance">5.0</var>
+
+
+        <!-- Casting mode. -->
+        <var name="CastingMode">Normal</var>
+        <var name="STALMode">stal</var>
+
+
+        <!-- PhysicalDef = PhysDef-$PhysicalDefMode, None -->
+        <var name="PhysicalDefense">None</var>
+        <!-- PhysicalDefMode = PDT, Evasion, Shield, Counter (depending HasEvasion/HasShield/HasCounter/HasPDT/HasDefense) -->
+        <var name="PhysicalDefMode">PDT</var>
+
+        <!-- MagicalDef = $MagicalDefMode-$MagicalDefElement, None -->
+        <var name="MagicalDefense">None</var>
+        <!-- MagicalDef mode: MDT or Resist -->
+        <var name="MagicalDefMode">MDT</var>
+        <!-- MagicalDefElement = Fire, Earth, Water, Wind, Ice, Thunder, Light, Dark, Any, All, None -->
+        <var name="MagicalDefElement">Any</var>
+
+
+        <!-- ******************************************* -->
+        <!--         Vars for constructing sets.         -->
+
+
+        <var name="BaseLayer">None</var>
+        <var name="CurrentSet">None</var>
+        <var name="WSSet">None</var>
+        <var name="WeaknessArmor">None</var>
+
+        <!-- ******************************************* -->
+        <!--         Vars for other actions.             -->
+        
+        <var name="MainStep">Box</var>
+        <var name="AltStep">Quick</var>
+        <var name="CurrentStep">Main</var>
+        <var name="UseAltStep">No</var>
+        <var name="SelectStepTarget">Yes</var>
+
+        <!-- On first run, will execute these to bind Ctrl-= and Alt-= and - to custom commands. -->
+        <!-- Set the values per job xml, use defaults, set to "None" to unbind,
+             or "Ignore" to not change (in case the user already has binds in init.txt).
+             Note: use of quoted multi-word spells/abilities is discouraged.  Use
+             Spellcast's auto-parsing to get around that.  EG: ChocoboJig instead of "Chocobo Jig".
+              -->
+             
+        <!-- examples -->
+        <var name="ClassBindCtrlEqual">input /ma Trigger1 Cycle(Step)</var>
+        <var name="ClassBindCtrlTilde">input /ja ChocoboJig &lt;me&gt;</var>
+        
+        <!-- default binds -->
+        <var name="ClassBindCtrlEqual">None</var>
+        <var name="ClassBindAltEqual">None</var>
+        <var name="ClassBindCtrlDash">None</var>
+        <var name="ClassBindAltDash">None</var>
+        <var name="ClassBindCtrlTilde">None</var>
+        <var name="ClassBindAltTilde">None</var>
+
+    </include>
+
+    <!-- Required when including RecastWarnings.  This defines the variables that are used. -->
+    <include name="RecastDurations">
+        <!-- These variables are defined in the job XMLs, though they are used in the Rules-Include.
+             Kept here for reference only. -->
+             
+        <!-- Count: Set bonus gained for the number of +2 AF3 pieces being worn.
+             10 for 2 pieces, 20 for 3 pieces, 30 for 4 pieces, 50 for 5 pieces. 
+        <var name="EstoqueurSetBonus">50</var>
+        <!- Cape: 0 for don't have; 1 for have. 
+        <var name="EstoqueurCape">1</var>
+        <!- Feet: 0 for don't have; 1 for +1; 2 for +2 
+        <var name="EstoqueurFeet">2</var>
+
+        <!- Savant's Hands: 0 for none, 1 for +1, 2 for +2 
+        <var name="SchPerpHands">2</var>
+        -->
+
+
+        <var name="SleepOrder">0</var>
+
+        <var name="Buff-Duration">0</var>
+        <var name="Warn-Duration">0</var>
+        <var name="BuffDurationMult">100</var>
+    </include>
+
+    <include name="ElementalStaves">
+        <!-- Variables can't (reliably) contain variable values.  Must define each explicitly. -->
+
+        <!-- Magian staves with -cast time, or whatever staff you want in precast. -->
+        <var name="Staff-FastCast-Fire">Chatoyant Staff</var>
+        <var name="Staff-FastCast-Ice">Vourukasha I</var>
+        <var name="Staff-FastCast-Wind">Chatoyant Staff</var>
+        <var name="Staff-FastCast-Earth">Chatoyant Staff</var>
+        <var name="Staff-FastCast-Thunder">Chatoyant Staff</var>
+        <var name="Staff-FastCast-Water">Chatoyant Staff</var>
+        <var name="Staff-FastCast-Light">Arka IV</var>
+        <var name="Staff-FastCast-Dark">Chatoyant Staff</var>
+
+        <!-- If you have a magian staff with cast time reduction, list the value here. -->
+        <!-- <var name="Staff-FastCastAmt-Fire">0</var> -->
+        <var name="Staff-FastCastAmt-Ice">12</var>
+        <!-- <var name="Staff-FastCastAmt-Wind">0</var>
+        <var name="Staff-FastCastAmt-Earth">0</var>
+        <var name="Staff-FastCastAmt-Thunder">0</var>
+        <var name="Staff-FastCastAmt-Water">0</var>
+        <var name="Staff-FastCastAmt-Light">0</var>
+        <var name="Staff-FastCastAmt-Dark">0</var> -->
+
+        <!-- What staff to equip when going for nuke damage. -->
+        <var name="Staff-Dmg-Fire">Chatoyant Staff</var>
+        <var name="Staff-Dmg-Ice">Vourukasha I</var>
+        <var name="Staff-Dmg-Wind">Chatoyant Staff</var>
+        <var name="Staff-Dmg-Earth">Chatoyant Staff</var>
+        <var name="Staff-Dmg-Thunder">Chatoyant Staff</var>
+        <var name="Staff-Dmg-Water">Chatoyant Staff</var>
+        <var name="Staff-Dmg-Light">Chatoyant Staff</var>
+        <var name="Staff-Dmg-Dark">Chatoyant Staff</var>
+
+        <!-- What staff to equip when going for spell accuracy (eg: debuffs). -->
+        <var name="Staff-Acc-Fire">Chatoyant Staff</var>
+        <var name="Staff-Acc-Ice">Chatoyant Staff</var>
+        <var name="Staff-Acc-Wind">Chatoyant Staff</var>
+        <var name="Staff-Acc-Earth">Chatoyant Staff</var>
+        <var name="Staff-Acc-Thunder">Apamajas II</var>
+        <var name="Staff-Acc-Water">Chatoyant Staff</var>
+        <var name="Staff-Acc-Light">Chatoyant Staff</var>
+        <var name="Staff-Acc-Dark">Chatoyant Staff</var>
+
+        <var name="Staff-Avatar-Fire">Chatoyant Staff</var>
+        <var name="Staff-Avatar-Ice">Chatoyant Staff</var>
+        <var name="Staff-Avatar-Wind">Chatoyant Staff</var>
+        <var name="Staff-Avatar-Earth">Chatoyant Staff</var>
+        <var name="Staff-Avatar-Thunder">Chatoyant Staff</var>
+        <var name="Staff-Avatar-Water">Chatoyant Staff</var>
+        <var name="Staff-Avatar-Light">Chatoyant Staff</var>
+        <var name="Staff-Avatar-Dark">Chatoyant Staff</var>
+
+        <!-- This set takes advantage of the negative elemental properties
+             of the lvl 51 staves to reduce acc and damage.  Used for procs. -->
+        <var name="Staff-Proc-Fire">Earth Staff</var>
+        <var name="Staff-Proc-Ice">Earth Staff</var>
+        <var name="Staff-Proc-Wind">Earth Staff</var>
+        <var name="Staff-Proc-Earth">Arka IV</var>
+        <var name="Staff-Proc-Thunder">Earth Staff</var>
+        <var name="Staff-Proc-Water">Earth Staff</var>
+        <var name="Staff-Proc-Light">Earth Staff</var>
+        <var name="Staff-Proc-Dark">Earth Staff</var>
+
+        <!-- Vars for specific types of staves that may vary from any of the above categories. -->
+        <var name="Staff-Cures">Arka IV</var>
+        <var name="Staff-PDT">Earth Staff</var>
+        <var name="Staff-HMP">Chatoyant Staff</var>
+
+    </include>
+
+    <!-- Sch weather constants are required for the rules that equip elemental gear.
+         If you import ElementalGear, you MUST import SchWeatherConstants as well. -->
+    <include name="ElementalGear">
+        <!-- define variables when acquired -->
+
+        <!-- Replace 0 with obi name when acquired -->
+        <!-- <var name="Obi-Fire">0</var>
+        <var name="Obi-Ice">0</var>
+        <var name="Obi-Wind">0</var>
+        <var name="Obi-Earth">0</var>
+        <var name="Obi-Thunder">0</var>
+        <var name="Obi-Water">0</var>
+        <var name="Obi-Light">0</var>
+        <var name="Obi-Dark">0</var> -->
+        
+        <var name="Sachet-Fire">Flame Sachet</var>
+        <var name="Sachet-Ice">Snow Sachet</var>
+        <var name="Sachet-Wind">Breeze Sachet</var>
+        <var name="Sachet-Earth">Soil Sachet</var>
+        <var name="Sachet-Thunder">Thunder Sachet</var>
+        <var name="Sachet-Water">Aqua Sachet</var>
+        <var name="Sachet-Light">Light Sachet</var>
+        <var name="Sachet-Dark">Dark Sachet</var>
+        <var name="Sachet-Any">Demonry Stone</var>
+
+        <!-- Replace 0 with gear name when acquired -->
+        <var name="TwilightCape">Twilight Cape</var>
+        <var name="ZodiacRing">Zodiac Ring</var>
+    </include>
+
+    <include name="SchWeatherConstants">
+        <var name="Storm-Fire">Firestorm</var>
+        <var name="Storm-Ice">Hailstorm</var>
+        <var name="Storm-Wind">Windstorm</var>
+        <var name="Storm-Earth">Sandstorm</var>
+        <var name="Storm-Thunder">Thunderstorm</var>
+        <var name="Storm-Water">Rainstorm</var>
+        <var name="Storm-Light">Aurorastorm</var>
+        <var name="Storm-Dark">Voidstorm</var>
+    </include>
+
+    <include name="SmnSpiritConstants">
+        <var name="Spirit-Fire">Fire Spirit</var>
+        <var name="Spirit-Ice">Ice Spirit</var>
+        <var name="Spirit-Wind">Air Spirit</var>
+        <var name="Spirit-Earth">Earth Spirit</var>
+        <var name="Spirit-Thunder">Thunder Spirit</var>
+        <var name="Spirit-Water">Water Spirit</var>
+        <var name="Spirit-Light">Light Spirit</var>
+        <var name="Spirit-Dark">Dark Spirit</var>
+    </include>
+
+    <include name="EnspellConstants">
+        <var name="En-Fire">Enfire</var>
+        <var name="En-Ice">Enblizzard</var>
+        <var name="En-Wind">Enaero</var>
+        <var name="En-Earth">Enstone</var>
+        <var name="En-Thunder">Enthunder</var>
+        <var name="En-Water">Enwater</var>
+        <var name="En-Light">Enlight</var>
+        <var name="En-Dark">Endark</var>
+    </include>
+
+    <include name="FastCastVars">
+        <!-- Override these with actual amounts available in gear for the given job.
+             Include merits (eg: whm Cure Cast Time), but not Fast Cast traits (eg: rdm). -->
+        <var name="CureFastCast">0</var>
+        <var name="HealFastCast">0</var>
+        <var name="EnhancingFastCast">0</var>
+        <var name="ElementalFastCast">0</var>
+        <var name="GeneralFastCast">0</var>
+
+        <!-- Internal variable -->
+        <var name="FastCastAmt">0</var>
+        <var name="FCCastTime">0</var>
+        <!-- FastCastMode can take a value of Normal, Moderate or Quick
+             Moderate indicates that the spell may not swap gear properly
+             if using full Fast Cast gear, but will probably work with a
+             lesser amount.  Quick indicates that the spell will almost
+             certainly not swap gear properly, and full midcast gear
+             selections should be applied at precast.
+             This is set by the include code, and can be used in the
+             job xml.
+             
+             FastCastMode may take values of: None (for non-spells), Quick, Moderate, and Normal.
+              -->
+        <var name="FastCastMode">None</var>
+    </include>
+
+    <!-- Variables for handling manipulating proc spells. -->
+    <include name="TestProcVars">
+        <var name="ProcElement">Ice</var>
+        <var name="ProcSpell">None</var>
+
+        <var name="T3-Fire">Fire III</var>
+        <var name="T3-Ice">Blizzard III</var>
+        <var name="T3-Wind">Aero III</var>
+        <var name="T3-Earth">Stone III</var>
+        <var name="T3-Thunder">Thunder III</var>
+        <var name="T3-Water">Water III</var>
+        <var name="T3-Light">Banish II</var>
+        <var name="T3-Dark">Bio II</var>
+
+        <var name="T4-Fire">Fire IV</var>
+        <var name="T4-Ice">Blizzard IV</var>
+        <var name="T4-Wind">Aero IV</var>
+        <var name="T4-Earth">Stone IV</var>
+        <var name="T4-Thunder">Thunder IV</var>
+        <var name="T4-Water">Water IV</var>
+        <var name="T4-Light">Banish III</var>
+        <var name="T4-Dark">Aspir</var>
+
+        <var name="T-G3-Fire">Firaga III</var>
+        <var name="T-G3-Ice">Blizzaga III</var>
+        <var name="T-G3-Wind">Aeroga III</var>
+        <var name="T-G3-Earth">Stonega III</var>
+        <var name="T-G3-Thunder">Thundaga III</var>
+        <var name="T-G3-Water">Waterga III</var>
+        <var name="T-G3-Light">Banishga II</var>
+        <var name="T-G3-Dark">Drain</var>
+
+        <var name="T-AM-Fire">Flare</var>
+        <var name="T-AM-Ice">Freeze</var>
+        <var name="T-AM-Wind">Tornado</var>
+        <var name="T-AM-Earth">Quake</var>
+        <var name="T-AM-Thunder">Burst</var>
+        <var name="T-AM-Water">Flood</var>
+        <var name="T-AM-Light">Holy</var>
+        <var name="T-AM-Dark">Dispel</var>
+
+        <var name="T-Brd-Fire">Ice Threnody</var>
+        <var name="T-Brd-Ice">Wind Threnody</var>
+        <var name="T-Brd-Wind">Earth Threnody</var>
+        <var name="T-Brd-Earth">Ltng. Threnody</var>
+        <var name="T-Brd-Thunder">Water Threnody</var>
+        <var name="T-Brd-Water">Fire Threnody</var>
+        <var name="T-Brd-Light">Dark Threnody</var>
+        <var name="T-Brd-Dark">Light Threnody</var>
+    </include>
+
+
+    <!-- ******************* Sets ******************* -->
+
+    <!-- Ensure all the sets listed here are in your primary Outside-Group group.
+         You should NOT inherit from this group, in order to improve performance. -->
+    <include name="Base-Group-Sets">
+        <group name="Base-Group">
+            <set name="None">
+            </set>
+            <set name="Resting-Normal">
+            </set>
+            <set name="Kite|Move">
+            </set>
+
+            <set name="PhysDef-PDT">
+            </set>
+            <set name="PhysDef-Evasion">
+            </set>
+            <set name="PhysDef-Defense">
+            </set>
+            <set name="PhysDef-Shield">
+            </set>
+
+            <set name="MDT-*">
+            </set>
+            <set name="Resist-*">
+            </set>
+
+            <set name="WeakSet">
+            </set>
+        </group>
+    </include>
+
+    <include name="TPSetTemplate">
+             <!-- Template listing of all possible sets for combinations of offense
+                  and defense for a given weapon type.
+                  Use wildcard matches to trap for sets with nothing unique, to
+                  simplify the list in actual use. -->
+             
+             <!-- Do not import this include -->
+             
+            <set name="TP-H2H-Normal-Normal">
+            </set>
+            <set name="TP-H2H-Acc-Normal" BaseSet="TP-H2H-Normal-Normal">
+            </set>
+            <set name="TP-H2H-MaxAcc-Normal" BaseSet="TP-H2H-Normal-Normal">
+            </set>
+            <set name="TP-H2H-Str-Normal" BaseSet="TP-H2H-Normal-Normal">
+            </set>
+            <set name="TP-H2H-Att-Normal" BaseSet="TP-H2H-Normal-Normal">
+            </set>
+            <set name="TP-H2H-Crit-Normal" BaseSet="TP-H2H-Normal-Normal">
+            </set>
+            <set name="TP-H2H-2HR-Normal" BaseSet="TP-H2H-Normal-Normal">
+            </set>
+            <set name="TP-H2H-LowDmg-Normal" BaseSet="TP-H2H-Normal-Normal">
+            </set>
+
+            <set name="TP-H2H-Normal-Evasion">
+            </set>
+            <set name="TP-H2H-Acc-Evasion" BaseSet="TP-H2H-Normal-Evasion">
+            </set>
+            <set name="TP-H2H-MaxAcc-Evasion" BaseSet="TP-H2H-Normal-Evasion">
+            </set>
+            <set name="TP-H2H-Str-Evasion" BaseSet="TP-H2H-Normal-Evasion">
+            </set>
+            <set name="TP-H2H-Att-Evasion" BaseSet="TP-H2H-Normal-Evasion">
+            </set>
+            <set name="TP-H2H-Crit-Evasion" BaseSet="TP-H2H-Normal-Evasion">
+            </set>
+            <set name="TP-H2H-2HR-Evasion" BaseSet="TP-H2H-Normal-Evasion">
+            </set>
+            <set name="TP-H2H-LowDmg-Evasion" BaseSet="TP-H2H-Normal-Evasion">
+            </set>
+
+            <set name="TP-H2H-Normal-PDT">
+            </set>
+            <set name="TP-H2H-Acc-PDT" BaseSet="TP-H2H-Normal-PDT">
+            </set>
+            <set name="TP-H2H-MaxAcc-PDT" BaseSet="TP-H2H-Normal-PDT">
+            </set>
+            <set name="TP-H2H-Str-PDT" BaseSet="TP-H2H-Normal-PDT">
+            </set>
+            <set name="TP-H2H-Att-PDT" BaseSet="TP-H2H-Normal-PDT">
+            </set>
+            <set name="TP-H2H-Crit-PDT" BaseSet="TP-H2H-Normal-PDT">
+            </set>
+            <set name="TP-H2H-2HR-PDT" BaseSet="TP-H2H-Normal-PDT">
+            </set>
+            <set name="TP-H2H-LowDmg-PDT" BaseSet="TP-H2H-Normal-PDT">
+            </set>
+    
+            <set name="TP-H2H-Normal-Counter">
+            </set>
+            <set name="TP-H2H-Acc-Counter" BaseSet="TP-H2H-Normal-Counter">
+            </set>
+            <set name="TP-H2H-MaxAcc-Counter" BaseSet="TP-H2H-Normal-Counter">
+            </set>
+            <set name="TP-H2H-Str-Counter" BaseSet="TP-H2H-Normal-Counter">
+            </set>
+            <set name="TP-H2H-Att-Counter" BaseSet="TP-H2H-Normal-Counter">
+            </set>
+            <set name="TP-H2H-Crit-Counter" BaseSet="TP-H2H-Normal-Counter">
+            </set>
+            <set name="TP-H2H-2HR-Counter" BaseSet="TP-H2H-Normal-Counter">
+            </set>
+            <set name="TP-H2H-LowDmg-Counter" BaseSet="TP-H2H-Normal-Counter">
+            </set>
+
+            <set name="TP-H2H-Normal-Shield">
+            </set>
+            <set name="TP-H2H-Acc-Shield" BaseSet="TP-H2H-Normal-Shield">
+            </set>
+            <set name="TP-H2H-MaxAcc-Shield" BaseSet="TP-H2H-Normal-Shield">
+            </set>
+            <set name="TP-H2H-Str-Shield" BaseSet="TP-H2H-Normal-Shield">
+            </set>
+            <set name="TP-H2H-Att-Shield" BaseSet="TP-H2H-Normal-Shield">
+            </set>
+            <set name="TP-H2H-Crit-Shield" BaseSet="TP-H2H-Normal-Shield">
+            </set>
+            <set name="TP-H2H-2HR-Shield" BaseSet="TP-H2H-Normal-Shield">
+            </set>
+            <set name="TP-H2H-LowDmg-Shield" BaseSet="TP-H2H-Normal-Shield">
+            </set>
+    </include>
+</includes>

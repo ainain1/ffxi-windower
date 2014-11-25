@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!-- Last modified: 11/29/2012 4:52:00 PM -->
+
+
+<includes>
+<!-- Variables for whether slots have been unlocked in Salvage. -->
+  <include name="SalvageEquipVars">
+      <var name="SalvageMainLocked">true</var>
+      <var name="SalvageAmmoLocked">true</var>
+      <var name="SalvageHeadLocked">true</var>
+      <var name="SalvageRingLocked">true</var>
+      <var name="SalvageBodyLocked">true</var>
+      <var name="SalvageHandLocked">true</var>
+      <var name="SalvageWaistLocked">true</var>
+      <var name="SalvageFeetLocked">true</var>
+
+      <!-- The default gear listed is mainly gear that I should always have on me
+           regardless of job (mostly), and that is All Jobs.
+           You can adjust this set to whatever general values are appropriate.
+           After that, you can modify each one to match specific jobs after importing
+           this include by repeating the var rule after the import rule. -->
+
+      <!-- Main: Must be set after import if you want main weapon explicitly tested.  Usually only for mages for staff swapping.
+                 Leaving it blank is safe for melee to avoid loss of TP. -->
+      <var name="SalvageTestMain"></var>
+      <var name="SalvageTestAmmo">Tantra Tathlum</var>
+      <var name="SalvageTestNeck">Calcitrant Stole</var>
+      <var name="SalvageTestRing">Rajas Ring</var>
+      <var name="SalvageTestBody">Tantra Cyclas +2</var>
+      <var name="SalvageTestHands">Melee Gloves +2</var>
+      <var name="SalvageTestWaist">Black Belt</var>
+      <var name="SalvageTestFeet">Tantra Gaiters +2</var>
+  </include>
+
+  <include name="SalvageEquipRules">
+
+      <!-- Stone spell is used to retest what's currently locked in salvage.  Water is used to reset vars. -->
+
+      <!-- If we have not tested a slot and found that we can put gear there, lock the slot so that
+           we aren't spammed with invalid attempts to change gear.   -->
+      <if area="*Remnants">
+          <if type="Trigger">
+              <!-- Stone is the starting point.  It attempts to equip designated pieces
+                   of equipment into slots that are still marked as locked.  It makes a
+                   delayed call to Death afterwards so that we can cancel this spell
+                   and then see the results of attempting to equip the gear.  Any gear
+                   that actually got equipped indicates that that slot is no longer locked. -->
+              <if Spell="Trigger" SpellTargetRaw=".SalvageCheck">
+                  <command>wait 1;input /ma Update .Salvage</command>
+                  <cancelspell />
+    
+                  <!-- Only attempt to equip gear in slots that are still currently locked so that
+                       we don't attempt to change out normal gear on subsequent tests. -->
+    
+                  <if advanced='"$SalvageMainLocked" = "true"'>
+                      <equip when="Precast"><main>$SalvageTestMain</main></equip>
+                  </if>
+                  <if advanced='"$SalvageAmmoLocked" = "true"'>
+                      <equip when="Precast"><ammo>$SalvageTestAmmo</ammo></equip>
+                  </if>
+                  <if advanced='"$SalvageHeadLocked" = "true"'>
+                      <equip when="Precast"><neck>$SalvageTestNeck</neck></equip>
+                  </if>
+                  <if advanced='"$SalvageRingLocked" = "true"'>
+                      <equip when="Precast"><lring>$SalvageTestRing</lring></equip>
+                  </if>
+                  <if advanced='"$SalvageBodyLocked" = "true"'>
+                      <equip when="Precast"><body>$SalvageTestBody</body></equip>
+                  </if>
+                  <if advanced='"$SalvageHandLocked" = "true"'>
+                      <equip when="Precast"><hands>$SalvageTestHands</hands></equip>
+                  </if>
+                  <if advanced='"$SalvageWaistLocked" = "true"'>
+                      <equip when="Precast"><waist>$SalvageTestWaist</waist></equip>
+                  </if>
+                  <if advanced='"$SalvageFeetLocked" = "true"'>
+                      <equip when="Precast"><feet>$SalvageTestFeet</feet></equip>
+                  </if>
+                  
+                  <return />
+              </if>
+    
+              <!-- This spell is automatically called after Stone is run. -->
+              <!-- Need to use a spell that players will never have access to.  Choosing 'Death'. -->
+              <!-- Anything that got equipped gets its pathos limiter variable unlocked. -->
+              <elseif spell="Update" SpellTargetRaw=".Salvage">
+                  <cancelspell />
+                  <var cmd="set SalvageLocksUnlocked false" />
+    
+                  <if NotEquipMain=""> <!-- Simply check whether there's a weapon equipped.  Don't expect anything in particular. -->
+                      <if advanced='"$SalvageMainLocked" = "true"'>
+                          <AddToChat>Main weapon unlocked.</AddToChat>
+                          <var cmd="set SalvageMainLocked false" />
+                          <var cmd="set SalvageLocksUnlocked true" />
+                      </if>
+                  </if>
+                  <if EquipAmmo="$SalvageTestAmmo">
+                      <if advanced='"$SalvageAmmoLocked" = "true"'>
+                          <AddToChat>Ranged/ammo slots unlocked.</AddToChat>
+                          <var cmd="set SalvageAmmoLocked false" />
+                          <var cmd="set SalvageLocksUnlocked true" />
+                      </if>
+                  </if>
+                  <if EquipNeck="$SalvageTestNeck">
+                      <if advanced='"$SalvageHeadLocked" = "true"'>
+                          <AddToChat>Head/neck slots unlocked.</AddToChat>
+                          <var cmd="set SalvageHeadLocked false" />
+                          <var cmd="set SalvageLocksUnlocked true" />
+                      </if>
+                  </if>
+                  <if EquipLRing="$SalvageTestRing">
+                      <if advanced='"$SalvageRingLocked" = "true"'>
+                          <AddToChat>Rings/earrings slots unlocked.</AddToChat>
+                          <var cmd="set SalvageRingLocked false" />
+                          <var cmd="set SalvageLocksUnlocked true" />
+                      </if>
+                  </if>
+                  <if EquipBody="$SalvageTestBody">
+                      <if advanced='"$SalvageBodyLocked" = "true"'>
+                          <AddToChat>Body slot unlocked.</AddToChat>
+                          <var cmd="set SalvageBodyLocked false" />
+                          <var cmd="set SalvageLocksUnlocked true" />
+                      </if>
+                  </if>
+                  <if EquipHands="$SalvageTestHands">
+                      <if advanced='"$SalvageHandLocked" = "true"'>
+                          <AddToChat>Hands slot unlocked.</AddToChat>
+                          <var cmd="set SalvageHandLocked false" />
+                          <var cmd="set SalvageLocksUnlocked true" />
+                      </if>
+                  </if>
+                  <if EquipWaist="$SalvageTestWaist">
+                      <if advanced='"$SalvageWaistLocked" = "true"'>
+                          <AddToChat>Back/waist slots unlocked.</AddToChat>
+                          <var cmd="set SalvageWaistLocked false" />
+                          <var cmd="set SalvageLocksUnlocked true" />
+                      </if>
+                  </if>
+                  <if EquipFeet="$SalvageTestFeet">
+                      <if advanced='"$SalvageFeetLocked" = "true"'>
+                          <AddToChat>Legs/feet slots unlocked.</AddToChat>
+                          <var cmd="set SalvageFeetLocked false" />
+                          <var cmd="set SalvageLocksUnlocked true" />
+                      </if>
+                  </if>
+    
+                  <!-- If you have a consistent naming convention, you can force an
+                       update to the default gear set at this point, or generate a
+                       call to a JA/Spell that will properly readjust your gear now
+                       that the new slots are unlocked -->
+                  <if advanced='"$SalvageLocksUnlocked" = "true"'>
+                      <!-- Fixed set: -->
+                      <!-- <equip set="Standard" /> -->
+                      <!-- Reset to default/normal: -->
+                      <action type="Command">wait 1;input /ja Tranquility</action>
+                  </if>
+              </elseif>
+    
+              <!-- Reset variables (mainly for testing, but also in case Spellcast and its
+                   variables are still loaded when you next make a salvage run). -->
+              <elseif spell="Reset" SpellTargetRaw=".Salvage">
+                  <action type="cancelspell"/>
+                  <addtochat>Resetting Salvage locks.</addtochat>
+                  <var cmd="set SalvageMainLocked true" />
+                  <var cmd="set SalvageAmmoLocked true" />
+                  <var cmd="set SalvageHeadLocked true" />
+                  <var cmd="set SalvageRingLocked true" />
+                  <var cmd="set SalvageBodyLocked true" />
+                  <var cmd="set SalvageHandLocked true" />
+                  <var cmd="set SalvageWaistLocked true" />
+                  <var cmd="set SalvageFeetLocked true" />
+              </elseif>
+          </if>
+          <else>
+              <!-- <addtochat>Locking gear for Salvage.</addtochat> -->
+
+              <if advanced='"$SalvageMainLocked" = "true"'>
+                  <lock slot="main|sub" when="All" lock="yes" />
+              </if>
+              <if advanced='"$SalvageAmmoLocked" = "true"'>
+                  <lock slot="ranged|ammo" when="All" lock="yes" />
+              </if>
+              <if advanced='"$SalvageHeadLocked" = "true"'>
+                  <lock slot="head|neck" when="All" lock="yes" />
+              </if>
+              <if advanced='"$SalvageRingLocked" = "true"'>
+                  <lock slot="lear|rear|lring|rring" when="All" lock="yes" />
+              </if>
+              <if advanced='"$SalvageBodyLocked" = "true"'>
+                  <lock slot="body" when="All" lock="yes" />
+              </if>
+              <if advanced='"$SalvageHandLocked" = "true"'>
+                  <lock slot="hands" when="All" lock="yes" />
+              </if>
+              <if advanced='"$SalvageWaistLocked" = "true"'>
+                  <lock slot="back|waist" when="All" lock="yes" />
+              </if>
+              <if advanced='"$SalvageFeetLocked" = "true"'>
+                  <lock slot="legs|feet" when="All" lock="yes" />
+              </if>
+          </else>
+      </if>
+  </include>
+
+</includes>

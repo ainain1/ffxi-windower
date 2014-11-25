@@ -1,0 +1,37 @@
+//Default Profile
+//Empty to prevent unexpected behavior at bad times
+
+
+// ===== Crystal ===== 
+//if item is 4096 then pass // pass Fire Crystal
+//if item is 4099 then pass // pass Earth Crystal
+//if item is 4101 then pass // pass Water Crystal
+//if item is 4098 then pass // pass Wind Crystal
+//if item is 4097 then pass // pass Ice Crystal
+//if item is 4100 then pass // pass Lightning Crystal
+//if item is 4102 then pass // pass Light Crystal
+//if item is 4103 then pass // pass Dark Crystal
+
+// ===== Cluster =====
+//if item is 4104 then pass // pass Fire Cluster
+//if item is 4107 then pass // pass Earth Cluster
+//if item is 4109 then pass // pass Water Cluster
+//if item is 4106 then pass // pass Wind Cluster
+//if item is 4105 then pass // pass Ice Cluster
+//if item is 4108 then pass // pass Lightning Cluster
+//if item is 4110 then pass // pass Light Cluster
+//if item is 4111 then pass // pass Dark Cluster
+
+// ===== Mixed Species ===== 
+if item is 2229 then pass // pass Chimera Blood
+if item is 930,924 then pass // pass Beastman Blood, Fiend Blood
+if item is 644 then pass // pass Mythril Ore
+if item is 914 then pass // pass Mercury
+
+// ===== Luminion =====
+if item is 1819 then pass // pass Luminion Chip
+if item is 1872 then pass // pass Ghrah M Chip
+
+// ===== Mandragora =====
+if item is 4369 then pass //4leaf mandy bud
+if item is 4368 then pass //2leaf mandy bud

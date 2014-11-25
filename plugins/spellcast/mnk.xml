@@ -1,0 +1,1068 @@
+<?xml version="1.0" ?>
+<spellcast xmlns="http://www.windower.net/spellcast/"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.windower.net/spellcast/ spellcast.xsd">
+
+  <!-- Last modified: 1/26/2013 2:01:46 AM -->
+  
+    <config Debug="false"
+            ShowGearSwaps="false"
+            ShowSpellInfo="false"
+            RequireVersion="2.30"
+            />
+
+    <variables clear="true">
+        <!-- General configuration -->
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='ConfigurationVars']/*" />
+
+        <!-- Configuration var overrides. -->
+        <var name="CritWS">Victory Smite</var>
+        <var name="MagicalWS">Sunburst|Earth Crusher|Cataclysm</var>
+        <var name="Options.DefenseModes">Evasion|Counter|PDT</var>
+        <var name="Options.OffenseModes">Normal|Acc|MaxAcc|Str|Att</var>
+        <var name="Options.WSModes">Default|Acc|Mod</var>
+
+        <!-- General utility -->
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='UtilityVars']/*" />
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='RecastDurations']/*" />
+
+        <!-- Utility default var overrides. -->
+        <var name="TPWeapon">H2H</var>
+
+        <!-- Variables for locking gear in Salvage until the slot is unlocked.  -->
+        <xi:include href="Salvage-Include.xml" xpointer="/includes/include[@name='SalvageEquipVars']/*" />
+
+        <var name="AggressiveLayer">Rancor</var>
+
+        <!-- Local vars -->
+        <var name="Duration-PC">18</var>
+        <var name="Duration-Impetus">185</var>
+        <var name="Duration-Berserk">185</var>
+
+        <var name="PC-Active">No</var>
+
+        <var name="ImpetusArmor">None</var>
+        <var name="UseImpetusArmor">None</var>
+        <var name="PerfectCounterArmor">None</var>
+
+        <var name="Clubs">Shellbuster</var>
+        <var name="Staves">Earth Staff|Chatoyant Staff|Plenitas Virga</var>
+        <var name="ChiBlastWeapon">Kirin's Pole</var>
+        <var name="ChiBlastSub">Poke Grip</var>
+        <var name="GuardSkillupWeapon">Verethragna</var>
+
+    </variables>
+
+    <sets>
+        <group name="Outside-Group" default="true">
+            <set name="None">
+            </set>
+
+            <!-- ***************************** -->
+            <!--  General idle sets            -->
+            <!-- ***************************** -->
+
+            <set name="Idle-Town-Normal">
+                <ammo>Thew Bomblet</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Wiglen Gorget</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Otronif Gloves</hands>
+                 <lring>Sheltered Ring</lring>
+                <rring>Paguroidea Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Otronif Brais</legs>
+                <feet>Hermes' Sandals</feet>
+            </set>
+            <set name="Idle-Field-Normal" BaseSet="Idle-Town-Normal|Regen">
+                <legs>Melee Hose +2</legs>
+            </set>
+            <set name="Idle-Field-2HR|Idle-Town-2HR" BaseSet="TP-H2H-2HR-Normal">
+            </set>
+
+            <set name="Resting-Normal" BaseSet="Idle-Field-Normal">
+                <back>Melee Cape</back>
+                <feet>Melee Gaiters +2</feet>
+            </set>
+
+            <set name="Regen">
+                <head>Ocelomeh Headpiece +1</head>
+                <neck>Wiglen Gorget</neck>
+                <body>Melee Cyclas +2</body>
+                <hands>Garden Bangles</hands>
+                <lring>Sheltered Ring</lring>
+                <rring>Paguroidea Ring</rring>
+            </set>
+
+            <set name="Move|Kite">
+                <feet>Hermes' Sandals</feet>
+            </set>
+
+
+            <!-- ***************************** -->
+            <!--  Sets for TP                  -->
+            <!-- ***************************** -->
+
+            <!-- During Hundred Fists (takes precedence over any standard TP sets) -->
+            <set name="TP-H2H-2HR-*|TP-FW-2HR-*|TP-Staff-2HR-*|TP-Club-2HR-*">
+                <ammo>Thew Bomblet</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Otronif Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Otronif Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+
+
+            <!-- Normal TP sets -->
+            <set name="TP-H2H-Normal-Normal">
+                <ammo>Thew Bomblet</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Otronif Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Otronif Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+            <set name="TP-H2H-Acc-Normal">
+                <ammo>Thew Bomblet</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Otronif Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Otronif Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+            <set name="TP-H2H-MaxAcc-Normal">
+                <ammo>Thew Bomblet</ammo>
+                <head>Thaumas Hat</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Thaumas Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Thaumas Kecks</legs>
+                <feet>Thaumas Nails</feet>
+            </set>
+            <set name="TP-H2H-Str-Normal">
+                <ammo>Thew Bomblet</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Thaumas Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Thaumas Kecks</legs>
+                <feet>Thaumas Nails</feet>
+            </set>
+            <set name="TP-H2H-Att-Normal">
+                <ammo>Thew Bomblet</ammo>
+                <head>Thaumas Hat</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Thaumas Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Thaumas Kecks</legs>
+                <feet>Thaumas Nails</feet>
+            </set>
+
+
+            <set name="TP-H2H-Normal-Evasion">
+                <ammo>Thew Bomblet</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Ghillie Earring +1</rear>
+                <body>Thaumas Coat</body>
+                <hands>Melee Gloves +2</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Tantra Hose +2</legs>
+                <feet>Tantra Gaiters +2</feet>
+            </set>
+            <set name="TP-H2H-*-Evasion" BaseSet="TP-H2H-Normal-Evasion">
+                <ammo>Tantra Tathlum</ammo>
+            </set>
+
+            <set name="TP-H2H-Normal-Counter">
+                <ammo>Thew Bomblet</ammo>
+                <head>Thaumas Hat</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Thaumas Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Thaumas Kecks</legs>
+                <feet>Thaumas Nails</feet>
+            </set>
+            <set name="TP-H2H-*-Counter" BaseSet="TP-H2H-Normal-Counter">
+                <ammo>Tantra Tathlum</ammo>
+            </set>
+
+            <set name="TP-H2H-Normal-PDT">
+				<ammo>Thew Bomblet</ammo>
+                <head>Otronif Mask</head>
+                <neck>Twilight Torque</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Otronif Harness</body>
+                <hands>Otronif Gloves</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Shadow Mantle</back>
+                <waist>Black Belt</waist>
+                <legs>Otronif Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+            <set name="TP-H2H-*-PDT" BaseSet="TP-H2H-Normal-PDT">
+            </set>
+
+
+
+            <!-- Footwork -->
+            <set name="TP-FW-Normal-Normal">
+                <ammo>Thew Bomblet</ammo>
+                <head>Thaumas Hat</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Ghillie Earring +1</rear>
+                <body>Usukane Haramaki</body>
+                <hands>Melee Gloves +2</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Tantra Hose +2</legs>
+                <feet>Tantra Gaiters +2</feet>
+            </set>
+            <set name="TP-FW-Acc-Normal" BaseSet="TP-FW-Normal-Normal">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Brisk Mask</head>
+                <rear>Kemas Earring</rear>
+            </set>
+            <set name="TP-FW-MaxAcc-Normal" BaseSet="TP-FW-Normal-Normal">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Brisk Mask</head>
+                <rear>Kemas Earring</rear>
+                <neck>Faith Torque</neck>
+                <hands>Melee Gloves +2</hands>
+            </set>
+            <set name="TP-FW-Str-Normal" BaseSet="TP-FW-Normal-Normal">
+                <ammo>Tantra Tathlum</ammo>
+                <neck>Faith Torque</neck>
+                <hands>Heafoc Mitts</hands>
+                <back>Misuuchi Kappa</back>
+            </set>
+            <set name="TP-FW-Att-Normal" BaseSet="TP-FW-Normal-Normal">
+            </set>
+
+
+            
+            <set name="TP-FW-Normal-Evasion">
+                <ammo>Thew Bomblet</ammo>
+                <head>Tantra Crown +2</head>
+                <neck>Torero Torque</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Aesir Ear Pendant</rear>
+                <body>Usukane Haramaki</body>
+                <hands>Tantra Gloves +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Boxer's Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Tantra Hose +2</legs>
+                <feet>Tantra Gaiters +2</feet>
+            </set>
+            <set name="TP-FW-Str-Evasion" BaseSet="TP-FW-Normal-Evasion">
+                <ammo>Tantra Tathlum</ammo>
+            </set>
+            <set name="TP-FW-*-Evasion" BaseSet="TP-FW-Normal-Evasion">
+                <ammo>Tantra Tathlum</ammo>
+                <hands>Usukane Gote</hands>
+            </set>
+
+
+            <set name="TP-FW-Normal-Counter">
+                <ammo>Thew Bomblet</ammo>
+                <head>Tantra Crown +2</head>
+                <neck>Calcitrant Stole</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Aesir Ear Pendant</rear>
+                <body>Tantra Cyclas +2</body>
+                <hands>Usukane Gote</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Tantra Hose +2</legs>
+                <feet>Tantra Gaiters +2</feet>
+            </set>
+            <set name="TP-FW-*-Counter" BaseSet="TP-FW-Normal-Counter">
+                <ammo>Tantra Tathlum</ammo>
+            </set>
+
+            <set name="TP-FW-Normal-PDT">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Tantra Crown +2</head>
+                <neck>Twilight Torque</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Aesir Ear Pendant</rear>
+                <body>Tantra Cyclas +2</body>
+                <hands>Denali Wristbands</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Tantra Hose +2</legs>
+                <feet>Tantra Gaiters +2</feet>
+            </set>
+            <set name="TP-FW-*-PDT" BaseSet="TP-FW-Normal-PDT">
+            </set>
+
+
+            <set name="TP-Staff-*">
+                <ammo>Thew Bomblet</ammo>
+                <head>Otronif Mask</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Otronif Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Otronif Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+
+            <set name="TP-Club-*">
+                <ammo>Thew Bomblet</ammo>
+                <head>Otronif Mask</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Otronif Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Otronif Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+
+
+
+            <set name="Rancor">
+                <neck>Asperity Necklace</neck>
+            </set>
+            
+            
+            <!-- ***************************** -->
+            <!--  Sets for JAs                 -->
+            <!-- ***************************** -->
+
+            <set name="Chakra">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <rear>Kemas Earring</rear>
+                <body>Temple Cyclas</body>
+                <hands>Melee Gloves +2</hands>
+                <lring>Sirona's Ring</lring>
+                <rring>Spiral Ring</rring>
+                <back>Melee Cape</back>
+                <waist>Warwolf Belt</waist>
+                <feet>Ryuga Sune-ate</feet>
+            </set>
+
+            <set name="Full Chi Blast">
+                <main>Kirin's Pole</main>
+                <sub>Verse Strap +1</sub>
+                <head>Temple Crown +1</head>
+                <neck>Promise Badge</neck>
+                <lear>Geist Earring</lear>
+                <rear>Geist Earring</rear>
+                <body>Kirin's Osode</body>
+                <hands>Devotee's Mitts</hands>
+                <lring>Solemn Ring</lring>
+                <rring>Sapphire Ring</rring>
+                <back>Melee Cape</back>
+                <waist>Steppe Rope</waist>
+                <legs>Temple Hose +1</legs>
+                <feet>Suzaku's Sune-ate</feet>
+            </set>
+
+            <set name="ImpetusSet">
+				
+				
+            </set>
+
+            <!-- ***************************** -->
+            <!--  Sets for defenses            -->
+            <!-- ***************************** -->
+
+            <set name="PerfectCounterSet">
+                <head>Tantra Crown +2</head>
+                <back>Ultion Mantle</back>
+            </set>
+
+            <!-- <set name="Guard">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Tiger Mask</head>
+                <neck>Guarding Torque</neck>
+                <lear>Bloodgem Earring</lear>
+                <rear>Guarding Earring</rear>
+                <body>Arhat's Gi +1</body>
+                <hands>Denali Wristbands</hands>
+                <lring>Meridian Ring</lring>
+                <rring>Bomb Queen Ring</rring>
+                <back>Boxer's Mantle</back>
+                <waist>Warwolf Belt</waist>
+                <legs>Temple Hose +1</legs>
+                <feet>Melee Gaiters +1</feet>
+            </set> -->
+
+            <set name="PhysDef-PDT">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Arhat's Jinpachi +1</head>
+                <neck>Twilight Torque</neck>
+                <body>Arhat's Gi +1</body>
+                <!-- <hands>Denali Wristbands</hands> -->
+                <hands>Tantra Gloves +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <!-- <back>Boxer's Mantle</back> -->
+                <waist>Twilight Belt</waist>
+            </set>
+            <set name="PhysDef-Evasion">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Fugacity Beret</head>
+                <neck>Torero Torque</neck>
+                <body>Usukane Haramaki</body>
+                <hands>Usukane Gote</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Boxer's Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Ocelot Trousers</legs>
+                <feet>Temple Gaiters +1</feet>
+            </set>
+
+            <set name="MDT-Any|MDT-All|MDT-None|Resist-Any|Resist-All|Resist-None">
+				<ammo>Thew Bomblet</ammo>
+                <head>Otronif Mask</head>
+                <neck>Twilight Torque</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Otronif Harness</body>
+                <hands>Otronif Gloves</hands>
+                <lring>Dark Ring</lring>
+                <rring>Shadow Ring</rring>
+                <back>Shadow Mantle</back>
+                <waist>Black Belt</waist>
+                <legs>Otronif Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+            <set name="MDT-Earth|Resist-Earth">
+                <ammo>Soil Sachet</ammo>
+                <neck>Twilight Torque</neck>
+                <rear>Merman's Earring</rear>
+                <body>Avalon Breastplate</body>
+                <hands>Denali Wristbands</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Lamia Mantle +1</back>
+            </set>
+            <set name="MDT-Water|Resist-Water">
+                <ammo>Aqua Sachet</ammo>
+                <head>Genbu's Kabuto</head>
+                <neck>Twilight Torque</neck>
+                <rear>Merman's Earring</rear>
+                <body>Avalon Breastplate</body>
+                <hands>Denali Wristbands</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Lamia Mantle +1</back>
+            </set>
+            <set name="MDT-Wind|Resist-Wind">
+                <ammo>Breeze Sachet</ammo>
+                <neck>Twilight Torque</neck>
+                <rear>Merman's Earring</rear>
+                <body>Avalon Breastplate</body>
+                <hands>Denali Wristbands</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Lamia Mantle +1</back>
+            </set>
+            <set name="MDT-Fire|Resist-Fire">
+                <ammo>Flame Sachet</ammo>
+                <neck>Twilight Torque</neck>
+                <rear>Merman's Earring</rear>
+                <body>Avalon Breastplate</body>
+                <hands>Denali Wristbands</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Lamia Mantle +1</back>
+                <feet>Suzaku's Sune-ate</feet>
+            </set>
+            <set name="MDT-Ice|Resist-Ice">
+                <ammo>Snow Sachet</ammo>
+                <neck>Twilight Torque</neck>
+                <rear>Merman's Earring</rear>
+                <body>Avalon Breastplate</body>
+                <hands>Denali Wristbands</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Lamia Mantle +1</back>
+            </set>
+            <set name="MDT-Thunder|Resist-Thunder">
+                <ammo>Thunder Sachet</ammo>
+                <neck>Twilight Torque</neck>
+                <rear>Merman's Earring</rear>
+                <body>Avalon Breastplate</body>
+                <hands>Denali Wristbands</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Lamia Mantle +1</back>
+                <legs>Byakko's Haidate</legs>
+            </set>
+
+            <set name="WeakSet">
+                <neck>Twilight Torque</neck>
+				<head>Otronif Mask</head>
+                <body>Otronif Harness</body>
+                <hands>Otronif Gloves </hands>
+				<back>Shadow Mantle</back>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <legs>Otronif Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+
+            <!-- ***************************** -->
+            <!--  Sets for weaponskills        -->
+            <!-- ***************************** -->
+
+            <set name="WS-Victory Smite-Normal">
+                <ammo>Thew Bomblet</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Tantra Cyclas +2</body>
+                <hands>Mustela Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Thaumas Kecks</legs>
+                <feet>Tantra Gaiters +2</feet>
+            </set>
+            <set name="WS-Victory Smite-Acc">
+                <ammo>Thew Bomblet</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Moonshade Earring</rear>
+                <body>Tantra Cyclas +2</body>
+                <hands>Mustela Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Thaumas Kecks</legs>
+                <feet>Tantra Gaiters +2</feet>
+            </set>
+            <set name="WS-Victory Smite-*" BaseSet="WS-Victory Smite-Normal">
+            </set>
+
+
+            <set name="WS-Shijin Spiral-Normal">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Otronif Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Manibozho Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+            <set name="WS-Shijin Spiral-Acc">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Toci's Harness</body>
+                <hands>Thurandaut Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Manibozho Brais</legs>
+                <feet>Thaumas Nails</feet>
+            </set>
+            <set name="WS-Shijin Spiral-Mod">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Toci's Harness</body>
+                <hands>Thurandaut Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Manibozho Brais</legs>
+                <feet>Thaumas Nails</feet>
+            </set>
+            <set name="WS-Shijin Spiral-*" BaseSet="WS-Shijin Spiral-Normal">
+            </set>
+
+
+            <set name="WS-Ascetic's Fury-Normal">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Otronif Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Manibozho Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+            <set name="WS-Ascetic's Fury-Acc">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Otronif Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Manibozho Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+            <set name="WS-Ascetic's Fury-*" BaseSet="WS-Ascetic's Fury-Normal">
+            </set>
+
+
+            <set name="WS-Asuran Fists-Normal">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Otronif Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Manibozho Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+            <set name="WS-Asuran Fists-Acc">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Otronif Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Manibozho Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+            <set name="WS-Asuran Fists-*" BaseSet="WS-Asuran Fists-Normal">
+            </set>
+
+
+            <set name="WS-Cataclysm">
+                <neck>Stoicheion Medal</neck>
+                <lear>Hecate's Earring</lear>
+                <rear>Moonshade Earring</rear>
+                <body>Usukane Haramaki</body>
+                <hands>Athos's Gloves</hands>
+                <lring>Demon's Ring</lring>
+                <rring>Spiral Ring</rring>
+                <waist>Aqua Belt</waist>
+                <legs>Denali Kecks</legs>
+                <feet>Usukane Sune-ate</feet>
+            </set>
+
+
+            <!-- Wildcard sets for other (primarily h2h) weaponskills -->
+            <set name="WS-*">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Uk'uxkaj Cap</head>
+                <neck>Asperity Necklace</neck>
+                <lear>Steelflash Earring</lear>
+                <rear>Bladeborn Earring</rear>
+                <body>Thaumas Coat</body>
+                <hands>Otronif Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Manibozho Brais</legs>
+                <feet>Otronif Boots</feet>
+            </set>
+
+
+            <!-- ***************************** -->
+            <!--  Sets for subjob stuff        -->
+            <!-- ***************************** -->
+
+            <set name="CureWaltz">
+                <ammo>Sonia's Plectrum</ammo>
+            </set>
+            <set name="CureWaltzMe">
+                <ammo>Tantra Tathlum</ammo>
+                <head>Genbu's Kabuto</head>
+                <rear>Kemas Earring</rear>
+                <body>Tantra Cyclas +2</body>
+                <rring>Spiral Ring</rring>
+                <back>Melee Cape</back>
+                <waist>Warwolf Belt</waist>
+                <feet>Ryuga Sune-ate</feet>
+            </set>
+
+            <set name="FastCast">
+                <head>Tantra Crown +2</head>
+                <rear>Loquacious Earring</rear>
+                <waist>Twilight Belt</waist>
+                <legs>Tantra Hose +2</legs>
+            </set>
+            <set name="Utsusemi">
+                <head>Tantra Crown +2</head>
+                <neck>Magoraga Beads</neck>
+                <rear>Loquacious Earring</rear>
+                <body>Usukane Haramaki</body>
+                <hands>Usukane Gote</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Shadow Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Tantra Hose +2</legs>
+                <feet>Temple Gaiters +1</feet>
+            </set>
+
+            <set name="Ninjutsu">
+                <neck>Stoicheion Medal</neck>
+                <lear>Hecate's Earring</lear>
+                <rear>Moldavite Earring</rear>
+                <body>Usukane Haramaki</body>
+                <lring>Demon's Ring</lring>
+                <rring>Spiral Ring</rring>
+                <legs>Denali Kecks</legs>
+            </set>
+
+        </group>
+
+        <group name="Abyssea-Group" inherit="Outside-Group" />
+
+        <group name="Campaign-Group" inherit="Outside-Group" />
+
+        <group name="Voidwatch-Group" inherit="Outside-Group" />
+
+        <group name="Salvage-Group" inherit="Outside-Group" />
+
+        <group name="Assault-Group" inherit="Outside-Group" />
+
+        <group name="Legion-Group" inherit="Outside-Group" />
+
+    </sets>
+
+    <rules>
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='RunFirstUpdate']/*" /> 
+
+        <!-- Salvage locks -->      
+        <!-- <xi:include href="Salvage-Include.xml" xpointer="/includes/include[@name='SalvageEquipRules']/*" /> -->
+        <!-- Make sure locks are in place before auto-changing gear. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='EquipmentLockRules']/*" />
+        <!-- Auto-change gear call via Aftercast to limit lag. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ChangeGearAftercast']/*" />
+        <!-- Other general imports. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='LevelRequirement']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ReturnRules']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='CleanTransportation']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='RecastWarnings']/*" />
+
+        <!-- Imported rules for locking gear in Salvage, and tests to unlock slots.
+        <xi:include href="SalvageIncludes.xml" xpointer="/includes/include[@name='SalvageEquipRules']/*" /> -->
+
+        <!-- First: Adjust values based on status checks. -->
+        
+        <!-- Determine weapon used. -->
+        <if EquipMain="$Clubs">
+            <var cmd="set TPWeapon Club" />
+        </if>
+        <elseif EquipMain="$Staves">
+            <var cmd="set TPWeapon Staff" />
+        </elseif>
+        <elseif mode="OR" BuffActive="Footwork" Spell="Footwork">
+            <var cmd="set TPWeapon FW" />
+        </elseif>
+        <else>
+            <var cmd="set TPWeapon H2H" />
+        </else>
+
+        <!-- Check for weakness -->
+        <if BuffActive="Weakness">
+            <var cmd="set WeaknessArmor WeakSet" />
+        </if>
+
+        <!-- Second: Update certain values when their status may drop, or when autoset changes. -->
+        <if spell="Update|autoset">
+            <!-- Autoset (engage/disengage/rest/etc) gets same checks as an Update command -->
+            
+            <!-- Check for changes to area/group. -->
+            <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='AreaRules']/*" />
+
+            <if status="Engaged" advanced='"$Movement"="Move"'>
+                <var cmd="set Movement None" />
+            </if>
+            <elseif status="Idle">
+                <var cmd="set Movement Move" />
+            </elseif>
+
+            <!-- Turn off armor sets on an Update call. -->
+            <if NotBuffActive="Weakness">
+                <var cmd="set WeaknessArmor None" />
+            </if>
+    
+            <if mode="OR" NotBuffActive="Perfect Counter" advanced='"$PC-Active"="No"'>
+                <var cmd="set PerfectCounterArmor None" />
+                <var cmd="set PC-Active No" />
+            </if>
+    
+            <if NotBuffActive="Impetus">
+                <var cmd="set ImpetusArmor None" />
+            </if>
+
+            <if NotBuffActive="Hundred Fists">
+                <if advanced='"$Use-OffenseMode"="2HR"'>
+                    <var cmd="set Use-OffenseMode None" />
+                    <var cmd="set IdleMode Normal" />
+                </if>
+            </if>
+
+            
+            <!-- On a manual update, report our current configuration. -->
+            <if SpellTargetRaw=".Manual">
+                <addtochat>Update gear. $TPWeapon - $OffenseMode/$DefenseMode, PD:$PhysicalDefense, MD:$MagicalDefense, $Movement</addtochat>
+            </if>
+        </if>
+
+        <!-- Third: Adjust configurations based on action/trigger. -->
+
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='UniversalTriggerRules']/*" />
+
+        <if type="JobAbility">
+            <if Spell="Perfect Counter">
+                <var cmd="set PC-Active Yes" />
+                <equip when="precast" set="PerfectCounterSet" />
+                <var cmd="set PerfectCounterArmor PerfectCounterSet" />
+                <command when="Aftercast">wait $Duration-PC;sc var set PC-Active No;$UpdateCommand</command>
+            </if>
+            <elseif spell="Boost">
+                <equip when="precast">
+                    <hands>Temple Gloves</hands>
+                </equip>
+            </elseif>
+            <elseif spell="Chakra">
+                <equip when="precast" set="Chakra" />
+            </elseif>
+            <elseif spell="Counterstance">
+                <equip when="precast">
+                    <feet>Melee Gaiters +2</feet>
+                </equip>
+            </elseif>
+            <elseif spell="Focus">
+                <equip when="precast">
+                    <head>Temple Crown +1</head>
+                </equip>
+            </elseif>
+            <elseif spell="Dodge">
+                <equip when="precast">
+                    <feet>Temple Gaiters +1</feet>
+                </equip>
+            </elseif>
+            <elseif Spell="Impetus">
+                <var cmd="set ImpetusArmor ImpetusSet" />
+                <command when="Aftercast">wait $Duration-Impetus;$UpdateCommand</command>
+            </elseif>
+            <elseif spell="Chi Blast">
+                <!-- See if we're using +mnd grip so that we can swap
+                     into earth staff while idle/kiting -->
+                <if EquipSub="$ChiBlastSub">
+                    <equip when="precast" set="Full %Spell" />
+                    <equip when="aftercast">
+                        <main>$Staff-PDT</main>
+                    </equip>
+                </if>
+                <else>
+                    <equip when="precast">
+                        <head>Melee Crown +2</head>
+                    </equip>
+                </else>
+            </elseif>
+            <elseif spell="Hundred Fists">
+                <equip when="precast">
+                    <head>Melee Hose +2</head>
+                </equip>
+                <var cmd="set Use-OffenseMode 2HR" />
+                <var cmd="set IdleMode 2HR" />
+            </elseif>
+            <elseif spell="Footwork">
+                <equip when="precast">
+                    <feet>Tantra Gaiters +2</feet>
+                </equip>
+            </elseif>
+            <elseif spell="Formless Strikes">
+                <equip when="precast">
+                    <feet>Melee Cyclas +2</feet>
+                </equip>
+            </elseif>
+            <elseif spell="Mantra">
+                <equip when="precast">
+                    <feet>Melee Gaiters +2</feet>
+                </equip>
+            </elseif>
+        </if>
+
+        <!-- Fourth: Adjust gear to account for changes in configuration -->
+
+        <if status="Engaged">
+            <var cmd="set UseImpetusArmor $ImpetusArmor" />
+        </if>
+        <else>
+            <var cmd="set UseImpetusArmor None" />
+        </else>
+
+        <!-- Fifth: Compile all adjustments into the final gear set. -->
+        
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='DefineBaseLayer']/*" />
+
+        <!-- Compile all subsets into a single final set -->
+        <var cmd="set CurrentSet $BaseLayer|$UseAggressive|$UseImpetusArmor|$WeaknessArmor|$PhysicalDefense|$PerfectCounterArmor|$MagicalDefense|$Movement" />
+
+        <!-- And assign to appropriate sets for idle/aftercast/etc -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='HandleEquippingGear']/*" />
+
+
+        <!-- ************************************************************************ -->
+        <!-- The following sections are solely for setting precast/midcast equipment, -->
+        <!-- and should not be changing any configuration options.                    -->
+        <!-- ************************************************************************ -->
+
+        <if type="WeaponSkill">
+            <if Spell="Victory Smite" NotEquipMain="Verethragna">
+                <changespell spell="Shijin Spiral" />
+            </if>
+            
+            <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='DefineWeaponskillSet']/*" />
+            <equip when="Precast" set="$WSSet" />
+
+            <if BuffActive="Footwork" spell="Dragon Kick|Tornado Kick">
+                <equip when="Precast">
+                    <feet>Tantra Gaiters +2</feet>
+                </equip>
+            </if>
+            <if BuffActive="Impetus" Spell="Victory Smite|Ascetic's Fury">
+                <equip when="Precast">
+                    <body>Tantra Cyclas +2</body>
+                </equip>
+            </if>
+        </if>
+
+        <elseif type="Waltz">
+            <!-- Waltzes for /dnc -->
+            <if NotSpell="Healing Waltz">
+                <if SpellTargetType="SELF">
+                    <equip when="Precast" set="CureWaltzMe" />
+                </if>
+                <else>
+                    <equip when="Precast" set="CureWaltz" />
+                </else>
+            </if>
+        </elseif>
+
+        <!-- Put on haste gear when casting utsu -->
+        <elseif type="Ninjutsu">
+            <if Spell="Utsusemi*">
+                <CastDelay delay="0.05" />
+                <AftercastDelay delay="0.5" />
+
+                <equip when="Precast" set="Utsusemi" />
+            </if>
+            <elseif SpellTargetType="MONSTER|NPC">
+                <equip when="Precast" set="FastCast|Ninjutsu" />
+            </elseif>
+        </elseif>
+
+        <elseif skill="*Magic">
+            <equip when="Precast" set="FastCast" />
+        </elseif>
+    </rules>
+</spellcast>

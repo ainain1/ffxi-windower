@@ -1,0 +1,111 @@
+keyboard_allowmmf 1
+
+//Set console variables
+console_position 15 50
+console_color 255 255 0 0
+console_displayactivity 1
+console_fadedelay 3500
+console_chatopen 1
+console_screendir screenshots
+
+//Set game variables
+game_forceambientlight 1
+game_ambientlight 255 120 120 120
+game_gamma 50
+game_allowsetcursorpos 0
+game_exittype 1
+game_exitprompt 1
+game_allowresize 0
+
+//Set general variables
+//showfps 1
+// FPS Position - Use -75 1 to position it on the top right corner.
+//fps_position 5 5 //top left
+fps_position -75 1 //top right
+
+//Bind keys
+//Bind syntax is "bind <key> <up> <command>
+// ^ represents control- and ! is alt, eg !1 is alt-1
+bind !f10 drawdistance set 10
+bind ^f10 drawdistance set 1
+bind f11 game_forceambientlight
+bind f12 showfps
+bind sysrq screenshot png hide
+bind ^v paste
+echo Toggle Lighting = F11 (Bump mapping must be off to work properly)
+echo Toggle FPS = F12
+echo DrawDistance Lv 10: Alt-F10
+echo DrawDistance Lv 1: Ctrl-F10
+echo Paste Clipboard = Ctrl-V
+
+//Sets ConsoleBG Background Position
+consolebg position 15 50
+
+// *** ALLIANCE TARGET KEYS ***
+// This lets you push Alt+F1-6 and Ctrl+F1-6 to  to target Alliance members.
+bind ^f1 input /ta <a10>
+bind ^f2 input /ta <a11>
+bind ^f3 input /ta <a12>
+bind ^f4 input /ta <a13>
+bind ^f5 input /ta <a14>
+bind ^f6 input /ta <a15>
+bind !f1 input /ta <a20>
+bind !f2 input /ta <a21>
+bind !f3 input /ta <a22>
+bind !f4 input /ta <a23>
+bind !f5 input /ta <a24>
+bind !f6 input /ta <a25>
+
+
+// Item (NNI and Voidwatch)
+
+bind ^f1 input /item "Fanatic's Drink" <me>
+bind ^f2 input /item "Dusty Wing" <me>
+bind ^f3 input /item "Sprinter's Drink" <me>
+bind ^f4 input /item "Fool's Drink" <me>
+
+bind !f1 input /item "Stalwart's Tonic" <me>
+bind !f2 input /item "Champion's Tonic" <me>
+bind !f3 input /item "Monarch's Drink" <me>
+bind !f4 input /item "Braver's Drink" <me>
+
+// Fill mode
+
+bind ^f5 fillmode
+
+// Rev3 (Radsources) binds
+
+//bind f9 input /ma CombatMode Cycle(Offense)
+//bind ^f9 input /ma CombatMode Cycle(Defense)
+//bind !f9 input /ma CombatMode Toggle(Aggressive)
+ 
+//bind f10 input /ma PhysicalDefense .On
+//bind !f10 input /ma PhysicalDefense .Cycle
+//bind ^f10 input /ws CombatMode Kite:toggle
+ 
+//bind f11 input /ma MagicalDefense On
+ 
+//bind f12 input /ma Update .Manual
+//bind !f12 input /ma Reset .Defense
+//bind ^f12 input /ma Update WSDistance
+
+//Set DrawDistance
+drawdistance set 20
+
+//move map
+ffxidb map pos 1500 5
+
+//Text
+wait 1
+text create doom;
+text create vanatime;
+text create vanaday;
+text create vanaweather;
+
+text create Counterstance;
+text create Berserk;
+text create Impetus;
+
+text create Debuff;
+
+input /chatmode /party;

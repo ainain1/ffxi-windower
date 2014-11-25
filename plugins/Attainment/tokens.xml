@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<tokens>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>current_exp</alias>
+		</aliases>
+		<value><current_exp /></value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>exp_next_lvl</alias>
+		</aliases>
+		<value><next_level_exp /></value>
+	</token>
+	<token>
+		<type>double</type>
+		<format decimalPlaces="1" />
+		<aliases>
+			<alias>exp_k_next_lvl</alias>
+		</aliases>
+		<value><next_level_exp /> / 1000</value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>tnl</alias>
+		</aliases>
+		<value><next_level_exp /> - <current_exp /></value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>current_limits</alias>
+		</aliases>
+		<value><current_limits /></value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>max_limits</alias>
+		</aliases>
+		<value><max_limits /></value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>max_limits_k</alias>
+		</aliases>
+		<value><max_limits /> / 1000</value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>tnm</alias>
+		</aliases>
+		<value><max_limits /> - <current_limits /></value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>merits</alias>
+		</aliases>
+		<value><current_merits /></value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>max_merits</alias>
+		</aliases>
+		<value><max_merits /></value>
+	</token>
+	<token>
+		<type>double</type>
+		<format decimalPlaces="1" />
+		<aliases>
+			<alias>exp_k_per_hour</alias>
+		</aliases>
+		<value>(<exp_per_second /> * 3600) / 1000</value>
+	</token>
+	<token>
+		<type>double</type>
+		<format decimalPlaces="1" />
+		<aliases>
+			<alias>exp_k_per_minute</alias>
+		</aliases>
+		<value>(<exp_per_second /> * 60) / 1000</value>
+	</token>
+	<token>
+		<type>double</type>
+		<format decimalPlaces="1" />
+		<aliases>
+			<alias>exp_k_per_second</alias>
+		</aliases>
+		<value><exp_per_second /> / 1000</value>
+	</token>
+	<token>
+		<type>double</type>
+		<format decimalPlaces="1" />
+		<aliases>
+			<alias>exp_per_hour</alias>
+		</aliases>
+		<value><exp_per_second /> * 3600</value>
+	</token>
+	<token>
+		<type>double</type>
+		<format decimalPlaces="1" />
+		<aliases>
+			<alias>exp_per_minute</alias>
+		</aliases>
+		<value><exp_per_second /> * 60</value>
+	</token>
+	<token>
+		<type>double</type>
+		<format decimalPlaces="1" />
+		<aliases>
+			<alias>exp_per_second</alias>
+		</aliases>
+		<value><exp_per_second /></value>
+	</token>
+	<token>
+		<type>double</type>
+		<format decimalPlaces="1" />
+		<aliases>
+			<alias>cruor_k_per_hour</alias>
+		</aliases>
+		<value>(<cruor_per_second /> * 3600) / 1000</value>
+	</token>
+	<token>
+		<type>double</type>
+		<format decimalPlaces="1" />
+		<aliases>
+			<alias>cruor_k_per_minute</alias>
+		</aliases>
+		<value>(<cruor_per_second /> * 60) / 1000</value>
+	</token>
+	<token>
+		<type>double</type>
+		<format decimalPlaces="1" />
+		<aliases>
+			<alias>cruor_k_per_second</alias>
+		</aliases>
+		<value><cruor_per_second /> / 1000</value>
+	</token>
+	<token>
+		<type>double</type>
+		<format decimalPlaces="1" />
+		<aliases>
+			<alias>cruor_per_hour</alias>
+		</aliases>
+		<value><cruor_per_second /> * 3600</value>
+	</token>
+	<token>
+		<type>double</type>
+		<format decimalPlaces="1" />
+		<aliases>
+			<alias>cruor_per_minute</alias>
+		</aliases>
+		<value><cruor_per_second /> * 60</value>
+	</token>
+	<token>
+		<type>double</type>
+		<format decimalPlaces="1" />
+		<aliases>
+			<alias>cruor_per_second</alias>
+		</aliases>
+		<value><cruor_per_second /></value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>total_exp</alias>
+		</aliases>
+		<value><total_exp_gained /></value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>last_exp</alias>
+		</aliases>
+		<value><last_exp_gained /></value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>total_cruor</alias>
+		</aliases>
+		<value><total_cruor_gained /></value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>last_cruor</alias>
+		</aliases>
+		<value><last_cruor_gained /></value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>pearl</alias>
+		</aliases>
+		<value>min(<pearl_light_intensity /> + <pearl_lights /> * 5, 230)</value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>gold</alias>
+		</aliases>
+		<value>min(<gold_light_intensity /> + <gold_lights /> * 5, 200)</value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>silver</alias>
+		</aliases>
+		<value>min(<silver_light_intensity /> + <silver_lights /> * 5, 200)</value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>ebon</alias>
+		</aliases>
+		<value>min(<ebon_light_intensity /> + <ebon_lights /> * 3, 200)</value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>azure</alias>
+		</aliases>
+		<value>min(<azure_light_intensity /> + <azure_lights /> * 5, 255)</value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>ruby</alias>
+		</aliases>
+		<value>min(<ruby_light_intensity /> + <ruby_lights /> * 5, 255)</value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>amber</alias>
+		</aliases>
+		<value>min(<amber_light_intensity /> + <amber_lights /> * 5, 255)</value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>visitant</alias>
+		</aliases>
+		<value><visitant_time_remaining /></value>
+	</token>
+	<token>
+		<type>integer</type>
+		<format />
+		<aliases>
+			<alias>hourglass</alias>
+		</aliases>
+		<value><dynamis_time_remaining /></value>
+	</token>
+	<token>
+		<type>string</type>
+		<format />
+		<aliases>
+			<alias>alabastor_granules</alias>
+		</aliases>
+		<value><has_alabastor_granules /></value>
+	</token>
+	<token>
+		<type>string</type>
+		<format />
+		<aliases>
+			<alias>amber_granules</alias>
+		</aliases>
+		<value><has_amber_granules /></value>
+	</token>
+	<token>
+		<type>string</type>
+		<format />
+		<aliases>
+			<alias>azure_granules</alias>
+		</aliases>
+		<value><has_azure_granules /></value>
+	</token>
+	<token>
+		<type>string</type>
+		<format />
+		<aliases>
+			<alias>crimson_granules</alias>
+		</aliases>
+		<value><has_crimson_granules /></value>
+	</token>
+	<token>
+		<type>string</type>
+		<format />
+		<aliases>
+			<alias>obsidian_granules</alias>
+		</aliases>
+		<value><has_obsidian_granules /></value>
+	</token>
+</tokens>

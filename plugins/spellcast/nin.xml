@@ -1,0 +1,694 @@
+<?xml version="1.0" ?>
+<spellcast xmlns:xi="http://www.w3.org/2001/XInclude">
+    <!-- Last modified: 9/15/2012 10:55:28 AM -->
+
+    <config Debug="false"
+            ShowGearSwaps="false"
+            ShowSpellInfo="false"
+            RequireVersion="2.30"
+            />
+
+    <variables clear="True">
+        <!-- General configuration -->
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='ConfigurationVars']/*" />
+
+        <!-- Configuration var overrides. -->
+        <var name="CritWS">Blade: Jin|Blade: Hi</var>
+        <var name="MagicalWS">Earth Crusher|Sunburst|Blade: Yu|Aeolian Edge</var>
+
+        <!-- General utility -->
+        <!-- General utility -->
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='UtilityVars']/*" />
+        <xi:include href="Mote-Config-Include.xml" xpointer="/includes/include[@name='RecastDurations']/*" />
+
+        <!-- Utility default var overrides. -->
+        <var name="TPWeapon">Katana</var>
+        <var name="TankMode">Evasion</var>
+        <var name="AggressiveLayer">Rancor</var>
+
+        <var name="PullWeapons">Mamoolbane|Aliyat Chakram</var>
+
+        <!-- Local vars -->
+        <var name="MoveFeet">Danzo Sune-ate</var>
+        <var name="Day-Move">Danzo Sune-ate</var>
+        <var name="Night-Move">Ninja Kyahan</var>
+
+        <var name="MigawariLayer">None</var>
+
+        <var name="ProcWeapons">Uchigatana|Earth Staff|Chatoyant Staff|Shellbuster|Pitchfork|Ark Saber|Twilight Knife</var>
+        <var name="TwoHProcWeapons">Uchigatana|Earth Staff|Pitchfork</var>
+        <var name="ProcWeaponSub">Ban</var>
+    </variables>
+
+    <sets>
+        <group name="Outside-Group" default="yes">
+            <set name="None">
+            </set>
+
+            <set name="Idle-Town-*">
+                <ammo>Qirmiz Tathlum</ammo>
+                <head>Iga Zukin +2</head>
+                <neck>Wiglen Gorget</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat</body>
+                <hands>Koga Tekko +2</hands>
+                <lring>Sheltered Ring</lring>
+                <rring>Paguroidea Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Koga Hakama +2</legs>
+                <feet>Iga Kyahan +2</feet>
+            </set>
+            <set name="Idle-Field-*" BaseSet="Idle-Town-*|Regen">
+            </set>
+            <set name="Regen">
+                <head>Ocelomeh Headpiece +1</head>
+                <neck>Wiglen Gorget</neck>
+                <lring>Sheltered Ring</lring>
+                <rring>Paguroidea Ring</rring>
+            </set>
+
+            <set name="Move|Kite">
+                <feet>$MoveFeet</feet>
+            </set>
+
+
+            <!-- ***************************** -->
+            <!--  Sets for TP                  -->
+            <!-- ***************************** -->
+
+            <set name="TP-Katana-Normal-Normal">
+                <ammo>Qirmiz Tathlum</ammo>
+                <head>Iga Zukin +2</head>
+                <neck>Rancor Collar</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat</body>
+                <hands>Koga Tekko +2</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Koga Hakama +2</legs>
+                <feet>Iga Kyahan +2</feet>
+            </set>
+            <set name="TP-Katana-Acc-Normal" BaseSet="TP-Katana-Normal-Normal">
+                <body>Thaumas Coat</body>
+                <legs>Iga Hakama +2</legs>
+            </set>
+            <set name="TP-Katana-MaxAcc-Normal" BaseSet="TP-Katana-Normal-Normal">
+                <body>Thaumas Coat</body>
+                <hands>Iga Tekko +1</hands>
+                <back>Belenos' Mantle</back>
+                <legs>Iga Hakama +2</legs>
+                <feet>Usukane Sune-ate</feet>
+            </set>
+            <set name="TP-Katana-Str-Normal" BaseSet="TP-Katana-Normal-Normal">
+            </set>
+            <set name="TP-Katana-Att-Normal" BaseSet="TP-Katana-Normal-Normal">
+            </set>
+            <set name="TP-Katana-*-Normal" BaseSet="TP-Katana-Normal-Normal">
+            </set>
+
+
+            <set name="TP-Katana-Normal-Evasion">
+                <ammo>Qirmiz Tathlum</ammo>
+                <head>Iga Zukin +2</head>
+                <neck>Torero Torque</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat</body>
+                <hands>Koga Tekko +2</hands>
+                <lring>Heed Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Boxer's Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Koga Hakama +2</legs>
+                <feet>Iga Kyahan +2</feet>
+            </set>
+            <set name="TP-Katana-Acc-Evasion" BaseSet="TP-Katana-Normal-Evasion">
+                <!-- <neck>Iga Erimaki</neck> -->
+                <neck>Torero Torque</neck>
+                <hands>Iga Tekko +1</hands>
+            </set>
+            <set name="TP-Katana-MaxAcc-Evasion" BaseSet="TP-Katana-Normal-Evasion">
+                <!-- <neck>Iga Erimaki</neck> -->
+                <neck>Torero Torque</neck>
+                <hands>Iga Tekko +1</hands>
+            </set>
+            <set name="TP-Katana-Str-Evasion" BaseSet="TP-Katana-Normal-Evasion">
+            </set>
+            <set name="TP-Katana-Att-Evasion" BaseSet="TP-Katana-Normal-Evasion">
+            </set>
+            <set name="TP-Katana-*-Evasion" BaseSet="TP-Katana-Normal-Evasion">
+            </set>
+
+            <set name="TP-Katana-Normal-PDT">
+                <ammo>Qirmiz Tathlum</ammo>
+                <head>Iga Zukin +2</head>
+                <neck>Twilight Torque</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat</body>
+                <hands>Koga Tekko +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Shadow Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Koga Hakama +2</legs>
+                <feet>Iga Kyahan +2</feet>
+            </set>
+            <set name="TP-Katana-Acc-PDT" BaseSet="TP-Katana-Normal-PDT">
+                <ammo>Qirmiz Tathlum</ammo>
+                <head>Iga Zukin +2</head>
+                <neck>Twilight Torque</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat</body>
+                <hands>Koga Tekko +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Shadow Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Koga Hakama +2</legs>
+                <feet>Iga Kyahan +2</feet>
+            </set>
+            <set name="TP-Katana-MaxAcc-PDT" BaseSet="TP-Katana-Normal-PDT">
+                <ammo>Qirmiz Tathlum</ammo>
+                <head>Iga Zukin +2</head>
+                <neck>Twilight Torque</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat</body>
+                <hands>Koga Tekko +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Shadow Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Koga Hakama +2</legs>
+                <feet>Iga Kyahan +2</feet>
+            </set>
+            <set name="TP-Katana-Str-PDT" BaseSet="TP-Katana-Normal-PDT">
+				<ammo>Qirmiz Tathlum</ammo>
+                <head>Iga Zukin +2</head>
+                <neck>Twilight Torque</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat</body>
+                <hands>Koga Tekko +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Shadow Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Koga Hakama +2</legs>
+                <feet>Iga Kyahan +2</feet>
+            </set>
+            <set name="TP-Katana-Att-PDT" BaseSet="TP-Katana-Normal-PDT">
+				<ammo>Qirmiz Tathlum</ammo>
+                <head>Iga Zukin +2</head>
+                <neck>Twilight Torque</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat</body>
+                <hands>Koga Tekko +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Shadow Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Koga Hakama +2</legs>
+                <feet>Iga Kyahan +2</feet>
+            </set>
+            <set name="TP-Katana-*-PDT" BaseSet="TP-Katana-Normal-PDT">
+				<ammo>Qirmiz Tathlum</ammo>
+                <head>Iga Zukin +2</head>
+                <neck>Twilight Torque</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat</body>
+                <hands>Koga Tekko +2</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Shadow Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Koga Hakama +2</legs>
+                <feet>Iga Kyahan +2</feet>
+            </set>
+
+
+
+
+            <set name="TP-ProcWeapons-*">
+                <sub>$ProcWeaponSub</sub>
+                <ammo>Qirmiz Tathlum</ammo>
+                <head>Iga Zukin +2</head>
+                <neck>Agasaya's Collar</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Suppanomimi</rear>
+                <body>Thaumas Coat</body>
+                <hands>Koga Tekko +2</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Twilight Belt</waist>
+                <legs>Iga Hakama +2</legs>
+                <feet>Iga Kyahan +2</feet>
+            </set>
+
+            <set name="Rancor">
+                <neck>Rancor Collar</neck>
+            </set>
+
+            <!--
+                Max:
+                Arhat's Jinpachi +1: 6%
+                Arhat's Gi +1: 9%
+                Denali Wristbands: 2%
+                Defending Ring: 10%
+                Jelly Ring: 5%
+                Darksteel Subligar +1: 3%
+                Darksteel Leggings +1: 2%
+                == 50%
+            -->
+            <set name="PhysDef-PDT">
+                <head>Arhat's Jinpachi +1</head>
+                <neck>Twilight Torque</neck>
+                <body>Thaumas Coat</body>
+                <hands>Denali Wristbands</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Shadow Mantle</back>
+                <legs>Koga Hakama +2</legs>
+            </set>
+            <set name="PhysDef-Evasion">
+                <head>Fugacity Beret</head>
+                <neck>Torero Torque</neck>
+                <body>Thaumas Coat</body>
+                <hands>Iga Tekko +1</hands>
+                <lring>Heed Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Boxer's Mantle</back>
+                <legs>Koga Hakama +2</legs>
+            </set>
+
+            <set name="MDT-Any|MDT-All|MDT-None|Resist-Any|Resist-All|Resist-None">
+                <neck>Twilight Torque</neck>
+                <hands>Denali Wristbands</hands>
+                <lring>Dark Ring</lring>
+                <rring>Dark Ring</rring>
+                <back>Lamia Mantle +1</back>
+            </set>
+
+            <set name="MDT-Fire|Resist-Fire" BaseSet="MDT-Any">
+                <ammo>Flame Sachet</ammo>
+                <feet>Suzaku's Sune-ate</feet>
+            </set>
+            <set name="MDT-Earth|Resist-Earth" BaseSet="MDT-Any">
+                <ammo>Soil Sachet</ammo>
+            </set>
+            <set name="MDT-Wind|Resist-Wind" BaseSet="MDT-Any">
+                <ammo>Breeze Sachet</ammo>
+            </set>
+            <set name="MDT-Water|Resist-Water" BaseSet="MDT-Any">
+                <ammo>Aqua Sachet</ammo>
+                <head>Genbu's Kabuto</head>
+            </set>
+            <set name="MDT-Ice|Resist-Ice" BaseSet="MDT-Any">
+                <ammo>Snow Sachet</ammo>
+            </set>
+            <set name="MDT-Thunder|Resist-Thunder" BaseSet="MDT-Any">
+                <ammo>Thunder Sachet</ammo>
+                <legs>Byakko's Haidate</legs>
+            </set>
+
+
+            <!-- What to wear while weak -->
+            <set name="WeakSet" BaseSet="PhysDef-PDT">
+                <head>Genbu's Kabuto</head>
+				<body>Thaumas Coat</body>
+                <rear>Bloodgem Earring</rear>
+                <lring>Bloodbead Ring</lring>
+                <rring>Meridian Ring</rring>
+				<back>Shadow Mantle</back>
+            </set>
+
+            <set name="Resting-Normal">
+            </set>
+
+
+
+            <!-- Macro swaps for JAs and spells -->
+            <set name="Yonin">
+                <!-- <legs>Iga Hakama +2</legs> -->
+            </set>
+            <set name="Innin">
+                <head>Iga Zukin +2</head>
+            </set>
+            <set name="Migawari">
+                <body>Iga Ningi +2</body>
+            </set>
+
+            <set name="FastCast">
+                <lear>Loquacious Earring</lear>
+				<hands>Thaumas Gloves</hands>
+            </set>
+            <set name="HasteCast">
+                <head>Iga Zukin +2</head>
+                <lear>Loquacious Earring</lear>
+                <waist>Twilight Belt</waist>
+                <legs>Iga Hakama +2</legs>
+                <feet>Iga Kyahan +2</feet>
+            </set>
+            <set name="UtsuCast" BaseSet="HasteCast|FastCast">
+                <neck>Magoraga Beads</neck>
+                <body>Usukane Haramaki</body>
+                <lring>Dark Ring</lring>
+                <rring>Heed Ring</rring>
+                <back>Boxer's Mantle</back>
+            </set>
+
+            <set name="EleNinjutsu">
+                <head>Koga Hatsuburi</head>
+                <neck>Stoicheion Medal</neck>
+                <lear>Moldavite Earring</lear>
+                <rear>Hecate's Earring</rear>
+                <!-- <hands>Iga Tekko +1</hands> -->
+                <hands>Koga Tekko +2</hands>
+                <lring>Spiral Ring</lring>
+                <rring>Demon's Ring</rring>
+                <legs>Denali Kecks</legs>
+            </set>
+
+
+            <set name="CureWaltz">
+                <ammo>Sonia's Plectrum</ammo>
+            </set>
+            <set name="CureWaltzMe">
+                <head>Genbu's Kabuto</head>
+                <rring>Spiral Ring</rring>
+                <waist>Warwolf Belt</waist>
+                <feet>Creek F Clomps</feet>
+            </set>
+            <!-- set for acc on steps, since Yonin drops acc a fair bit -->
+            <set name="DncStep">
+                <neck>Agasaya Collar</neck>
+                <body>Iga Ningi +2</body>
+                <hands>Iga Tekko +1</hands>
+                <legs>Iga Hakama +2</legs>
+                <waist>Anguinus Belt</waist>
+            </set>
+
+            <!--  Weaponskills  -->
+            <set name="WS-Blade: Jin-Att">
+                <ammo>Qirmiz Tathlum</ammo>
+                <head>Thaumas Hat</head>
+                <neck>Thunder Gorget</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Aesir Ear Pendant</rear>
+                <body>Toci's Harness</body>
+                <hands>Seiryu's Kote</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Cuchulain's Belt</waist>
+                <legs>Byakko's Haidate</legs>
+                <feet>Thaumas Nails</feet>
+            </set>
+            <set name="WS-Blade: Jin-Acc" BaseSet="WS-Blade: Jin-Att">
+                <waist>Anguinus Belt</waist>
+            </set>
+            <set name="WS-Blade: Jin-CapAtt" BaseSet="WS-Blade: Jin-Att">
+                <!-- <back>Iga Dochugappa</back> -->
+                <legs>Byakko's Haidate</legs>
+            </set>
+            <set name="WS-Blade: Jin-*" BaseSet="WS-Blade: Jin-Att">
+            </set>
+
+            <set name="WS-Blade: Shun-Att">
+                <ammo>Demonry Core</ammo>
+                <head>Thaumas Hat</head>
+                <neck>Thunder Gorget</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Aesir Ear Pendant</rear>
+                <body>Toci's Harness</body>
+                <hands>Mustela Gloves</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Jupiter's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Thunder Belt</waist>
+                <legs>Byakko's Haidate</legs>
+                <feet>Thaumas Nails</feet>
+            </set>
+            <set name="WS-Blade: Shun-Acc" BaseSet="WS-Blade: Shun-Att">
+            </set>
+            <set name="WS-Blade: Shun-CapAtt" BaseSet="WS-Blade: Shun-Att">
+            </set>
+            <set name="WS-Blade: Shun-*" BaseSet="WS-Blade: Shun-Att">
+            </set>
+
+            <set name="WS-Blade: Kamu-Att">
+                <ammo>Qirmiz Tathlum</ammo>
+                <head>Thaumas Hat</head>
+                <neck>Thunder Gorget</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Aesir Ear Pendant</rear>
+                <body>Toci's Harness</body>
+                <hands>Heafoc Mitts</hands>
+                <lring>Spiral Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Anguinus Belt</waist>
+                <legs>Usukane Hizayoroi</legs>
+                <feet>Thaumas Nails</feet>
+            </set>
+            <set name="WS-Blade: Kamu-Acc" BaseSet="WS-Blade: Kamu-Att">
+                <hands>Denali Wristbands</hands>
+                <legs>Byakko's Haidate</legs>
+            </set>
+            <set name="WS-Blade: Kamu-CapAtt" BaseSet="WS-Blade: Kamu-Att">
+                <waist>Warwolf Belt</waist>
+                <legs>Byakko's Haidate</legs>
+            </set>
+            <set name="WS-Blade: Kamu-*" BaseSet="WS-Blade: Kamu-Att">
+            </set>
+
+            <set name="WS-Blade: Ku-Att">
+                <head>Thaumas Hat</head>
+                <neck>Soil Gorget</neck>
+                <lear>Brutal Earring</lear>
+                <rear>Aesir Ear Pendant</rear>
+                <body>Toci's Harness</body>
+                <hands>Ochiudo's Kote</hands>
+                <lring>Rajas Ring</lring>
+                <rring>Epona's Ring</rring>
+                <back>Atheling Mantle</back>
+                <waist>Anguinus Belt</waist>
+                <legs>Usukane Hizayoroi</legs>
+                <feet>Thaumas Nails</feet>
+            </set>
+            <set name="WS-Blade: Ku-*" BaseSet="WS-Blade: Ku-Att">
+            </set>
+
+
+            <set name="WS-Aeolian Edge-*|WS-Blade: Yu-*">
+                <head>Iga Zukin +2</head>
+                <neck>Stoicheion Medal</neck>
+                <lear>Hecate's Earring</lear>
+                <rear>Moldavite Earring</rear>
+                <body>Usukane Haramaki</body>
+                <hands>Iga Tekko +1</hands>
+                <lring>Strendu Ring</lring>
+                <rring>Demon's Ring</rring>
+                <waist>Cuchulain's Belt</waist>
+                <legs>Denali Kecks</legs>
+                <feet>Thaumas Nails</feet>
+            </set>
+
+            <!-- Default for everything else (eg: procs), just put in some basic acc. -->
+            <set name="WS-*">
+                <head>Thaumas Hat</head>
+                <body>Toci's Harness</body>
+                <hands>Seiryu's Kote</hands>
+                <waist>Anguinus Belt</waist>
+                <feet>Thaumas Nails</feet>
+            </set>
+        </group>
+
+        <group name="Abyssea-Group" inherit="Outside-Group" />
+
+        <group name="Campaign-Group" inherit="Outside-Group" />
+
+        <group name="Voidwatch-Group" inherit="Outside-Group" />
+
+        <group name="Legion-Group" inherit="Outside-Group" />
+    </sets>
+
+    <rules>
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='RunFirstUpdate']/*" />
+
+        <if BuffActive="Migawari">
+            <equip when="all" lock="true">
+                <body>Iga Ningi +2</body>
+            </equip>
+        </if>
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='LevelRequirement']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ReturnRules']/*" />
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='CleanTransportation']/*" />
+        <!-- Make sure locks are in place before auto-changing gear. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='EquipmentLockRules']/*" />
+        <!-- Auto-change gear call via Aftercast to limit lag. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='ChangeGearAftercast']/*" />
+        <!-- Other general imports. -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='RecastWarnings']/*" />
+
+
+        <!-- First: Adjust values based on status checks. -->
+
+        <!-- Set variable for time-specific gear -->
+        <if TimeGT="7.00" TimeLT="17.00">
+            <var cmd="set MoveFeet $Day-Move" />
+        </if>
+        <else>
+            <var cmd="set MoveFeet $Night-Move" />
+        </else>
+
+        <if EquipMain="$ProcWeapons">
+            <var cmd="set TPWeapon ProcWeapons" />
+        </if>
+        <else>
+            <var cmd="set TPWeapon Katana" />
+        </else>
+
+        <if EquipMain="$TwoHProcWeapons">
+            <var cmd="set ProcWeaponSub Rose Strap" />
+        </if>
+        <else>
+            <var cmd="set ProcWeaponSub Ban" />
+        </else>
+
+        <!-- Check for weakness -->
+        <if BuffActive="Weakness">
+            <var cmd="set WeaknessArmor WeakSet" />
+        </if>
+
+        <if BuffActive="Yonin">
+            <var cmd="set Stance Yonin" />
+        </if>
+        <elseif BuffActive="Innin">
+            <var cmd="set Stance Innin" />
+        </elseif>
+        <else>
+            <var cmd="set Stance None" />
+        </else>
+
+
+        <!-- Second: Update certain values when their status may drop, or when autoset changes. -->
+
+        <if spell="Update|autoset">
+            <!-- Autoset (engage/disengage/rest/etc) gets same checks as an Update command -->
+
+            <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='AreaRules']/*" />
+
+            <!-- Turn off Def layers if we died.  Default once raised is
+                 WeaknessArmor.  PhysicalDefense and MagicalDefense override
+                 Weakness armor, so should need to explicitly re-add them
+                 if you intend to use them. -->
+            <if status="dead">
+                <var cmd="set PhysicalDefense None" />
+                <var cmd="set MagicalDefense None" />
+                <var cmd="set WeaknessArmor $WeaknessSet" />
+            </if>
+
+            <!-- Check for weakness -->
+            <if NotBuffActive="Weakness">
+                <var cmd="set WeaknessArmor None" />
+            </if>
+
+            <if NotBuffActive="Migawari">
+                <var cmd="set MigawariLayer None" />
+            </if>
+
+            <!-- Ensure movement is set properly -->
+            <if status="Engaged" advanced='"$Movement"="Move"'>
+                <var cmd="set Movement None" />
+            </if>
+            <elseif status="Idle">
+                <var cmd="set Movement Move" />
+            </elseif>
+
+            <!-- Output current status if this is a manual update -->
+            <if SpellTargetRaw=".Manual">
+                <addtochat>Update. $TPWeapon - $OffenseMode/$DefenseMode, PD:$PhysicalDefense, MD:$MagicalDefense, $Movement</addtochat>
+            </if>
+        </if>
+
+        <!-- Third: Adjust configurations based on action/trigger. -->
+
+        <if type="JobAbility">
+            <if Spell="Yonin|Innin">
+                <var cmd="set Stance %Spell" />
+            </if>
+        </if>
+        <elseif Spell="Migawari: Ichi">
+            <var cmd="set MigawariLayer Migawari" />
+        </elseif>
+
+        <xi:include href="Mote-Rules-Include.xml" xpointer="/includes/include[@name='UniversalTriggerRules']/*" />
+
+        <!-- Fourth: Compile all adjustments into the final gear set. -->
+
+        <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='DefineBaseLayer']/*" />
+
+        <!-- Define the current equip set based on the layers in use. -->
+        <var cmd="set CurrentSet $BaseLayer|$Stance|$WeaknessArmor|$PhysicalDefense|$MagicalDefense|$MigawariLayer|$Movement" />
+
+
+        <!-- And assign to appropriate sets for idle/aftercast/etc -->
+        <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='HandleEquippingGear']/*" />
+
+        <!-- ************************************************************************ -->
+        <!-- The following sections are solely for setting precast/midcast equipment, -->
+        <!-- and should not be changing any configuration options.                    -->
+        <!-- ************************************************************************ -->
+
+        <if type="WeaponSkill">
+            <xi:include href="Mote-Rules-Include.xml" xpointer="//include[@name='DefineWeaponskillSet']/*" />
+            <equip when="Precast" set="$WSSet" />
+			
+			<command when="aftercast">input /echo %TP TP Returned</command>
+        </if>
+
+        <elseif type="Waltz">
+            <!-- Waltzes for /dnc -->
+            <if NotSpell="Healing Waltz">
+                <if TargetType="SELF">
+                    <equip when="Precast" set="CureWaltzMe" />
+                </if>
+                <else>
+                    <equip when="Precast" set="CureWaltz" />
+                </else>
+            </if>
+        </elseif>
+
+        <elseif type="Step">
+            <equip when="Precast" set="DncStep" />
+        </elseif>
+
+        <!-- Put on haste gear when casting utsu -->
+        <elseif type="Ninjutsu">
+            <if Spell="Utsusemi*">
+                <equip when="Precast" set="UtsuCast" />
+                <equip when="Midcast" set="HasteCast" />
+            </if>
+            <elseif Spell="Migawari*">
+                <equip when="Precast" set="FastCast|Migawari" />
+                <equip when="Aftercast" set="Migawari" />
+            </elseif>
+            <elseif Spell="Katon*|Hyoton*|Huton*|Doton*|Raiton*|Suiton*">
+                <equip when="Precast" set="EleNinjutsu|FastCast" />
+                <equip when="Midcast" set="HasteCast|EleNinjutsu" />
+            </elseif>
+        </elseif>
+
+    </rules>
+</spellcast>

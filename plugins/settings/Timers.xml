@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<settings>
+    <!--
+	This file controls the settings for the Timers plugin.
+	Settings in the <global> section apply to all characters
+
+	The available settings are:
+	-->
+    <global>
+        <graphicalMode>true</graphicalMode>
+        <slimMode>false</slimMode>
+        <flashOnCompletion>true</flashOnCompletion>
+        <showTenths>true</showTenths>
+        <highRed>255</highRed>
+        <highGreen>0</highGreen>
+        <highBlue>0</highBlue>
+        <medRed>255</medRed>
+        <medGreen>160</medGreen>
+        <medBlue>0</medBlue>
+        <lowRed>0</lowRed>
+        <lowGreen>255</lowGreen>
+        <lowBlue>0</lowBlue>
+        <textA>255</textA>
+        <textR>255</textR>
+        <textG>255</textG>
+        <textB>255</textB>
+        <flashR>255</flashR>
+        <flashG>255</flashG>
+        <flashB>0</flashB>
+        <fontName>Arial</fontName>
+        <fontSize>8</fontSize>
+        <fontBold>false</fontBold>
+        <recastX>20</recastX>
+        <recastY>350</recastY>
+        <buffsX>190</buffsX>
+        <buffsY>350</buffsY>
+        <customX>360</customX>
+        <customY>350</customY>
+        <barSpacing>0</barSpacing>
+        <recastTimerLimit>8</recastTimerLimit>
+        <buffsTimerLimit>8</buffsTimerLimit>
+        <customTimerLimit>8</customTimerLimit>
+        <enableRecast>true</enableRecast>
+        <enableBuffs>true</enableBuffs>
+        <orderAlphabetically>false</orderAlphabetically>
+        <show1HourName>true</show1HourName>
+        <bgA>128</bgA>
+        <bgR>0</bgR>
+        <bgG>0</bgG>
+        <bgB>0</bgB>
+        <songCancel>false</songCancel>
+        <rollCancel>false</rollCancel>
+        <whitelistMode>false</whitelistMode>
+        <recastList />
+        <buffList />
+        <extendText>true</extendText>
+        <textColoring>false</textColoring>
+        <medPercent>0.5</medPercent>
+        <lowPercent>0.25</lowPercent>
+        <flashDuration>2</flashDuration>
+        <recastLowToHigh>true</recastLowToHigh>
+        <buffLowToHigh>false</buffLowToHigh>
+        <sortType>Creation</sortType>
+        <buffsLowToHigh>false</buffsLowToHigh>
+        <customLowToHigh>false</customLowToHigh>
+        <recastFlashDuration>2</recastFlashDuration>
+        <buffsFlashDuration>2</buffsFlashDuration>
+        <customFlashDuration>2</customFlashDuration>
+        <buffsList />
+        <stroke>false</stroke>
+    </global>
+    <!--
+	You may also override specific settings on a per-character basis here.
+	-->
+</settings>

@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<settings>
+    <!--
+	This file controls the settings for the ConsoleBG plugin.
+	Settings in the <global> section apply to all characters.
+	
+	The available settings are:
+	PosX, PosY - The x and y offset, where the background should begin.
+	Alpha, Red, Green, Blue - Color for the background.
+	SizeX, SizeY - Size of the background.
+	Image - Background image to display. Leave empty for none.
+	FitImage - Whether or not to fit the background to the image.
+	RepeatX, RepeatY - How often to repeat the image vertically/horizontally.
+	-->
+    <global>
+        <PosX>1</PosX>
+        <PosY>25</PosY>
+        <Alpha>255</Alpha>
+        <Red>0</Red>
+        <Green>0</Green>
+        <Blue>0</Blue>
+        <SizeX>600</SizeX>
+        <SizeY>314</SizeY>
+        <Image />
+        <FitImage>false</FitImage>
+        <RepeatX>1</RepeatX>
+        <RepeatY>1</RepeatY>
+    </global>
+    <!--
+	You may also override specific settings on a per-character basis here.
+	-->
+</settings>

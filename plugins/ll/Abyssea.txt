@@ -1,0 +1,772 @@
+//Abyssea LightLuggage
+//Credits to: Lightvision and Tambor of TheTubbies Linkshell on Cerberus Server
+
+//Added items
+//Regular mob drops (listed by zone)
+//Pop Items (listed by zone) - Thanks to Tambor
+//AF seals (listed by job) - Thanks to Tambor
+//AF +2 items (listed by zone/type) - Thanks to Tambor
+//Chest Drops (spells/syth mats/meds)
+
+//Passing Defaults
+//By Default all armour seals and +2 items ARE NOT passed
+//By Default all pop items ARE NOT passed
+//By Default High Kindred Seals and Kindred Seals ARE NOT passed
+//By Default all "Trash" items, items that drops from regular mobs ARE passed
+//By Default all Items from chests ARE passed
+
+//Searching the File
+//Searching for the full name of a job will take you to the seals for that job.
+//Searching "Junk Items" will take you to the items that drops from regulat mobs
+//Searching "Chest Items" will take to you the chest items listed in 2 categories Spells and Synth/Crap Items
+//Searching for a pop item, as it appears in game should take you to the pop item
+//Failing that search:
+// (ALT) for La Thiene
+// (AK) for Konschtat
+// (AT) for Tahrongi
+// (AAC) for Attohwa Chasm
+// (AM) for Misareaux
+// (AV) for Vunkerl
+// (AA) for Altepa
+// (AU) for Uleguerand
+// (AG) for Grauberg
+
+//--------------------------Seals--------------------------------
+
+//Warrior
+if item is 3110 then pass //Head
+//if item is 3130 then pass //Body
+//if item is 3150 then pass //Hands
+if item is 3170 then pass //Legs
+if item is 3190 then pass //Feet
+if item is 12088 then pass //Base Feet
+
+//Monk
+if item is 3111 then pass //Head
+if item is 3131 then pass //Body
+if item is 3151 then pass //Hands
+if item is 3171 then pass //Legs
+if item is 3191 then pass //Feet
+if item is 12089 then pass //Base Feet
+
+//White Mage
+//if item is 3112 then pass //Head
+//if item is 3132 then pass //Body
+if item is 3152 then pass //Hands
+if item is 3172 then pass //Legs
+//if item is 3192 then pass //Feet
+if item is 12090 then pass //Base Feet
+
+//Black Mage
+if item is 3113 then pass //Head
+//if item is 3133 then pass //Body
+if item is 3153 then pass //Hands
+if item is 3173 then pass //Legs
+//if item is 3193 then pass //Feet
+if item is 12091 then pass //Base Feet
+
+//Red Mage
+if item is 3114 then pass //Head
+//if item is 3134 then pass //Body
+if item is 3154 then pass //Hands
+if item is 3174 then pass //Legs
+if item is 3194 then pass //Feet
+if item is 12092 then pass //Base Feet
+
+//Thief
+if item is 3115 then pass //Head
+if item is 3135 then pass //Body
+//if item is 3155 then pass //Hands
+if item is 3175 then pass //Legs
+if item is 3195 then pass //Feet
+if item is 12093 then pass //Base Feet
+
+//Paladin
+if item is 3116 then pass //Head
+if item is 3136 then pass //Body
+if item is 3156 then pass //Hands
+if item is 3176 then pass //Legs
+if item is 3196 then pass //Feet
+if item is 12094 then pass //Base Feet
+
+//Dark Knight
+if item is 3117 then pass //Head
+//if item is 3137 then pass //Body
+//if item is 3157 then pass //Hands
+if item is 3177 then pass //Legs
+if item is 3197 then pass //Feet
+if item is 12095 then pass //Base Feet
+
+//Beastmaster
+//if item is 3118 then pass //Head
+//if item is 3138 then pass //Body
+//if item is 3158 then pass //Hands
+if item is 3178 then pass //Legs
+//if item is 3198 then pass //Feet
+if item is 12096 then pass //Base Feet
+
+//Bard
+//if item is 3119 then pass //Head
+//if item is 3139 then pass //Body
+//if item is 3159 then pass //Hands
+//if item is 3179 then pass //Legs
+//if item is 3199 then pass //Feet
+if item is 12097 then pass //Base Feet
+
+//Ranger
+//if item is 3120 then pass //Head
+if item is 3140 then pass //Body
+if item is 3160 then pass //Hands
+if item is 3180 then pass //Legs
+//if item is 3200 then pass //Feet
+if item is 12098 then pass //Base Feet
+
+//Samurai
+//if item is 3121 then pass //Head
+//if item is 3141 then pass //Body
+//if item is 3161 then pass //Hands
+if item is 3181 then pass //Legs
+//if item is 3201 then pass //Feet
+if item is 12099 then pass //Base Feet
+
+//Ninja
+if item is 3122 then pass //Head
+if item is 3142 then pass //Body
+if item is 3162 then pass //Hands
+if item is 3182 then pass //Legs
+if item is 3202 then pass //Feet
+if item is 12100 then pass //Base
+
+//Dragoon
+//if item is 3123 then pass //Head
+//if item is 3143 then pass //Body
+if item is 3163 then pass //Hands
+//if item is 3183 then pass //Legs
+if item is 3203 then pass //Feet
+if item is 12101 then pass //Base Feet
+
+//Summoner
+//if item is 3124 then pass //Head
+if item is 3144 then pass //Body
+if item is 3164 then pass //Hands
+//if item is 3184 then pass //Legs
+//if item is 3204 then pass //Feet
+//if item is 12102 then pass //Base Feet
+
+//Blue Mage
+if item is 3125 then pass //Head
+//if item is 3145 then pass //Body
+//if item is 3165 then pass //Hands
+if item is 3185 then pass //Legs
+//if item is 3205 then pass //Feet
+if item is 12103 then pass //Base Feet
+
+//Corsair
+//if item is 3126 then pass //Head
+if item is 3146 then pass //Body
+//if item is 3166 then pass //Hands
+if item is 3186 then pass //Legs
+if item is 3206 then pass //Feet
+if item is 12104 then pass //Base Feet
+
+//Puppetmaster
+if item is 3127 then pass //Head
+if item is 3147 then pass //Body
+//if item is 3167 then pass //Hands
+if item is 3187 then pass //Legs
+//if item is 3207 then pass //Feet
+if item is 12105 then pass //Base Feet
+
+//Dancer
+//if item is 3128 then pass //Head
+//if item is 3148 then pass //Body
+//if item is 3168 then pass //Hands
+if item is 3188 then pass //Legs
+//if item is 3208 then pass //Feet
+//if item is 12106 then pass //Base Feet
+
+//Scholar
+//if item is 3129 then pass //Head
+//if item is 3149 then pass //Body
+//if item is 3169 then pass //Hands
+if item is 3189 then pass //Legs
+//if item is 3209 then pass //Feet
+if item is 12107 then pass //Base Feet
+
+//---------------------------------------------------------------
+
+//-----------------Jewels/Stones/Cards/Coins---------------------
+
+//Head (Attohwa) (Vision)
+//if item is 3210 then pass //Stone (BRD, RNG, THF, WAR, WHM)
+//if item is 3211 then pass //Coin (BLM, BST, DRK, NIN, SMN)
+//if item is 3212 then pass //Jewel (COR, MNK, PUP, RDM, SAM)
+//if item is 3213 then pass //Card (BLU, DNC, DRG, PLD, SCH)
+
+//Body (Ardor)
+//if item is 3214 then pass //Stone (WAR, PLD, BRD, NIN, BLU)
+//if item is 3215 then pass //Coin (THF, DRK, RNG, SMN, COR)
+//if item is 3216 then pass //Jewel (BLM, DNC, PUP, RDM, SAM)
+//if item is 3217 then pass //Card (BST, DRG, MNK, SCH, WHM)
+
+//Hands (Wieldance)
+//if item is 3218 then pass //Stone (WAR, RDM, THF, BST, SCH)
+//if item is 3219 then pass //Coin (WHM, DRK, RNG, BLU, DNC)
+//if item is 3220 then pass //Jewel (MNK, BLM, BRD, SAM, SMN)
+//if item is 3221 then pass //Card (PLD, NIN, DRG, COR, PUP)
+
+//Legs (Misareaux) (Balance)
+if item is 3222 then pass //Stone (BLM, BLU, NIN, PUP, WAR)
+//if item is 3223 then pass //Coin (BRD, DRK, PLD, RDM, THF)
+//if item is 3224 then pass //Jewel (BST, MNK, RNG, SAM, SCH)
+//if item is 3225 then pass //Card (COR, DNC, DRG, SMN, WHM)
+
+
+//Feet (Vunkerl) (Voyage)
+//if item is 3226 then pass //Stone (DNC, PLD, RDM, SMN, WAR)
+//if item is 3227 then pass //Coin (BLU, COR, DRK, MNK, SCH)
+//if item is 3228 then pass //Jewel (BRD, PUP, SAM, THF, WHM)
+//if item is 3229 then pass //Card (BLM, BST, DRG, NIN, RNG)
+
+//-------------------------Abyssea Junk Items-----------------------------
+
+//Abyssea - La Theine (ALT)
+if item is 884 then pass //black tiger fang
+if item is 861 then pass //tiger hide
+if item is 497 then pass //gigas socks
+if item is 499 then pass //gigas necklace
+if item is 5571 then pass //Karakul Meat
+if item is 878 then pass //Karakul skin
+if item is 4468 then pass //pamamas
+if item is 17296 then pass //pebble
+if item is 5680 then pass //Agaricus
+if item is 5569 then pass //puk egg
+if item is 2148 then pass //puk wing
+if item is 2874 then pass //Lambent Scale
+if item is 874 then pass //bird feathers
+if item is 4570 then pass //bird eggs
+if item is 912 then pass //Beehive Chip 
+if item is 925 then pass //Giant Stinger 
+if item is 4370 then pass //honey
+if item is 846 then pass //insect wing
+if item is 859 then pass //ram skin
+if item is 895 then pass //ram horn
+if item is 505 then pass //Sheepskin
+if item is 992 then pass //Sheep Tooth
+if item is 4372 then pass //Giant Sheep Meat 
+if item is 2521 then pass //Gnole Claw
+if item is 4358 then pass //hare meat
+if item is 856 then pass //rabbit hide
+if item is 748 then pass //flint stone
+if item is 736 then pass //silver ore
+if item is 642 then pass //zinc ore
+if item is 738 then pass //platinum ore
+
+//Abyssea - Konschtat (AK)
+if item is 1119 then pass //tonberry coat
+if item is 1162 then pass //tonbery lantern
+if item is 1443 then pass //dried mugwort
+if item is 2163 then pass //imp wing
+if item is 557 then pass //ahriman lens
+if item is 2903 then pass //eft blood
+if item is 924 then pass //fiend blood
+if item is 923 then pass //Dryad root
+if item is 701 then pass //rosewood log
+if item is 4448 then pass //puffball
+if item is 703 then pass //petrified log
+if item is 2428 then pass //wivre hide
+if item is 2427 then pass //wivre maul
+if item is 529 then pass //luminicloth
+if item is 940 then pass //revival tree root
+if item is 4362 then pass //lizard egg
+if item is 4373 then pass //woozyshroom
+if item is 5682 then pass //Purple Polypore
+if item is 575 then pass //grain seeds
+if item is 572 then pass //herb seeds
+if item is 953 then pass //treant bulb
+if item is 1122 then pass //Wyvern Skin
+
+//Abyssea - Tahrongi (AT)
+if item is 914 then pass //Mercury
+if item is 922 then pass //bat wings
+if item is 891 then pass //bat fangs
+if item is 2212 then pass //Gunpowder Swathe
+if item is 2165 then pass //Qutrub Gorget
+if item is 1423 then pass //eft skin
+if item is 852 then pass //lizard skin
+if item is 896 then pass //scorpion shell
+if item is 897 then pass //scorpion claw
+if item is 842 then pass //giant bird feather
+if item is 854 then pass //cockatrice skin
+if item is 4435 then pass //cockatrice meat
+if item is 1123 then pass //Manticore Fang
+if item is 1116 then pass //Manticore Hide
+if item is 4377 then pass //coeurl hide
+if item is 863 then pass //coeurl meat
+if item is 2522 then pass //gnat wing
+if item is 17868 then pass //humus
+if item is 1639 then pass //Corse Robe
+if item is 1614 then pass //Corse Bracelet
+
+//Abyssea - Attohwa (AAC)
+if item is 842 then pass //giant bird feather
+if item is 854 then pass //cockatrice skin
+if item is 4435 then pass //cockatrice meat
+if item is 4377 then pass //coeurl hide
+if item is 863 then pass //coeurl meat
+if item is 940 then pass //revival tree root
+if item is 849 then pass //undead skin
+if item is 896 then pass //scorpion shell
+if item is 897 then pass //scorpion claw
+if item is 748 then pass //flint stone
+if item is 736 then pass //silver ore
+if item is 642 then pass //zinc ore
+if item is 2173 then pass //wamoura cocoon
+if item is 4369 then pass //4leaf mandy bud
+if item is 4368 then pass //2leaf mandy bud
+if item is 839 then pass //crawler cocoon
+if item is 816 then pass //silk thread
+if item is 2365 then pass //demon blood
+if item is 2229 then pass //chimera blood
+if item is 914 then pass //Mercury
+if item is 880 then pass //bone chip
+if item is 825 then pass //cotton cloth
+if item is 529 then pass //luminicloth
+if item is 1741 then pass //hq eft skin
+
+//Abyssea - Misareaux (AM)
+if item is 874 then pass //bird feathers
+if item is 4570 then pass //bird eggs
+if item is 881 then pass //crab shells
+if item is 4400 then pass //land crab meat
+if item is 922 then pass //bat wings
+if item is 891 then pass //bat fangs
+if item is 930 then pass //beastman blood
+if item is 924 then pass //fiend blood
+if item is 4368 then pass //2leaf mandy bud
+if item is 2149 then pass //apkallu feather
+if item is 5568 then pass //apkallu egg
+if item is 838 then pass //spider web
+if item is 1622 then pass //bugard tusk
+if item is 1640 then pass //bugard skin
+if item is 5563 then pass //orobon meat
+if item is 853 then pass //raptor skin
+if item is 1617 then pass //flytrap leaf
+if item is 846 then pass //insect wing
+if item is 2171 then pass //colibri beak
+if item is 2150 then pass //colibri feather
+if item is 4362 then pass //lizard egg
+if item is 852 then pass //lizard skin
+if item is 17305 then pass //cluster arm
+if item is 1630 then pass //cluster ash
+if item is 1667 then pass //cluster core
+if item is 768 then pass //flint stone
+
+//Abyssea - Vunkerl (AV)
+if item is 1620 then pass //taurus horn
+if item is 868 then pass //pugil scales
+if item is 4484 then pass //shall shell
+if item is 2163 then pass //imp wing
+if item is 2506 then pass //ladybug wing
+if item is 4357 then pass //crawler egg
+if item is 816 then pass //silk thread
+if item is 2749 then pass //gargouille eye
+if item is 2747 then pass //gargoille horn
+if item is 2748 then pass //gargouille shank
+if item is 18729 then pass //djinn arm
+if item is 2549 then pass //djinn ash
+if item is 888 then pass //seashell
+if item is 5569 then pass //puk egg
+if item is 2148 then pass //puk wing
+if item is 2229 then pass //chimera blood
+if item is 1724 then pass //soulflayer robe
+if item is 2335 then pass //soulflayer tentacle
+if item is 4358 then pass //hare meat
+if item is 856 then pass //rabbit hide
+if item is 922 then pass //bat wings
+if item is 891 then pass //bat fangs
+if item is 930 then pass //beastman blood
+if item is 924 then pass //fiend blood
+if item is 2518 then pass //smilodon hide
+if item is 5668 then pass //smilodon liver
+if item is 4375 then pass //danceshroom
+if item is 4374 then pass //sleepshroom
+if item is 2953 then pass //viscous spittle
+if item is 838 then pass //spider web
+
+//Abyssea - Altepa (AA)
+if item is 3242 then pass //hq scorpion claw
+if item is 896 then pass //scorpion shell
+if item is 897 then pass //scorpion claw
+if item is 4400 then pass //land crab meat
+if item is 700 then pass //Mahogany Log 
+if item is 923 then pass //Dryad root
+if item is 701 then pass //rosewood log
+if item is 4448 then pass //puffball
+if item is 857 then pass //dhalmel hide
+if item is 4359 then pass //dhalmel meat
+if item is 893 then pass //giant femur
+if item is 5569 then pass //puk egg
+if item is 2148 then pass //puk wing
+if item is 2229 then pass //chimera blood
+if item is 854 then pass //cockatrice skin
+if item is 4435 then pass //cockatrice meat
+if item is 1123 then pass //Manticore Fang
+if item is 1116 then pass //Manticore Hide
+if item is 1163 then pass //Manticore hair
+if item is 1122 then pass //Wyvern Skin
+if item is 1124 then pass //Wyvern wing
+if item is 4368 then pass //2leaf mandy bud
+if item is 843 then pass //Giant Bird Plume 
+if item is 842 then pass //giant bird feather
+if item is 2975 then pass //Manigordo Tusk
+if item is 2518 then pass //smilodon hide
+if item is 5668 then pass //smilodon liver
+if item is 2506 then pass //ladybug wing
+if item is 868 then pass //pugil scales
+if item is 4484 then pass //shall shell
+if item is 1165 then pass //doll shard
+if item is 914 then pass //Mercury
+
+//Abyssea - Uleguerand (AU)
+if item is 853 then pass //raptor skin
+if item is 2823 then pass //Iridium Ingot
+if item is 2749 then pass //gargouille eye
+if item is 2747 then pass //gargoille horn
+if item is 2748 then pass //gargouille shank
+if item is 1428 then pass //Buffalo Hide
+if item is 5152 then pass //Buffalo meat
+if item is 748 then pass //flint stone
+if item is 736 then pass //silver ore
+if item is 642 then pass //zinc ore
+if item is 2163 then pass //imp wing
+if item is 1700 then pass //Bloodthread 
+if item is 1626 then pass //Avatar Blood
+if item is 2151 then pass //Marid Hide
+if item is 2166 then pass //Marid Hair
+if item is 884 then pass //black tiger fang
+if item is 861 then pass //tiger hide
+if item is 1122 then pass //Wyvern Skin
+if item is 1124 then pass //Wyvern wing
+if item is 955 then pass //Golem Shard
+if item is 644 then pass //Mythril Ore 
+
+//Abyssea - Grauberg (AG)
+if item is 1622 then pass //bugard tusk
+if item is 1640 then pass //bugard skin
+if item is 1122 then pass //Wyvern Skin
+if item is 2428 then pass //wivre hide
+if item is 2427 then pass //wivre maul
+if item is 881 then pass //crab shells
+if item is 4400 then pass //land crab meat
+if item is 1193 then pass //hq crab shell
+if item is 511 then pass //Goblin Mask
+if item is 508 then pass //Goblin Helm
+if item is 507 then pass //Goblin Mail
+if item is 868 then pass //pugil scales
+if item is 5569 then pass //puk egg
+if item is 2148 then pass //puk wing
+if item is 954 then pass //Magic Pot Shard 
+if item is 914 then pass //Mercury
+if item is 18729 then pass //djinn arm
+if item is 2549 then pass //djinn ash
+
+//-------------------------Abyssea Chest Items-----------------------------
+
+//Spells
+//if item is 4965 then pass //Aisha: Ichi
+//if item is 4991 then pass //Army's Paeon VI
+//if item is 4856 then pass //Aspir II
+//if item is 4982 then pass //Foe Requiem VII
+//if item is 5001 then pass //Knight's Minne V
+//if item is 4655 then pass //Protect V
+//if item is 4771 then pass //Stone V
+//if item is 4781 then pass //Water V
+//if item is 4660 then pass //Shell V
+//if item is 4614 then pass //Cure VI
+//if item is 4849 then pass //Addle
+//if item is 5099 then pass //Boost-MND
+//if item is 5096 then pass //Boost-VIT
+//if item is 5057 then pass //Earth Carol II
+//if item is 5092 then pass //Gain-MND
+//if item is 5089 then pass //Gain-VIT
+//if item is 4966 then pass //Myoshu: Ichi
+//if item is 4893 then pass //Stoneja
+//if item is 5059 then pass //Water Carol II
+//if item is 6059 then pass //Animus Augeo
+//if item is 6060 then pass //Animus Minuo
+//if item is 4996 then pass //Mage's Ballad III
+//if item is 4850 then pass //Refresh II
+//if item is 4807 then pass //Waterja
+//if item is 4863 then pass //Break
+//if item is 4707 then pass //Endark
+//if item is 4706 then pass //Enlight
+//if item is 5078 then pass //Sentinel's Schetzo
+//if item is 4755 then pass //Aero V
+//if item is 4967 then pass //Yurin: Ichi
+//if item is 4969 then pass //Migawari: Ichi
+//if item is 4892 then pass //Aeroja
+//if item is 5085 then pass //Regen IV
+//if item is 4890 then pass //Firaja
+//if item is 4761 then pass //Blizzard V
+//if item is 4756 then pass //Fire V
+//if item is 5100 then pass //Boost-CHR
+//if item is 5093 then pass //Gain-CHR
+//if item is 5054 then pass //Fire Carol II
+//if item is 5090 then pass //Gain-AGI
+//if item is 5097 then pass //Boost-AGI
+//if item is 6061 then pass //Adloquium
+//if item is 5056 then pass //Wind Carol II
+
+// Synth/crap items
+//if item is 5152 then pass //Buffalo Meat
+//if item is 863 then pass //Coeurl Meat
+//if item is 780 then pass //Clarite
+//if item is 4272 then pass //Dragon Meat
+//if item is 756 then pass //Durium Ore
+//if item is 1258 then pass //Earth Ore
+//if item is 702 then pass //Ebony Log
+//if item is 1769 then pass //Galateia
+//if item is 685 then pass //Khroma Ore
+//if item is 1446 then pass //Lacquer Tree Log
+//if item is 739 then pass //Orichalcum Ore
+//if item is 740 then pass //Phrygian Ore
+//if item is 2359 then pass //Star Sapphire
+//if item is 1415 then pass //Urushi
+//if item is 1260 then pass //Water Ore
+//if item is 1633 then pass //Clot Plasma
+//if item is 2824 then pass //Shagreen
+//if item is 2189 then pass //Fiendish Skin
+//if item is 781 then pass //Larimar
+//if item is 1262 then pass //Dark Ore
+//if item is 778 then pass //Heliodor
+//if item is 1740 then pass //Iolite
+//if item is 1259 then pass //Lightning Ore
+//if item is 1469 then pass //Wootz Ore
+//if item is 836 then pass //Damascene Cloth
+//if item is 2408 then pass //Flocon-de-mer
+//if item is 2198 then pass //Water Spider's Web
+//if item is 887 then pass //Coral Fragment
+//if item is 645 then pass //Darksteel Ore
+//if item is 812 then pass //Deathstone
+//if item is 804 then pass //Spinel 
+//if item is 794 then pass //Sapphire
+//if item is 785 then pass //Emerald
+//if item is 786 then pass //Ruby
+//if item is 1312 then pass //Angel Skin
+//if item is 942 then pass //Philosopher's Stone
+//if item is 5455 then pass //Ahtapot
+//if item is 898 then pass //Chicken Bone
+//if item is 654 then pass //Darksteel Ingot
+//if item is 777 then pass //Fulmenite
+//if item is 745 then pass //Gold Ingot
+//if item is 5564 then pass //Hydra Meat
+//if item is 1302 then pass //Earth Bead
+//if item is 1303 then pass //Lightning Bead
+//if item is 1306 then pass //Dark Bead
+//if item is 2703 then pass //Khromated Leather
+//if item is 729 then pass //Bloodwood Log
+//if item is 629 then pass //Beech Log
+//if item is 739 then pass //Black Pearl
+//if item is 902 then pass //Demon Horn
+//if item is 722 then pass //Divine Log
+//if item is 719 then pass //Ebony Lumber
+//if item is 1299 then pass //Fire Bead
+//if item is 1300 then pass //Ice Bead
+//if item is 1447 then pass //Lacquer Tree Lumber
+//if item is 2152 then pass //Marid Leather
+//if item is 1411 then pass //Molybdenum Ingot
+//if item is 747 then pass //Orichalcum Ingot
+//if item is 1311 then pass //Oxblood
+if item is 4387 then pass //Wild Onion
+//if item is 1301 then pass //Wind Bead
+//if item is 1305 then pass //Light Bead
+//if item is 2476 then pass //Platinum Silk
+//if item is 1313 then pass //Siren's Hair
+//if item is 646 then pass //Adaman Ore
+if item is 1592 then pass //Cactuar Root
+if item is 2549 then pass //Djinn Ash
+//if item is 746 then pass //Platinum Ingot
+//if item is 1465 then pass //Granite
+//if item is 860 then pass //Behemoth Hide
+//if item is 4120 then pass //X-Potion
+//if item is 4124 then pass //Max-Potion
+//if item is 4125 then pass //Max-Potion +1
+//if item is 4140 then pass //Pro-Ether
+//if item is 4137 then pass //Super Ether +1
+//if item is 4149 then pass //Panacea 
+//if item is 2169 then pass //Cerberus Hide
+//if item is 647 then pass //Molybdenum Ore
+//if item is 1122 then pass //Wyvern Skin
+//if item is 823 then pass //Gold Thread
+//if item is 821 then pass //Rainbow Thread
+//if item is 827 then pass //Wool Cloth
+//if item is 1132 then pass //Raxa
+//if item is 2475 then pass //Kaolin
+//if item is 931 then pass //Cermet Chunk
+if item is 5568 then pass //Apkallu Egg
+//if item is 731 then pass //Aquilaria Log
+//if item is 3316 then pass //Flame Gem
+//if item is 3317 then pass //Snow Gem
+//if item is 3318 then pass //Breeze Gem
+//if item is 3319 then pass //Soil Gem
+//if item is 3320 then pass //Thunder Gem
+//if item is 3321 then pass //Aqua Gem
+//if item is 3322 then pass //Light Gem
+//if item is 3323 then pass //Shadow Gem
+
+
+//---------------------------------------------------------------
+
+//-------------------------Pop Items-----------------------------
+
+//Abyssea - La Theine (ALT)
+//if item is 2891 then pass //Dried Chigoe
+//if item is 2892 then pass //Raw Mutton Chop
+//if item is 2893 then pass //Garg. Blk. Fang
+//if item is 2894 then pass //Trophy Shield
+//if item is 2895 then pass //Oversized Sock
+//if item is 2896 then pass //Massive Armband
+//if item is 2897 then pass //Transparent Wing
+//if item is 2898 then pass //Piceous Scale
+//if item is 2899 then pass //Winter Puk Egg
+//if item is 2900 then pass //Bug-Eaten Hat
+//if item is 2901 then pass //Giant Agar. Mushroom
+//if item is 2902 then pass //Filthy Gnole Claw
+
+//Abyssea - Konschtat (AK)
+//if item is 2903 then pass //Eft Blood
+//if item is 2904 then pass //Giant Slug Eyestalk
+//if item is 2905 then pass //Moonglow Cloth
+//if item is 2906 then pass //Rotting Eyeball
+//if item is 2907 then pass //Tiny Morbol Vine
+//if item is 2908 then pass //Oblivispore Mushroom
+//if item is 2909 then pass //Snakeskin Moss
+//if item is 2910 then pass //Armored Dragonhorn
+//if item is 2911 then pass //Ripped Eft Skin
+//if item is 2912 then pass //Giant Bugard Tusk
+//if item is 2913 then pass //Cloudy Lens
+//if item is 2914 then pass //Murmuring Globule
+
+//Abyssea - Tahrongi (AT)
+//if item is 2915 then pass //HQ Clionid Wing
+//if item is 2916 then pass //HQ Limule Pincer
+//if item is 2917 then pass //Bloodshot Hecteye
+//if item is 2918 then pass //Baleful Skull
+//if item is 2919 then pass //Bloody Fang
+//if item is 2920 then pass //Alkaline Humus
+//if item is 2921 then pass //Venom. Scorp. Stinger
+//if item is 2922 then pass //Eft Egg
+//if item is 2923 then pass //Cockatrice Tailmeat
+//if item is 2924 then pass //Shocking Whisker
+//if item is 2925 then pass //Resilient Mane
+//if item is 2926 then pass //Moaning Vestige
+//if item is 2945 then pass //Shriveled Wing
+//if item is 2946 then pass //Tarnished Pincer
+//if item is 2947 then pass //Exorcised Skull
+//if item is 2948 then pass //Acidic Humus
+//if item is 2949 then pass //Quivering Eft Egg
+//if item is 2950 then pass //Smooth Whisker
+
+//Abyssea - Attohwa (AAC)
+//if item is 3072 then pass //Withered Cocoon
+//if item is 3073 then pass //Eruca Egg
+//if item is 3074 then pass //Blanched Silver
+//if item is 3075 then pass //Undying Ooze
+//if item is 3076 then pass //Bone Chips
+//if item is 3077 then pass //Wailing Rags
+//if item is 3078 then pass //Cracked Drgscale.
+//if item is 3079 then pass //Gory Pincer
+//if item is 3080 then pass //Ext. Eyestalk
+//if item is 3081 then pass //Coeurl Round
+//if item is 3082 then pass //Withered Bud
+//if item is 3083 then pass //Mngl. Ck. Skin
+//if item is 3084 then pass //Great Root
+
+//Abyssea - Misareaux (AM)
+//if item is 3085 then pass //Bewitching Tusk
+//if item is 3086 then pass //Molt Scraps
+//if item is 3087 then pass //Apkallu Down
+//if item is 3088 then pass //Avian Remex
+//if item is 3089 then pass //Orbn. Cheekmeat
+//if item is 3090 then pass //Spheroid Plate
+//if item is 3091 then pass //Hd. Raptor Skin
+//if item is 3092 then pass //Mocking Beak
+//if item is 3093 then pass //HQ Crab Meat
+//if item is 3094 then pass //HQ Rock Salt
+//if item is 3095 then pass //Worm-Eaten Bud
+//if item is 3096 then pass //Spotted Flyfrond
+//if item is 3097 then pass //Blk. Rabbit Tail
+
+//Abyssea - Vunkerl (AV)
+//if item is 3098 then pass //Gnr. Taurus Horn
+//if item is 3099 then pass //Gargouille Stone
+//if item is 3100 then pass //Moonbeam Clam
+//if item is 3101 then pass //Dented Skull
+//if item is 3102 then pass //Stiff. Tentacle
+//if item is 3103 then pass //Black Whisker
+//if item is 3104 then pass //Opaque Wing
+//if item is 3105 then pass //Fortune Wing
+//if item is 3106 then pass //Djinn Ashes
+//if item is 3107 then pass //Shockshroom
+//if item is 3108 then pass //Crwl. Floatstone
+//if item is 3109 then pass //HQ Rabbit Hide
+
+//Abyssea - Altepa (AA)
+//if item is 3230 then pass //Tablilla Mercury
+//if item is 3231 then pass //Sharabha Hide
+//if item is 3232 then pass //Tiger King's Hide
+//if item is 3233 then pass //Vadleany Fluid
+//if item is 3234 then pass //Oasis Water
+//if item is 3235 then pass //Sandy Shard
+//if item is 3236 then pass //Smoldering Arm
+//if item is 3237 then pass //Sand-caked Fang
+//if item is 3238 then pass //HQ Dhalmel Hide
+//if item is 3239 then pass //Puppet's Blood
+//if item is 3240 then pass //HQ Cockatrice Skin
+//if item is 3241 then pass //Ladybird Leaf
+//if item is 3242 then pass //HQ Scorpion Claw
+//if item is 3243 then pass //Sabulous Clay
+//if item is 3244 then pass //Giant Mistletoe
+
+//Abyssea - Uleguerand (AU)
+//if item is 3245 then pass //Bevel Gear
+//if item is 3246 then pass //Snow God Core
+//if item is 3247 then pass //Sisyphus Fragment
+//if item is 3248 then pass //Rimed Wing
+//if item is 3249 then pass //Audumbla Hide
+//if item is 3250 then pass //Helical Gear
+//if item is 3251 then pass //Gear Fluid
+//if item is 3252 then pass //Gelid Arm
+//if item is 3253 then pass //HQ Marid Hide
+//if item is 3254 then pass //Ice Wyvern Scale
+//if item is 3255 then pass //Whiteworm Clay
+//if item is 3256 then pass //Imp's Sentry Horn
+//if item is 3257 then pass //Benumbed Eye
+//if item is 3258 then pass //HQ Buffalo Horn
+//if item is 3259 then pass //HQ Black Tiger Hide
+
+//Abyssea - Grauberg (AG)
+//if item is 3260 then pass //Teekess. Fragment
+//if item is 3261 then pass //Minaruja Skull
+//if item is 3262 then pass //Jaculus Wing
+//if item is 3263 then pass //Naiad's Lock
+//if item is 3265 then pass //Bubbling Oil
+//if item is 3266 then pass //Darkflame Arm
+//if item is 3267 then pass //Pursuer's Wing
+//if item is 3268 then pass //HQ Wivre Hide
+//if item is 3269 then pass //Decaying Molar
+//if item is 3270 then pass //HQ Pugil Scale
+//if item is 3271 then pass //Fay Teardrop
+//if item is 3272 then pass //Unseelie Eye
+//if item is 3273 then pass //Goblin Rope
+//if item is 3274 then pass //Goblin Oil
+
+//---------------------------------------------------------------
+
+//-----------------------Misc Items------------------------------
+
+//if item is 2955 then pass //Kindred Crests
+//if item is 2956 then pass //High Kindred Crests
+
+if item is 17047,18514,18533,18620,18777,18893,18967,19131,19168,19313,19289,18456 then pass // Magnus Hammer,Toporok,Axe,Pole,Sainti,Sword,Scythe,Dagger,Claymore,Lance,Toki,Yoshihiro

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<includes>
+	<!--
+		Created by Ihm
+		
+		If you're using this, leave this here please, credit the author and stuff :3.
+		
+		Version 1.1
+	-->
+	<!-- These are the main variables needed by the different includes. -->
+	<include name="ConfigVariables">
+		<var name="_StoredMainWeapon">empty</var>
+		<var name="_StoredSubWeapon">empty</var>
+		<var name="_StoredGearLock">0</var>
+		
+		<var name="_GearSet">Basic</var>
+		<var name="_CurrentEquipmentTag">unbuffed</var>
+		<var name="_BuffCount">0</var>
+		
+		<var name="_PDTMode">0</var>
+		<var name="_MDTMode">0</var>
+	</include>
+	
+	<!-- These are used for Scholar main auto addendum using. -->
+	<include name="AutoSCHMain">
+		<var name="_SCH_AutoArts">1</var>
+		<var name="_SCH_AA_Active">0</var>
+	
+		<var name="_SCH_MJ_Dark_S1">Sleep|Sleep II</var> <!-- RDM and BLM can cast -->
+		<var name="_SCH_MJ_Dark_S2">Dispel</var> <!-- RDM can cast -->
+		<var name="_SCH_MJ_Dark_S3">Stone IV|Water IV|Aero IV|Fire IV|Blizzard IV|Thunder IV|Stone V|Water V|Aero V|Fire V|Blizzard V|Thunder V|Break</var> <!-- None can cast -->
+		<var name="_SCH_MJ_Light_S1">Poisona|Paralyna|Blindna|Silena|Cursna|Reraise|Erase|Viruna|Stona</var> <!-- WHM can cast -->
+		<var name="_SCH_MJ_Light_S1">Raise II|Reraise II|Raise III|Reraise III</var> <!-- None can cast -->
+	</include>
+	
+	<!-- These are used for Scholar sub auto addendum using. -->
+	<include name="AutoSCHSub">
+		<var name="_SCH_AutoArts">1</var>
+		<var name="_SCH_AA_Active">0</var>
+	
+		<var name="_SCH_SJ_Dark">Sleep|Dispel</var>
+		<var name="_SCH_SJ_Light">Poisona|Paralyna|Blindna|Silena|Cursna|Reraise|Erase|Viruna</var>
+	</include>
+	
+	<!-- The list of Obi's based on element. -->
+	<include name="ObiList">
+		<var name="IceObi">Hyorin Obi</var>
+		<var name="WindObi">Furin Obi</var>
+		<var name="EarthObi">Dorin Obi</var>
+		<var name="ThunderObi">Rairin Obi</var>
+		<var name="WaterObi">Suirin Obi</var>
+		<var name="FireObi">Karin Obi</var>
+		<var name="DarkObi">Anrin Obi</var>
+		<var name="LightObi">Korin Obi</var>
+	</include>
+
+    <!-- This will automatically adjust targets when they're deemed invalid. -->
+    <include name="TargetAdjustment">
+ 		<if SpellTargetType="NPC" NotValidTarget="*Enemy*" ValidTarget="*Self*">
+			<changetarget target="&lt;me&gt;"/>
+		</if>
+		<elseif SpellTargetType="NPC" NotValidTarget="*NPC*" ValidTarget="*Self*">
+			<changetarget target="&lt;me&gt;"/>
+		</elseif>
+		<elseif SpellTargetRaw="&lt;t&gt;" NotValidTarget="NONE" ValidTarget="*Self*">
+			<changetarget target="&lt;me&gt;"/>
+		</elseif>
+    </include>
+	
+    <!-- Cancel buffs that can't be overwritten. -->
+    <include name="BuffCancel">
+        <if Spell="Sneak" BuffActive="Sneak" SpellTargetType="Self" NotBuffActive="Silence|Mute">
+            <midcastdelay delay="1" />
+            <command when="midcast">cancel 71</command>
+        </if>
+		<elseif Spell="Spectral Jig" BuffActive="Sneak">
+			<command when="precast">cancel 71</command>
+		</elseif>
+        <elseif Spell="Monomi*" BuffActive="Sneak" NotBuffActive="Silence|Mute">
+            <midcastdelay delay="2.5" />
+            <command when="midcast">cancel 71</command>
+        </elseif>
+        <elseif Spell="Utsusemi: Ichi" Buffactive="Copy Image*" NotBuffActive="Silence|Mute">
+			<midcastdelay delay="2.5" />
+			<command when="midcast">cancel 66</command>
+			<command when="midcast">cancel 446</command>
+        </elseif>
+		<elseif spell="Stoneskin" BuffActive="Stoneskin" NotBuffActive="Silence|Mute">
+			<midcastdelay delay="2.5" />
+			<command when="midcast">cancel 37</command>
+		</elseif>
+    </include>
+	
+	<!-- Stops GearSwaps on Teleports and Warps. -->
+    <include name="TeleportCancel">
+        <if Spell="Teleport*|Recall*|Warp|Warp II|Retrace" SpellTargetType="Self">
+            <return />
+        </if>
+    </include>
+	
+	<!-- Auto-re-equips weapons if they're removed, and locks weapons if set to. -->
+	<include name="WeaponHandling">
+		<if NotEquipMain="empty">
+			<var cmd="set _StoredMainWeapon %EquipMain" />
+		</if>
+		<else>
+			<equip when="precast">
+				<main>$_StoredMainWeapon</main>
+			</equip>
+		</else>
+		
+		<if NotEquipSub="empty">
+			<var cmd="set _StoredSubWeapon %EquipSub" />
+		</if>
+		<else>
+			<equip when="aftercast">
+				<sub>$_StoredSubWeapon</sub>
+			</equip>
+		</else>
+		
+		<if advanced='"$_StoredGearLock"=="0"'><changelock slot="main|sub" when="All" lock="true" /></if>
+	</include>
+	
+	<!-- Lock certain slots when certain gear is equiped. -->
+	<include name="AutoSlotLocking">
+        <if EquipRange="Soulgauger*">
+            <changelock slot="range|ammo" when="All" lock="true" />
+			<addtochat color="205">%EquipRange equiped, slot locked.</addtochat>
+        </if>
+        <if EquipHead="Reraise Hairpin">
+            <changelock slot="head" when="All" lock="true" />
+			<addtochat color="205">%EquipHead equiped, slot locked.</addtochat>
+        </if>
+        <if EquipNeck="Reraise Gorget">
+            <changelock slot="neck" when="All" lock="true" />
+			<addtochat color="205">%EquipNeck equiped, slot locked.</addtochat>
+        </if>
+        <if EquipLEar="Reraise Earring">
+            <changelock slot="lear" when="All" lock="true" />
+			<addtochat color="205">%EquipLEar equiped, slot locked.</addtochat>
+        </if>
+        <if EquipREar="Reraise Earring">
+            <changelock slot="rear" when="All" lock="true" />
+			<addtochat color="205">%EquipREar equiped, slot locked.</addtochat>
+        </if>
+	</include>
+	
+	<!-- Group switching using ClassTrigger. -->
+	<include name="ClassTriggerGroupSwitching">
+		<!-- Group switching -->
+		<if Spell="ClassTrigger">
+			<if SpellTargetRaw="buff">
+				<if BuffActive="Minuet|Madrigal|Chaos_Roll">
+					<var cmd="set _CurrentEquipmentTag buffed" />
+				</if>
+				<else>
+					<var cmd="set _CurrentEquipmentTag unbuffed" />
+				</else>
+			</if>
+			<else>
+				<var cmd="set _GearSet %SpellTargetRaw" />
+			</else>
+			
+			<if NotGroup="$_GearSet-$_CurrentEquipmentTag">
+				<command>sc group $_GearSet-$_CurrentEquipmentTag</command>
+			</if>
+			<command>alias jobgearup .gc %MainJob miscgear base $_GearSet-unbuffed $_GearSet-buffed;</command>
+			<cancelspell />
+			<return />
+		</if>
+	</include>
+	
+	<!-- Switches DT modes. -->
+	<include name="DTModeSwitching">
+		<!-- Physical Damage Taken mode -->
+		<if Spell="PhysicalDefense">
+			<if advanced='"$_PDTMode"=="0"'>
+				<var cmd="set _PDTMode 1" />
+				<addtochat color="205">Damage Mitigation Mode Activated!</addtochat>
+			</if>
+			<else>
+				<var cmd="set _PDTMode 0" />
+				<addtochat color="205">Damage Mitigation Mode Deactivated!</addtochat>
+			</else>
+		</if>
+		<!-- Magical Damage Taken mode -->
+		<if Spell="MagicalDefense">
+			<if advanced='"$_MDTMode"=="0"'>
+				<var cmd="set _MDTMode 1" />
+				<addtochat color="205">Magic Mitigation Mode Activated!</addtochat>
+			</if>
+			<else>
+				<var cmd="set _MDTMode 0" />
+				<addtochat color="205">Magic Mitigation Mode Deactivated!</addtochat>
+			</else>
+		</if>
+	</include>
+	
+	<!-- Checks for certain buffs to set you into buffed mode. -->
+	<include name="BuffModeDetection">
+		<command>
+			ae unregister 10000; ae unregister 10001; ae unregister 10002; ae unregister 10003; ae unregister 10004; ae unregister 10005;
+			wait 1;
+			ae register 10000 (regex)gainbuff_(Minuet|Madrigal|Chaos_Roll)(/regex) trigger "ClassTrigger" buff;
+			ae register 10001 (regex)losebuff_(Minuet|Madrigal|Chaos_Roll)(/regex) trigger "ClassTrigger" buff;
+		</command>
+	</include>
+	
+	<!-- Lucky and Unlucky numbers for COR Roll outputting. -->
+	<include name="CORRolls">
+		<var name="Double-UpLucky">0</var>
+		<var name="Double-UpUnlucky">0</var>
+		
+		<var name="Corsair&apos;s RollLucky">5</var>
+		<var name="Corsair&apos;s RollUnlucky">9</var>
+		
+		<var name="Ninja RollLucky">4</var>
+		<var name="Ninja RollUnlucky">8</var>
+		
+		<var name="Hunter&apos;s RollLucky">4</var>
+		<var name="Hunter&apos;s RollUnlucky">8</var>
+
+		<var name="Chaos RollLucky">4</var>
+		<var name="Chaos RollUnlucky">8</var>
+
+		<var name="Magus&apos;s RollLucky">2</var>
+		<var name="Magus&apos;s RollUnlucky">6</var>
+
+		<var name="Healer&apos;s RollLucky">3</var>
+		<var name="Healer&apos;s RollUnlucky">7</var>
+
+		<var name="Puppet RollLucky">4</var>
+		<var name="Puppet RollUnlucky">8</var>
+
+		<var name="Choral RollLucky">2</var>
+		<var name="Choral RollUnlucky">6</var>
+
+		<var name="Monk&apos;s RollLucky">3</var>
+		<var name="Monk&apos;s RollUnlucky">7</var>
+
+		<var name="Beast RollLucky">4</var>
+		<var name="Beast RollUnlucky">8</var>
+
+		<var name="Samurai RollLucky">2</var>
+		<var name="Samurai RollUnlucky">6</var>
+
+		<var name="Evoker&apos;s RollLucky">5</var>
+		<var name="Evoker&apos;s RollUnlucky">9</var>
+
+		<var name="Rogue&apos;s RollLucky">5</var>
+		<var name="Rogue&apos;s RollUnlucky">9</var>
+
+		<var name="Warlock&apos;s RollLucky">4</var>
+		<var name="Warlock&apos;s RollUnlucky">8</var>
+
+		<var name="Fighter&apos;s RollLucky">5</var>
+		<var name="Fighter&apos;s RollUnlucky">9</var>
+
+		<var name="Drachen RollLucky">3</var>
+		<var name="Drachen RollUnlucky">7</var>
+
+		<var name="Gallant&apos;s RollLucky">3</var>
+		<var name="Gallant&apos;s RollUnlucky">7</var>
+
+		<var name="Wizard&apos;s RollLucky">5</var>
+		<var name="Wizard&apos;s RollUnlucky">9</var>
+
+		<var name="Dancer&apos;s RollLucky">3</var>
+		<var name="Dancer&apos;s RollUnlucky">7</var>
+
+		<var name="Scholar&apos;s RollLucky">2</var>
+		<var name="Scholar&apos;s RollUnlucky">6</var>
+
+		<var name="Bolter&apos;s RollLucky">3</var>
+		<var name="Bolter&apos;s RollUnlucky">9</var>
+
+		<var name="Caster&apos;s RollLucky">2</var>
+		<var name="Caster&apos;s RollUnlucky">7</var>
+
+		<var name="Blitzer&apos;s RollLucky">4</var>
+		<var name="Blitzer&apos;s RollUnlucky">9</var>
+
+		<var name="Tactician&apos;s RollLucky">5</var>
+		<var name="Tactician&apos;s RollUnlucky">8</var>
+
+		<var name="Allies&apos; RollLucky">3</var>
+		<var name="Allies&apos; RollUnlucky">10</var>
+		
+		<var name="Miser&apos;s RollLucky">5</var>
+		<var name="Miser&apos;s RollUnlucky">7</var>
+		
+		<var name="Companion&apos;s RollLucky">2</var>
+		<var name="Companion&apos;s RollUnlucky">10</var>
+		
+		<var name="Avenger&pos;s RollLucky">4</var>
+		<var name="Avenger&pos;s RollUnlucky">8</var>
+	</include>
+</includes>

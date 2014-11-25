@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<settings>
+    <!--
+	This file controls the settings for the Itemizer plugin.
+	Settings in the <global> section apply to all characters
+	The available settings are:
+	chatOutput - Whether or not to show output from Itemizer in the chat log
+	color - The color of said output
+	delay - Time to wait between moving an item and retrying the command
+	autoItem - Enable or disable automatic item moving
+	autoNinjutsu - Enable or disable automatic tool moving
+	-->
+    <global>
+        <chatOutput>true</chatOutput>
+        <color>8</color>
+        <delay>50</delay>
+        <autoItem>true</autoItem>
+        <autoNinjutsu>false</autoNinjutsu>
+    </global>
+    <!--
+	You may also override specific settings on a per-character basis here.
+	-->
+</settings>

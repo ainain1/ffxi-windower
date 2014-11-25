@@ -1,0 +1,2430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Last modified: 1/26/2013 2:02:55 AM -->
+
+<!-- IMPORTANT -->
+
+<!--
+     This include, and the xmls based on it, make use of new custom trigger spells
+     from the "radsources" resources.  Current updated resources should include these
+     in the standard client.  If things don't appear to be working, check that first.
+ -->
+
+<!-- REQUIRED -->
+
+<!-- The following include entries must be imported for this include to be properly functional. -->
+
+<!-- Vars section:
+     ConfigurationVars (required)
+     UtilityVars (required)
+
+     RecastDurations (if using RecastWarnings)
+     ElementalStaves (if using ElementalStaffRules or FastCastCalculations)
+     FastCastVars (if using FastCastCalculations)
+     ElementalGear (if using ObiRingCape-*)
+ -->
+
+<!-- Sets section:
+     Base-Group (recommended as base for inheritance)
+
+     Outside-Group (group required for normal outside areas; inherit from Base-Group)
+     Abyssea-Group (group for inside Abyssea) [Visitant status]
+     Campaign-Group (group for when in Campaign) [Allied Tags status]
+     Voidwatch-Group (group for when in Voidwatch) [Voidwatcher status]
+     Salvage-Group (group for when in Salvage) [*Remnants zone]
+     Legion-Group (group for when in Legion) [??? status]
+
+     These groups are only required if using the areaRules include, which automatically switches
+     based on where you currently are.  Most of the time, only the Outside-Group needs to
+     have sets defined, and the remainder can be empty groups that inherit from that one.
+ -->
+
+<!-- Rules section:
+     UniversalTriggerRules - The fundamental include that this Include file is based around.
+ -->
+
+
+<!-- Notes:
+     <addtochat color="12"></addtochat> - This color triggers the /tell chime.
+-->
+
+
+<includes xmlns="http://www.windower.net/spellcast/"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.windower.net/spellcast/ spellcastIncludeRules.xsd">
+  <!-- ******************* Rules ******************* -->
+
+    <!-- Make sure things like basic area and status are set as soon as possible. -->
+    <include name="RunFirstUpdate">
+        <if advanced='"$FirstUpdate"="No"'>
+            <var cmd="set FirstUpdate Yes" />
+            <addtochat>Ran first update.</addtochat>
+            <if commandprefix="/trigger">
+                <command>$UpdateCommand;wait 0.5;input /ma %spell %spellTargetRaw</command>
+            </if>
+            <else>
+                <command>$UpdateCommand;wait 0.5;input %commandprefix %spell %spellTargetRaw</command>
+            </else>
+            
+            <!-- Class binds -->
+            <!-- On first run, will execute these to bind - and = keys to custom commands. -->
+            <!-- Set the values per job xml, use defaults, or set to "None" to not use them. -->
+            
+            <!-- Ctrl-= -->
+            <if advanced='"$ClassBindCtrlEqual"="None"'>
+                <command>unbind ^=</command>
+            </if>
+            <elseif advanced='"$ClassBindCtrlEqual"!="Ignore"'>
+                <command>bind ^= $ClassBindCtrlEqual</command>
+            </elseif>
+
+            <!-- Alt-= -->
+            <if advanced='"$ClassBindAltEqual"="None"'>
+                <command>unbind !=</command>
+            </if>
+            <elseif advanced='"$ClassBindAltEqual"!="Ignore"'>
+                <command>bind != $ClassBindAltEqual</command>
+            </elseif>
+
+            <!-- Ctrl+- -->
+            <if advanced='"$ClassBindCtrlDash"="None"'>
+                <command>unbind ^-</command>
+            </if>
+            <elseif advanced='"$ClassBindCtrlDash"!="Ignore"'>
+                <command>bind ^- $ClassBindCtrlDash</command>
+            </elseif>
+
+            <!-- Alt+- -->
+            <if advanced='"$ClassBindAltDash"="None"'>
+                <command>unbind !-</command>
+            </if>
+            <elseif advanced='"$ClassBindAltDash"!="Ignore"'>
+                <command>bind !- $ClassBindAltDash</command>
+            </elseif>
+
+            <!-- Ctrl+` -->
+            <if advanced='"$ClassBindCtrlTilde"="None"'>
+                <command>unbind ^`</command>
+            </if>
+            <elseif advanced='"$ClassBindCtrlTilde"!="Ignore"'>
+                <command>bind ^` $ClassBindCtrlTilde</command>
+            </elseif>
+
+            <!-- Alt+` -->
+            <if advanced='"$ClassBindAltTilde"="None"'>
+                <command>unbind !`</command>
+            </if>
+            <elseif advanced='"$ClassBindAltTilde"!="Ignore"'>
+                <command>bind !` $ClassBindAltTilde</command>
+            </elseif>
+
+            <cancelspell />
+            <return />
+        </if>
+    </include>
+
+    <!-- Do not use rules if level 50 or lower. -->
+    <include name="LevelRequirement">
+        <if notmainjoblvlgt="50">
+            <return />
+        </if>
+    </include>
+
+    <!-- These stop any gear changes if you're unable to take particular actions. -->
+    <include name="ReturnRules">
+        <!-- The bug that required this should be fixed -->
+        <if spelltargetraw="&lt;st*">
+            <return />
+        </if>
+
+        <!-- Allow manipulation of equipment sets while under adverse effects.
+             Do not perform restriction checks on any trigger actions. -->
+        <if nottype="Trigger">
+            <if status="dead">
+                <!-- Can't do anything if you're dead -->
+                <addtochat>DEAD!</addtochat>
+                <return />
+            </if>
+            <elseif BuffActive="Sleep|Petrification|Stun|Terror|Charm">
+                <!-- Ignoring Illusion|Egg|Costume -->
+                <addtochat color="28">Cannot act.</addtochat>
+                <return />
+            </elseif>
+            <elseif spell="Ranged">
+                <if advanced='%spellTargetDistance &gt; 24.9'>
+                    <addtochat color="28">Out of range.</addtochat>
+                    <return />
+                </if>
+            </elseif>
+            <elseif BuffActive="Silence|Mute|Omerta">
+                <if type="*Magic|BardSong|Ninjutsu">
+                    <addtochat color="28">Silenced.</addtochat>
+                    <return />
+                </if>
+            </elseif>
+            <elseif BuffActive="Amnesia|Impairment">
+                <if type="Weaponskill|JobAbility|Scholar|PetCommand|BloodPact*|CorsairRoll|CorsairShot">
+                    <addtochat color="28">Amnesiad.</addtochat>
+                    <return />
+                </if>
+            </elseif>
+            <elseif type="PetCommand|BloodPact*" PetIsValid="false">
+                <addtochat color="28">No valid pet.</addtochat>
+                <return />
+            </elseif>
+            <elseif type="Weaponskill">
+                <if SpellTargetDistanceGT="12.0">
+                    <cancelspell />
+                    <addtochat color="28">Too far away, foo'!</addtochat>
+                    <return />
+                </if>
+                <!-- <if mode="OR" TPLT="80" advanced='%SpellTargetDistance &gt; $WSDistance'>
+                    <cancelspell />
+                    <addtochat color="28">%spell cancelled: TP or distance.</addtochat>
+                    <return />
+                </if> -->
+            </elseif>
+        </if>
+    </include>
+
+    <!-- Do not change gear if spell is a transport spell used on self (Warp II/Retrace on others is fine). -->
+    <include name="CleanTransportation">
+        <if spell="Warp|Warp II|Teleport*|Recall*|Retrace" SpellTargetType="Self">
+            <return />
+        </if>
+    </include>
+
+    <!-- area variable rule -->
+    <include name="AreaRules">
+        <!-- Determine general area, as some give access to special gear, or differences in approach to gearing. -->
+        <if BuffActive="Voidwatcher">
+            <var cmd="set Area Voidwatch" />
+            <var cmd="set IdleArea Field" />
+        </if>
+        <elseif BuffActive="Allied Tags">
+            <var cmd="set Area Campaign" />
+            <var cmd="set IdleArea Field" />
+        </elseif>
+        <elseif BuffActive="Visitant">
+            <var cmd="set Area Abyssea" />
+            <var cmd="set IdleArea Field" />
+        </elseif>
+        <elseif advanced='"%area"!="$LastKnownArea"'>
+            <if area="*Remnants">
+                <var cmd="set Area Salvage" />
+            </if>
+            <elseif area="Nyzul Isle|Ilrusi Atoll|Leujaoam Sanctum|Mamool Ja Training Grounds|Lebros Cavern|Periqia">
+                <var cmd="set Area Assault" />
+            </elseif>
+            <elseif area="*Legion">
+                <var cmd="set Area Legion" />
+            </elseif>
+            <else>
+                <var cmd="set Area Outside" />
+            </else>
+
+            <!-- Define idle set based on town or elsewhere -->
+            <if area="Ru'Lude Gardens|Nashmau|Tavnazian Safehold|Port*|Bastok*|Windurst*|*San d'Oria|*Jeuno|*Whitegate" notarea="Dynamis*|*[S]">
+                <var cmd="set IdleArea Town" />
+            </if>
+            <else>
+                <var cmd="set IdleArea Field" />
+            </else>
+        </elseif>
+
+        <var cmd="set LastKnownArea %area" />
+
+        <!-- Change group based on area -->
+        <if notgroup="$Area-Group">
+            <command>sc group $Area-Group</command>
+        </if>
+    </include>
+
+    <!-- spell Cancel Rules -->
+    <include name="SpellCancel">
+        <if spell="Sneak" BuffActive="Sneak" SpellTargetType="Self">
+            <midcastdelay delay="1" />
+            <command when="midcast">cancel 71</command>
+        </if>
+        <elseif spell="Spectral Jig" BuffActive="Sneak">
+            <command when="precast">cancel 71</command>
+        </elseif>
+        <elseif spell="Monomi*" BuffActive="Sneak">
+            <midcastdelay delay="2.5" />
+            <command when="midcast">cancel 71</command>
+        </elseif>
+        <elseif spell="Utsusemi: Ichi" buffactive="Copy Image*" NotBuffActive="Silence|Mute|Omerta|Obliviscence">
+            <if NotBuffActive="Copy Image (3)|Copy Image (4)">
+                <midcastdelay delay="2.5" />
+                <command when="midcast">cancel 66</command>
+                <command when="midcast">cancel 446</command>
+            </if>
+            <else>
+                <cancelspell />
+                <return />
+            </else>
+        </elseif>
+        <elseif spell="Stoneskin" BuffActive="Stoneskin">
+            <midcastdelay delay="2.8" />
+            <command when="midcast">cancel 37</command>
+        </elseif>
+    </include>
+
+    <!-- Lock various slots when using particular gear. -->
+    <include name="EquipmentLockRules">
+        <if equipmain="$TrialWeapon">
+            <changelock slot="main|sub|range" when="All" lock="true" />
+        </if>
+        <if equiprange="$PullWeapons|Soulgauger*">
+            <changelock slot="range|ammo" when="All" lock="true" />
+        </if>
+        <if equipfeet="Powder Boots|Sprint Shoes">
+            <changelock slot="feet" when="All" lock="true" />
+        </if>
+        <if equiphead="Reraise Hairpin">
+            <changelock slot="head" when="All" lock="true" />
+        </if>
+        <if equipneck="Sanctus Rosary|Reraise Gorget|Lavalier +1">
+            <changelock slot="neck" when="All" lock="true" />
+        </if>
+        <if equiplear="$ReraiseEarrings">
+            <changelock slot="lear" when="All" lock="true" />
+        </if>
+        <if equiprear="$ReraiseEarrings">
+            <changelock slot="rear" when="All" lock="true" />
+        </if>
+        <if equiplring="Emperor Band|Decennial Ring">
+            <changelock slot="lring" when="All" lock="true" />
+        </if>
+        <if equiprring="Emperor Band|Decennial Ring">
+            <changelock slot="rring" when="All" lock="true" />
+        </if>
+
+        <!-- Only test for teleport stuff in town to avoid tons of unneeded checks. -->
+        <if advanced='"$Idlearea"="Town"'>
+            <if equiphead="Maat's Cap|Star Cap|Moogle Cap|Nomad Cap|Laurel Crown">
+                <changelock slot="head" when="All" lock="true" />
+            </if>
+            <if equipneck="Federation Stable Scarf|Kingdom Stable Collar|Republic Stable Medal">
+                <changelock slot="neck" when="All" lock="true" />
+            </if>
+            <if equiplear="Duchy Earring|Empire Earring|Federation Earring|Republic Earring|Kingdom Earring|Nashmau Earring|Mhaura Earring|Selbina Earring|Norg Earring|Rabao Earring|Reraise Earring|Raising Earring|Kocco's Earring|Mamool Ja Earring">
+                <changelock slot="lear" when="All" lock="true" />
+            </if>
+            <if equiprear="Duchy Earring|Empire Earring|Federation Earring|Republic Earring|Kingdom Earring|Nashmau Earring|Mhaura Earring|Selbina Earring|Norg Earring|Rabao Earring|Reraise Earring|Raising Earring|Kocco's Earring|Mamool Ja Earring">
+                <changelock slot="rear" when="All" lock="true" />
+            </if>
+            <if equiplring="Tavnazian Ring|Olduum Ring|Mea Ring|Dem Ring|Holla Ring|Vahzl Ring|Yhoat Ring">
+                <changelock slot="lring" when="All" lock="true" />
+            </if>
+            <if equiprring="Tavnazian Ring|Olduum Ring|Mea Ring|Dem Ring|Holla Ring|Vahzl Ring|Yhoat Ring">
+                <changelock slot="rring" when="All" lock="true" />
+            </if>
+            <if equipbody="Tidal Talisman">
+                <changelock slot="body" when="All" lock="true" />
+            </if>
+        </if>
+    </include>
+
+    <!-- Handle universal toggle and cycle triggers -->
+    <!-- This is a REQUIRED include. -->
+    <include name="UniversalTriggerRules">
+        <if type="Trigger">
+            <if skill="ControlTrigger">
+                <cancelspell />
+
+                <!-- Handle various types of resets. -->
+                <if spell="Reset">
+                    <if SpellTargetRaw=".Defense">
+                        <var cmd="set MagicalDefense None" />
+                        <var cmd="set PhysicalDefense None" />
+                        <if status="Engaged">
+                            <var cmd="set Movement None" />
+                        </if>
+
+                        <addtochat>PDT/MDT reset.</addtochat>
+                    </if>
+                    <elseif SpellTargetRaw="SteppedDefense">
+                        <if advanced='"$MagicalDefense" != "None"'>
+                            <var cmd="set MagicalDefense None" />
+                            <addtochat>Magical Defense reset.</addtochat>
+                        </if>
+                        <elseif advanced='"$PhysicalDefense" != "None"'>
+                            <var cmd="set PhysicalDefense None" />
+                            <addtochat>Physical Defense reset.</addtochat>
+                        </elseif>
+                    </elseif>
+                    <elseif SpellTargetRaw="All|Full">
+                        <var cmd="set Movement None" />
+                        <var cmd="set MagicalDefense None" />
+                        <var cmd="set PhysicalDefense None" />
+                        <var cmd="set FightingMode Offense" />
+                        <var cmd="set AttackMode Normal" />
+                        <var cmd="set FightingFocus Normal" />
+                        <var cmd="set WSMode Default" />
+                        <var cmd="set AggressiveMode Off" />
+                        <var cmd="set CastingMode Normal" />
+
+                        <addtochat>All modes reset.</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="Physical*">
+                        <var cmd="set PhysicalDefense None" />
+                        <addtochat>Physical Defense reset.</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="Casting*">
+                        <var cmd="set CastingMode Normal" />
+                        <addtochat>Casting Mode reset.</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="Magical*">
+                        <var cmd="set MagicalDefense None" />
+                        <addtochat>Magical Defense reset.</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="Debug">
+                        <var cmd="set Debug 0" />
+                        <addtochat>Debug off.</addtochat>
+                    </elseif>
+                </if>
+                <elseif spell="Update">
+                    <if SpellTargetRaw="WSDistance">
+                        <if TargetType="Monster">
+                            <var cmd="set WSDistance %TargetDistance" />
+                            <addtochat>Distance Variable: $WSDistance</addtochat>
+                        </if>
+                        <else>
+                            <addtochat>Invalid target for weaponskill distance.</addtochat>
+                        </else>
+                    </if>
+                    <elseif SpellTargetRaw="Debug">
+                        <var cmd="set Debug 1" />
+                        <addtochat>Debug active.</addtochat>
+                    </elseif>
+                </elseif>
+            </if>
+
+            <elseif skill="ElementalTrigger">
+                <!-- MDT elemental triggers.  Other elemental triggers handled per job. -->
+                <if SpellTargetRaw="MDT|Resist">
+                    <cancelspell />
+    
+                    <var cmd="set MagicalDefElement %spellElement" />
+
+                    <if advanced='"$MagicalDefense" != "None"'>
+                        <var cmd="set MagicalDefense $MagicalDefMode-$MagicalDefElement" />
+                    </if>
+
+                    <addtochat>Magical Defense Element: $MagicalDefElement ($MagicalDefMode)</addtochat>
+                </if>
+            </elseif>
+
+            <elseif skill="CombatTrigger">
+                <cancelspell />
+
+                <!-- Physical and magical defense modes -->
+
+                <if spell="PhysicalDefense">
+                    <!-- Handle changes in physical defense -->
+                    <if SpellTargetRaw=".Off">
+                        <var cmd="set PhysicalDefense None" />
+                        <addtochat>Physical Defense: $PhysicalDefense</addtochat>
+                    </if>
+                    <elseif SpellTargetRaw=".On">
+                        <var cmd="set PhysicalDefense PhysDef-$PhysicalDefMode" />
+                        <addtochat>Physical Defense: $PhysicalDefense</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw=".Toggle">
+                        <if advanced='"$PhysicalDefense" = "None"'>
+                            <var cmd="set PhysicalDefense PhysDef-$PhysicalDefMode" />
+                        </if>
+                        <else>
+                            <var cmd="set PhysicalDefense None" />
+                        </else>
+
+                        <addtochat>Physical Defense: $PhysicalDefense</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="Mode:*|PDT|Evasion|Shield|Defense|Custom">
+                        <if SpellTargetRaw="PDT|*:PDT" advanced='Regex("PDT", "$Options.DefenseModes")'>
+                            <var cmd="set PhysicalDefMode PDT" />
+                        </if>
+                        <elseif SpellTargetRaw="Evasion|*:Evasion" advanced='Regex("Evasion", "$Options.DefenseModes")'>
+                            <var cmd="set PhysicalDefMode Evasion" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Shield|*:Shield" advanced='Regex("Shield", "$Options.DefenseModes")'>
+                            <var cmd="set PhysicalDefMode Shield" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Defense|*:Defense" advanced='Regex("Defense", "$Options.DefenseModes")'>
+                            <var cmd="set PhysicalDefMode Defense" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Custom|*:Custom" advanced='Regex("Custom", "$Options.DefenseModes")'>
+                            <var cmd="set PhysicalDefMode Shield" />
+                        </elseif>
+                        <else>
+                            <addtochat>Unknown or invalid mode: [%spellTargetRaw]</addtochat>
+                            <return />
+                        </else>
+
+    
+                        <if advanced='"$PhysicalDefense" != "None"'>
+                            <var cmd="set PhysicalDefense PhysDef-$PhysicalDefMode" />
+                        </if>
+    
+                        <addtochat>Physical Defense Mode: $PhysicalDefMode</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw=".Cycle">
+                        <!-- Order: PDT > Evasion > Defense > Shield > Custom [Counter isn't used] -->
+                        <if advanced='"$PhysicalDefMode" = "PDT"'>
+                            <if advanced='Regex("Evasion", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Evasion" />
+                            </if>
+                            <elseif advanced='Regex("Defense", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Defense" />
+                            </elseif>
+                            <elseif advanced='Regex("Shield", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Shield" />
+                            </elseif>
+                            <elseif advanced='Regex("Custom", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Custom" />
+                            </elseif>
+                        </if>
+                        <elseif advanced='"$PhysicalDefMode" = "Evasion"'>
+                            <if advanced='Regex("Defense", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Defense" />
+                            </if>
+                            <elseif advanced='Regex("Shield", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Shield" />
+                            </elseif>
+                            <elseif advanced='Regex("Custom", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Custom" />
+                            </elseif>
+                            <elseif advanced='Regex("PDT", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode PDT" />
+                            </elseif>
+                        </elseif>
+                        <elseif advanced='"$PhysicalDefMode" = "Defense"'>
+                            <if advanced='Regex("Shield", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Shield" />
+                            </if>
+                            <elseif advanced='Regex("Custom", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Custom" />
+                            </elseif>
+                            <elseif advanced='Regex("PDT", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode PDT" />
+                            </elseif>
+                            <elseif advanced='Regex("Evasion", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Evasion" />
+                            </elseif>
+                        </elseif>
+                        <elseif advanced='"$PhysicalDefMode" = "Shield"'>
+                            <if advanced='Regex("Custom", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Custom" />
+                            </if>
+                            <elseif advanced='Regex("PDT", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode PDT" />
+                            </elseif>
+                            <elseif advanced='Regex("Evasion", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Evasion" />
+                            </elseif>
+                            <elseif advanced='Regex("Defense", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Defense" />
+                            </elseif>
+                        </elseif>
+                        <else>
+                            <if advanced='Regex("PDT", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode PDT" />
+                            </if>
+                            <elseif advanced='Regex("Evasion", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Evasion" />
+                            </elseif>
+                            <elseif advanced='Regex("Defense", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Defense" />
+                            </elseif>
+                            <elseif advanced='Regex("Shield", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Shield" />
+                            </elseif>
+                            <elseif advanced='Regex("Custom", "$Options.DefenseModes")'>
+                                <var cmd="set PhysicalDefMode Custom" />
+                            </elseif>
+                            <else>
+                                <addtochat>No valid Defense Modes available.</addtochat>
+                                <var cmd="set PhysicalDefMode None" />
+                            </else>
+                        </else>
+    
+                        <if advanced='"$PhysicalDefense" != "None"'>
+                            <var cmd="set PhysicalDefense PhysDef-$PhysicalDefMode" />
+                        </if>
+
+                        <addtochat>Physical Defense Type: $PhysicalDefMode</addtochat>
+                    </elseif>
+                    <else>
+                        <!-- Default: Turn on -->
+                        <var cmd="set PhysicalDefense PhysDef-$PhysicalDefMode" />
+                        <addtochat>Physical Defense: $PhysicalDefense</addtochat>
+                    </else>
+                </if>
+                <elseif spell="MagicalDefense">
+                    <!-- Turn Magical Defense on and off -->
+                    <if SpellTargetRaw=".On">
+                        <var cmd="set MagicalDefense $MagicalDefMode-$MagicalDefElement" />
+                        <addtochat>Magical Defense: $MagicalDefense</addtochat>
+                    </if>
+                    <elseif SpellTargetRaw=".Off">
+                        <var cmd="set MagicalDefense None" />
+                        <addtochat>Magical Defense: $MagicalDefense</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw=".Toggle">
+                        <if advanced='"$MagicalDefense" = "None"'>
+                            <var cmd="set MagicalDefense $MagicalDefMode-$MagicalDefElement" />
+                        </if>
+                        <else>
+                            <var cmd="set MagicalDefense None" />
+                        </else>
+
+                        <addtochat>Magical Defense: $MagicalDefense</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="Mode:*|MDT|Resist">
+                        <if SpellTargetRaw="MDT|*:MDT">
+                            <var cmd="set MagicalDefMode MDT" />
+                        </if>
+                        <elseif SpellTargetRaw="Resist|*:Resist">
+                            <var cmd="set MagicalDefMode Resist" />
+                        </elseif>
+
+                        <addtochat>Magical Defense Mode: $MagicalDefMode ($MagicalDefElement)</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw=".Cycle|.Reverse">
+                        <if advanced='"$MagicalDefMode" = "MDT"'>
+                            <var cmd="set MagicalDefMode Resist" />
+                        </if>
+                        <else>
+                            <var cmd="set MagicalDefMode MDT" />
+                        </else>
+
+                        <addtochat>Magical Defense Mode: $MagicalDefMode ($MagicalDefElement)</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="Element:*">
+                        <if SpellTargetRaw="*:Fire">
+                            <var cmd="set MagicalDefElement Fire" />
+                        </if>
+                        <elseif SpellTargetRaw="*:Earth|*:Stone">
+                            <var cmd="set MagicalDefElement Earth" />
+                        </elseif>
+                        <elseif SpellTargetRaw="*:Water">
+                            <var cmd="set MagicalDefElement Water" />
+                        </elseif>
+                        <elseif SpellTargetRaw="*:Air|*:Aero|*:Wind">
+                            <var cmd="set MagicalDefElement Wind" />
+                        </elseif>
+                        <elseif SpellTargetRaw="*:Ice">
+                            <var cmd="set MagicalDefElement Ice" />
+                        </elseif>
+                        <elseif SpellTargetRaw="*:Lightning|*:Thunder">
+                            <var cmd="set MagicalDefElement Thunder" />
+                        </elseif>
+                        <elseif SpellTargetRaw="*:Light">
+                            <var cmd="set MagicalDefElement Light" />
+                        </elseif>
+                        <elseif SpellTargetRaw="*:Dark">
+                            <var cmd="set MagicalDefElement Dark" />
+                        </elseif>
+                        <elseif SpellTargetRaw="*:Any|*:None">
+                            <var cmd="set MagicalDefElement Any" />
+                        </elseif>
+                        <elseif SpellTargetRaw="*:All">
+                            <var cmd="set MagicalDefElement All" />
+                        </elseif>
+                        <else>
+                            <addtochat>Unknown Magical Defense element: [%spellTargetRaw]</addtochat>
+                            <return />
+                        </else>
+
+                        <addtochat>Magical Defense Element: $MagicalDefElement</addtochat>
+                    </elseif>
+                    <else>
+                        <!-- Default: Turn on -->
+                        <var cmd="set MagicalDefense $MagicalDefMode-$MagicalDefElement" />
+                        <addtochat>Magical Defense: $MagicalDefense</addtochat>
+                    </else>
+
+                </elseif>
+
+                <!-- Idle/Resting modes -->
+
+                <elseif spell="IdleMode|CycleIdleMode">
+                    <!-- Customize these in job xml. -->
+                </elseif>
+                <elseif spell="RestingMode|CycleRestingMode">
+                    <!-- Customize these in job xml. -->
+                </elseif>
+
+                <!-- Offensive and Defensive modes -->
+
+                <!-- spellTargetRaw will be analyzed to determine which aspect of combat is being set,
+                     and how.
+
+                     Modes:
+                     Aggressive [on|off]
+                     Offense (general fighting mode)
+                     Defense (general fighting mode)
+                     WS (focus for weaponskills separate from standard focus)
+                 -->
+
+                <elseif spell="CombatMode">
+                    <if SpellTargetRaw="Aggressive|Aggressive:*">
+                        <if SpellTargetRaw="*:Off">
+                            <var cmd="set AggressiveMode Off" />
+                        </if>
+                        <else>
+                            <var cmd="set AggressiveMode On" />
+                        </else>
+
+                        <addtochat>Aggressive Mode: $AggressiveMode</addtochat>
+                    </if>
+                    <elseif SpellTargetRaw="Kite|Kite:*">
+                        <if SpellTargetRaw="*:Off">
+                            <var cmd="set KiteMode None" />
+                        </if>
+                        <elseif SpellTargetRaw="*:Toggle">
+                            <if advanced='"$KiteMode"="Kite"'>
+                                <var cmd="set KiteMode None" />
+                            </if>
+                            <else>
+                                <var cmd="set KiteMode Kite" />
+                            </else>
+                        </elseif>
+                        <else>
+                            <var cmd="set KiteMode Kite" />
+                        </else>
+
+                        <addtochat>Kiting: $KiteMode</addtochat>
+                    </elseif>
+                    
+                    <elseif SpellTargetRaw="Offense:*">
+                        <!-- Var to convert SpellTargetRaw to a valid value -->
+                        <var cmd="set TempMode None" />
+
+                        <if SpellTargetRaw="Offense:Normal">
+                            <var cmd="set TempMode Normal" />
+                        </if>
+                        <elseif SpellTargetRaw="Offense:Att|Offense:Attack">
+                            <var cmd="set TempMode Att" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Offense:Acc|Offense:Accuracy">
+                            <var cmd="set TempMode Acc" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Offense:MaxAcc|Offense:MaxAccuracy">
+                            <var cmd="set TempMode MaxAcc" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Offense:Str">
+                            <var cmd="set TempMode Str" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Offense:Crit">
+                            <var cmd="set TempMode Crit" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Offense:LowDmg">
+                            <var cmd="set TempMode LowDmg" />
+                        </elseif>
+                        <else>
+                            <var cmd="set TempMode Normal" />
+                        </else>
+
+                        <if advanced='Regex("$TempMode", "$Options.OffenseModes")'>
+                            <var cmd="set OffenseMode $TempMode" />
+                        </if>
+                        <else>
+                            <addtochat>$TempMode is unavailable.</addtochat>
+                        </else>
+
+                        <addtochat>Offense Mode: $OffenseMode</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="Defense:*">
+                        <!-- Var to convert SpellTargetRaw to a valid value -->
+                        <var cmd="set TempMode None" />
+                        
+                        <if SpellTargetRaw="Defense:Eva|Defense:Evasion">
+                            <var cmd="set TempMode Evasion" />
+                        </if>
+                        <elseif SpellTargetRaw="Defense:Shield">
+                            <var cmd="set TempMode Shield" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Defense:Counter">
+                            <var cmd="set TempMode Counter" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Defense:PDT">
+                            <var cmd="set TempMode PDT" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Defense:Defense">
+                            <var cmd="set TempMode Defense" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Defense:Custom">
+                            <var cmd="set TempMode Custom" />
+                        </elseif>
+                        <else>
+                            <var cmd="set TempMode Normal" />
+                        </else>
+
+                        <if advanced='Regex("$TempMode", "$Options.DefenseModes")'>
+                            <var cmd="set DefenseMode $TempMode" />
+                        </if>
+                        <else>
+                            <addtochat>$TempMode is unavailable.</addtochat>
+                        </else>
+
+                        <addtochat>Defense Mode: $DefenseMode</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="WS:*|Weaponskill:*">
+                        <!-- Var to convert SpellTargetRaw to a valid value -->
+                        <var cmd="set TempMode None" />
+
+                        <if SpellTargetRaw="*:Acc|*:Accuracy">
+                            <var cmd="set TempMode Accuracy" />
+                        </if>
+                        <elseif SpellTargetRaw="*:Att|*:Attack">
+                            <var cmd="set TempMode Attack" />
+                        </elseif>
+                        <elseif SpellTargetRaw="*:Mod">
+                            <var cmd="set TempMode Mod" />
+                        </elseif>
+                        <elseif SpellTargetRaw="*:Crit">
+                            <var cmd="set TempMode Crit" />
+                        </elseif>
+                        <else>
+                            <var cmd="set TempMode Default" />
+                        </else>
+
+                        <if advanced='Regex("$TempMode", "$Options.WSModes")'>
+                            <var cmd="set WSMode $TempMode" />
+                        </if>
+                        <else>
+                            <addtochat>$TempMode is unavailable.</addtochat>
+                        </else>
+
+                        <addtochat>Weaponskill Focus: $WSMode</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="Cycle(*)">
+                        <if SpellTargetRaw="*(Offense)">
+                            <!-- Order: Normal > Acc > MaxAcc > Att > Crit > Str > LowDmg > Custom -->
+
+                            <if advanced='"$OffenseMode" = "Normal"'>
+                                <if advanced='Regex("Acc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Acc" />
+                                </if>
+                                <elseif advanced='Regex("MaxAcc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode MaxAcc" />
+                                </elseif>
+                                <elseif advanced='Regex("Att", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Att" />
+                                </elseif>
+                                <elseif advanced='Regex("Crit", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Crit" />
+                                </elseif>
+                                <elseif advanced='Regex("Str", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Str" />
+                                </elseif>
+                                <elseif advanced='Regex("LowDmg", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode LowDmg" />
+                                </elseif>
+                                <elseif advanced='Regex("Custom", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Custom" />
+                                </elseif>
+                            </if>
+                            <elseif advanced='"$OffenseMode" = "Acc"'>
+                                <if advanced='Regex("MaxAcc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode MaxAcc" />
+                                </if>
+                                <elseif advanced='Regex("Att", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Att" />
+                                </elseif>
+                                <elseif advanced='Regex("Crit", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Crit" />
+                                </elseif>
+                                <elseif advanced='Regex("Str", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Str" />
+                                </elseif>
+                                <elseif advanced='Regex("LowDmg", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode LowDmg" />
+                                </elseif>
+                                <elseif advanced='Regex("Custom", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Custom" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set OffenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$OffenseMode" = "MaxAcc"'>
+                                <if advanced='Regex("Att", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Att" />
+                                </if>
+                                <elseif advanced='Regex("Crit", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Crit" />
+                                </elseif>
+                                <elseif advanced='Regex("Str", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Str" />
+                                </elseif>
+                                <elseif advanced='Regex("LowDmg", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode LowDmg" />
+                                </elseif>
+                                <elseif advanced='Regex("Custom", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Custom" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set OffenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$OffenseMode" = "Att"'>
+                                <if advanced='Regex("Crit", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Crit" />
+                                </if>
+                                <elseif advanced='Regex("Str", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Str" />
+                                </elseif>
+                                <elseif advanced='Regex("LowDmg", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode LowDmg" />
+                                </elseif>
+                                <elseif advanced='Regex("Custom", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Custom" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set OffenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$OffenseMode" = "Crit"'>
+                                <if advanced='Regex("Str", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Str" />
+                                </if>
+                                <elseif advanced='Regex("LowDmg", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode LowDmg" />
+                                </elseif>
+                                <elseif advanced='Regex("Custom", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Custom" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set OffenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$OffenseMode" = "Str"'>
+                                <if advanced='Regex("LowDmg", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode LowDmg" />
+                                </if>
+                                <elseif advanced='Regex("Custom", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Custom" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set OffenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$OffenseMode" = "LowDmg"'>
+                                <if advanced='Regex("Custom", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Custom" />
+                                </if>
+                                <else>
+                                    <var cmd="set OffenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <else>
+                                <var cmd="set OffenseMode Normal" />
+                            </else>
+
+                            <addtochat>Offense Mode: $OffenseMode</addtochat>
+                        </if>
+                        <elseif SpellTargetRaw="*(Defense)">
+                            <!-- Order: Normal > Evasion > PDT > Shield > Counter > Custom -->
+
+                            <if advanced='"$DefenseMode" = "Normal"'>
+                                <if advanced='Regex("Evasion", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Evasion" />
+                                </if>
+                                <elseif advanced='Regex("PDT", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode PDT" />
+                                </elseif>
+                                <elseif advanced='Regex("Shield", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Shield" />
+                                </elseif>
+                                <elseif advanced='Regex("Counter", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Counter" />
+                                </elseif>
+                                <elseif advanced='Regex("Custom", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Custom" />
+                                </elseif>
+                            </if>
+                            <elseif advanced='"$DefenseMode" = "Evasion"'>
+                                <if advanced='Regex("PDT", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode PDT" />
+                                </if>
+                                <elseif advanced='Regex("Shield", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Shield" />
+                                </elseif>
+                                <elseif advanced='Regex("Counter", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Counter" />
+                                </elseif>
+                                <elseif advanced='Regex("Custom", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Custom" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set DefenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$DefenseMode" = "PDT"'>
+                                <if advanced='Regex("Shield", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Shield" />
+                                </if>
+                                <elseif advanced='Regex("Counter", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Counter" />
+                                </elseif>
+                                <elseif advanced='Regex("Custom", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Custom" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set DefenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$DefenseMode" = "Shield"'>
+                                <if advanced='Regex("Counter", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Counter" />
+                                </if>
+                                <elseif advanced='Regex("Custom", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Custom" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set DefenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$DefenseMode" = "Counter"'>
+                                <if advanced='Regex("Custom", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Custom" />
+                                </if>
+                                <else>
+                                    <var cmd="set DefenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <else>
+                                <var cmd="set DefenseMode Normal" />
+                            </else>
+
+                            <addtochat>Defense Mode: $DefenseMode</addtochat>
+                        </elseif>
+                        <elseif SpellTargetRaw="*(WS)|*(Weaponskill)">
+                            <!-- Order: Default > Acc > Att > Mod > Crit -->
+
+                            <if advanced='"$WSMode" = "Default"'>
+                                <if advanced='Regex("Acc", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Acc" />
+                                </if>
+                                <elseif advanced='Regex("Att", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Att" />
+                                </elseif>
+                                <elseif advanced='Regex("Mod", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Mod" />
+                                </elseif>
+                                <elseif advanced='Regex("Crit", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Crit" />
+                                </elseif>
+                            </if>
+                            <elseif advanced='"$WSMode" = "Acc"'>
+                                <if advanced='Regex("Att", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Att" />
+                                </if>
+                                <elseif advanced='Regex("Mod", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Mod" />
+                                </elseif>
+                                <elseif advanced='Regex("Crit", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Crit" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set WSMode Default" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$WSMode" = "Att"'>
+                                <if advanced='Regex("Mod", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Mod" />
+                                </if>
+                                <elseif advanced='Regex("Crit", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Crit" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set WSMode Default" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$WSMode" = "Mod"'>
+                                <if advanced='Regex("Crit", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Crit" />
+                                </if>
+                                <else>
+                                    <var cmd="set WSMode Default" />
+                                </else>
+                            </elseif>
+                            <else>
+                                <var cmd="set WSMode Default" />
+                            </else>
+                            
+                            <addtochat>Weaponskill Focus: $WSMode</addtochat>
+                        </elseif>
+                    </elseif>
+                    <elseif SpellTargetRaw="Reverse(*)">
+                        <if SpellTargetRaw="*(Offense)">
+                            <!-- Order: Normal < Acc < MaxAcc < Att < Crit < Str < LowDmg < Custom -->
+
+                            <if advanced='"$OffenseMode" = "Normal"'>
+                                <if advanced='Regex("Custom", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Custom" />
+                                </if>
+                                <elseif advanced='Regex("LowDmg", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode LowDmg" />
+                                </elseif>
+                                <elseif advanced='Regex("Str", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Str" />
+                                </elseif>
+                                <elseif advanced='Regex("Crit", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Crit" />
+                                </elseif>
+                                <elseif advanced='Regex("Att", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Att" />
+                                </elseif>
+                                <elseif advanced='Regex("MaxAcc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode MaxAcc" />
+                                </elseif>
+                                <elseif advanced='Regex("Acc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Acc" />
+                                </elseif>
+                            </if>
+                            <elseif advanced='"$OffenseMode" = "Custom"'>
+                                <if advanced='Regex("LowDmg", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode LowDmg" />
+                                </if>
+                                <elseif advanced='Regex("Str", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Str" />
+                                </elseif>
+                                <elseif advanced='Regex("Crit", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Crit" />
+                                </elseif>
+                                <elseif advanced='Regex("Att", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Att" />
+                                </elseif>
+                                <elseif advanced='Regex("MaxAcc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode MaxAcc" />
+                                </elseif>
+                                <elseif advanced='Regex("Acc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Acc" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set OffenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$OffenseMode" = "LowDmg"'>
+                                <if advanced='Regex("Str", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Str" />
+                                </if>
+                                <elseif advanced='Regex("Crit", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Crit" />
+                                </elseif>
+                                <elseif advanced='Regex("Att", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Att" />
+                                </elseif>
+                                <elseif advanced='Regex("MaxAcc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode MaxAcc" />
+                                </elseif>
+                                <elseif advanced='Regex("Acc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Acc" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set OffenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$OffenseMode" = "Str"'>
+                                <if advanced='Regex("Crit", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Crit" />
+                                </if>
+                                <elseif advanced='Regex("Att", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Att" />
+                                </elseif>
+                                <elseif advanced='Regex("MaxAcc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode MaxAcc" />
+                                </elseif>
+                                <elseif advanced='Regex("Acc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Acc" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set OffenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$OffenseMode" = "Crit"'>
+                                <if advanced='Regex("Att", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Att" />
+                                </if>
+                                <elseif advanced='Regex("MaxAcc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode MaxAcc" />
+                                </elseif>
+                                <elseif advanced='Regex("Acc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Acc" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set OffenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$OffenseMode" = "Att"'>
+                                <if advanced='Regex("MaxAcc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode MaxAcc" />
+                                </if>
+                                <elseif advanced='Regex("Acc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Acc" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set OffenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$OffenseMode" = "MaxAcc"'>
+                                <if advanced='Regex("Acc", "$Options.OffenseModes")'>
+                                    <var cmd="set OffenseMode Acc" />
+                                </if>
+                                <else>
+                                    <var cmd="set OffenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <else>
+                                <var cmd="set OffenseMode Normal" />
+                            </else>
+
+                            <addtochat>Offense Mode: $OffenseMode</addtochat>
+                        </if>
+                        <elseif SpellTargetRaw="*(Defense)">
+                            <!-- Order: Normal < Evasion < PDT < Shield < Counter < Custom -->
+                            <!-- Order: Normal > Custom > Counter > Shield > PDT > Evasion -->
+                            <if advanced='"$DefenseMode" = "Normal"'>
+                                <if advanced='Regex("Custom", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Custom" />
+                                </if>
+                                <elseif advanced='Regex("Counter", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Counter" />
+                                </elseif>
+                                <elseif advanced='Regex("Shield", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Shield" />
+                                </elseif>
+                                <elseif advanced='Regex("PDT", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode PDT" />
+                                </elseif>
+                                <elseif advanced='Regex("Evasion", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Evasion" />
+                                </elseif>
+                            </if>
+                            <elseif advanced='"$DefenseMode" = "Custom"'>
+                                <if advanced='Regex("Counter", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Counter" />
+                                </if>
+                                <elseif advanced='Regex("Shield", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Shield" />
+                                </elseif>
+                                <elseif advanced='Regex("PDT", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode PDT" />
+                                </elseif>
+                                <elseif advanced='Regex("Evasion", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Evasion" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set DefenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$DefenseMode" = "Counter"'>
+                                <if advanced='Regex("Shield", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Shield" />
+                                </if>
+                                <elseif advanced='Regex("PDT", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode PDT" />
+                                </elseif>
+                                <elseif advanced='Regex("Evasion", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Evasion" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set DefenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$DefenseMode" = "Shield"'>
+                                <if advanced='Regex("PDT", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode PDT" />
+                                </if>
+                                <elseif advanced='Regex("Evasion", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Evasion" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set DefenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$DefenseMode" = "PDT"'>
+                                <if advanced='Regex("Evasion", "$Options.DefenseModes")'>
+                                    <var cmd="set DefenseMode Evasion" />
+                                </if>
+                                <else>
+                                    <var cmd="set DefenseMode Normal" />
+                                </else>
+                            </elseif>
+                            <else>
+                                <var cmd="set DefenseMode Normal" />
+                            </else>
+
+                            <addtochat>Defense Mode: $DefenseMode</addtochat>
+                        </elseif>
+                        <elseif SpellTargetRaw="*(WS)|*(Weaponskill)">
+                            <!-- Order: Default < Acc < Att < Mod < Crit -->
+
+                            <if advanced='"$WSMode" = "Default"'>
+                                <if advanced='Regex("Crit", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Crit" />
+                                </if>
+                                <elseif advanced='Regex("Mod", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Mod" />
+                                </elseif>
+                                <elseif advanced='Regex("Att", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Att" />
+                                </elseif>
+                                <elseif advanced='Regex("Acc", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Acc" />
+                                </elseif>
+                            </if>
+                            <elseif advanced='"$WSMode" = "Crit"'>
+                                <if advanced='Regex("Mod", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Mod" />
+                                </if>
+                                <elseif advanced='Regex("Att", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Att" />
+                                </elseif>
+                                <elseif advanced='Regex("Acc", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Acc" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set WSMode Default" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$WSMode" = "Mod"'>
+                                <if advanced='Regex("Att", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Att" />
+                                </if>
+                                <elseif advanced='Regex("Acc", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Acc" />
+                                </elseif>
+                                <else>
+                                    <var cmd="set WSMode Default" />
+                                </else>
+                            </elseif>
+                            <elseif advanced='"$WSMode" = "Att"'>
+                                <if advanced='Regex("Acc", "$Options.WSModes")'>
+                                    <var cmd="set WSMode Acc" />
+                                </if>
+                                <else>
+                                    <var cmd="set WSMode Default" />
+                                </else>
+                            </elseif>
+                            <else>
+                                <var cmd="set WSMode Default" />
+                            </else>
+                            
+                            <addtochat>Weaponskill Focus: $WSMode</addtochat>
+                        </elseif>
+                    </elseif>
+                    <elseif SpellTargetRaw="Toggle(*)">
+                        <if SpellTargetRaw="*(Aggressive)">
+                            <if advanced='"$AggressiveMode"="On"'>
+                                <var cmd="set AggressiveMode Off" />
+                            </if>
+                            <else>
+                                <var cmd="set AggressiveMode On" />
+                            </else>
+
+                            <addtochat>Aggressive Mode: $AggressiveMode</addtochat>
+                        </if>
+                        <elseif SpellTargetRaw="*(Kite)">
+                            <if advanced='"$KiteMode"="Kite"'>
+                                <var cmd="set KiteMode None" />
+                            </if>
+                            <else>
+                                <var cmd="set KiteMode Kite" />
+                            </else>
+
+                            <addtochat>Kite Mode: $KiteMode</addtochat>
+                        </elseif>
+                    </elseif>
+                </elseif>
+
+                <!-- Casting modes (abstract concepts, not explicit sets) -->
+
+                <elseif spell="CastingMode">
+                    <if SpellTargetRaw="Cycle(STAL)">
+                        <if advanced='"$STALMode"="stal"'>
+                            <var cmd="set STALMode stpt" />
+                        </if>
+                        <elseif advanced='"$STALMode"="stpt"'>
+                            <var cmd="set STALMode stpc" />
+                        </elseif>
+                        <else>
+                            <var cmd="set STALMode stal" />
+                        </else>
+
+                        <addtochat>Targetting Mode: $STALMode</addtochat>
+                    </if>
+                    <elseif SpellTargetRaw="SetTarget(STAL)">
+                        <var cmd="set STALMode stal" />
+                        <addtochat>Targetting Mode: $STALMode</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="SetTarget(STPT)">
+                        <var cmd="set STALMode stpt" />
+                        <addtochat>Targetting Mode: $STALMode</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="SetTarget(STPC)">
+                        <var cmd="set STALMode stpc" />
+                        <addtochat>Targetting Mode: $STALMode</addtochat>
+                    </elseif>
+                    <else>
+                        <if SpellTargetRaw="NM|Resistant">
+                            <var cmd="set CastingMode Resistant" />
+                        </if>
+                        <elseif SpellTargetRaw="AOEBurn">
+                            <var cmd="set CastingMode AOEBurn" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Dire">
+                            <var cmd="set CastingMode Dire" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Speed">
+                            <var cmd="set CastingMode Speed" />
+                        </elseif>
+                        <elseif SpellTargetRaw="Normal|Reset">
+                            <var cmd="set CastingMode Normal" />
+                        </elseif>
+    
+                        <addtochat>Casting Mode: $CastingMode</addtochat>
+                    </else>
+                </elseif>
+                <elseif spell="CycleCastingMode">
+                    <if SpellTargetRaw="Reverse">
+                        <if advanced='"$CastingMode"="Normal"'>
+                            <var cmd="set CastingMode Dire" />
+                        </if>
+                        <elseif advanced='"$CastingMode"="Dire"'>
+                            <var cmd="set CastingMode AOEBurn" />
+                        </elseif>
+                        <elseif advanced='"$CastingMode"="AOEBurn"'>
+                            <var cmd="set CastingMode Resistant" />
+                        </elseif>
+                        <elseif advanced='"$CastingMode"="Resistant"'>
+                            <var cmd="set CastingMode Speed" />
+                        </elseif>
+                        <else>
+                            <!-- Default: Normal -->
+                            <var cmd="set CastingMode Normal" />
+                        </else>
+                    </if>
+                    <else>
+                        <if advanced='"$CastingMode"="Normal"'>
+                            <var cmd="set CastingMode Speed" />
+                        </if>
+                        <elseif advanced='"$CastingMode"="Speed"'>
+                            <var cmd="set CastingMode Resistant" />
+                        </elseif>
+                        <elseif advanced='"$CastingMode"="Resistant"'>
+                            <var cmd="set CastingMode AOEBurn" />
+                        </elseif>
+                        <elseif advanced='"$CastingMode"="AOEBurn"'>
+                            <var cmd="set CastingMode Dire" />
+                        </elseif>
+                        <else>
+                            <!-- Default: Normal -->
+                            <var cmd="set CastingMode Normal" />
+                        </else>
+                    </else>
+
+                    <addtochat>Casting Mode: $CastingMode</addtochat>
+                </elseif>
+            </elseif>
+            
+            <elseif skill="GenericTrigger">
+                <if SpellTargetRaw="Test">
+                </if>
+                <elseif SpellTargetRaw="Check">
+                    <cancelspell />
+                    <addtochat>Current base TP set: TP-$TPWeapon-$OffenseMode-$DefenseMode</addtochat>
+                </elseif>
+            </elseif>
+            <elseif skill="Trigger">
+                <if Spell="Trigger1">
+                  <!--
+                      /ma Trigger1 Cycle(Step)
+                      /ma Trigger1 Cycle(AltStep)
+                      /ma Trigger1 Cycle(UseAltStep)
+                      /ma Trigger1 Cycle(SelectStepTarget)
+                      /ma Trigger1 Step
+                      /ma Trigger1 StepT
+                      
+                      
+                      Note: You can change the trigger number if you like. Make sure to update the rules as well.
+                      Also: "/ma Trigger" currently resolves to "/ma Trigger1", so you can use that without the
+                      number unless/until they actually fix it in Spellcast.
+                      
+                      
+                      Cycle(Step) and Cycle(AltStep) rotate through the available steps, like your example.
+                      
+                      UseAltStep determines whether or not to use the alternate step.  Default is No, but you can
+                      set a different default in each job xml.
+                      
+                      SelectStepTarget determines whether the default target is the normal <t>, or <stnpc> (which I
+                      use in Dynamis for hitting mobs I'm not engaged to).  Default is No, but you can set a different
+                      default in each job xml.
+                      
+                      The Step command uses the currently defined step.  Using StepT forces it to use the <t>
+                      target instead of SelectStepTarget.
+                      
+                      
+                      I'd probably set up binds like:
+                      
+                      bind ^= input /ma Trigger1 Cycle(Step)
+                      bind != input /ma Trigger1 Cycle(AltStep)
+                      
+                      And set the UseAltStep and SelectStepTarget values to defaults I expect to keep (or put them
+                      in macros on my dustbin palette, as the number of bind options is pretty limited).
+                  
+                  -->
+                    <if SpellTargetRaw="Step|StepT">
+                        <if status="engaged">
+                            <if advanced='"$$CurrentStepStep"="Quick"'>
+                                <changespell spell="Quickstep" />
+                            </if>
+                            <elseif advanced='"$$CurrentStepStep"="Box"'>
+                                <changespell spell="Box Step" />
+                            </elseif>
+                            <elseif advanced='"$$CurrentStepStep"="Stutter"'>
+                                <changespell spell="Stutter Step" />
+                            </elseif>
+                            <elseif advanced='"$$CurrentStepStep"="Feather"'>
+                                <changespell spell="Feather Step" />
+                            </elseif>
+                            <else>
+                                <addtochat>Unknown step: $$CurrentStepStep</addtochat>
+                            </else>
+
+                            <if SpellTargetRaw="StepT">
+                                <changetarget target="&lt;t&gt;" />
+                            </if>
+                            <elseif advanced='"$SelectStepTarget"="Yes"'>
+                                <changetarget target="&lt;stnpc&gt;" />
+                            </elseif>
+                            <else>
+                                <changetarget target="&lt;t&gt;" />
+                            </else>
+
+                            <if advanced='"$UseAltStep"="Yes"'>
+                                <if advanced='"$CurrentStep"="Main"'>
+                                    <var cmd="set CurrentStep Alt" />
+                                </if>
+                                <else>
+                                    <var cmd="set CurrentStep Main" />
+                                </else>
+                            </if>
+                        </if>
+                        <else>
+                            <addtochat color="112">Insufficient TP or not engaged.</addtochat>
+                        </else>
+                    </if>
+                    <elseif SpellTargetRaw="Cycle(Step)">
+                        <if advanced='"$MainStep"="Quick"'>
+                            <var cmd="set MainStep Box" />
+                        </if>
+                        <elseif advanced='"$MainStep"="Box"'>
+                            <var cmd="set MainStep Stutter" />
+                        </elseif>
+                        <elseif advanced='"$MainStep"="Stutter"' MainJob="Dnc">
+                            <var cmd="set MainStep Feather" />
+                        </elseif>
+                        <else>
+                            <var cmd="set MainStep Quick" />
+                        </else>
+                        
+                        <addtochat>Main Step: $MainStep</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="Cycle(AltStep)">
+                        <if advanced='"$AltStep"="Quick"'>
+                            <var cmd="set AltStep Box" />
+                        </if>
+                        <elseif advanced='"$AltStep"="Box"'>
+                            <var cmd="set AltStep Stutter" />
+                        </elseif>
+                        <elseif advanced='"$AltStep"="Stutter"' MainJob="Dnc">
+                            <var cmd="set AltStep Feather" />
+                        </elseif>
+                        <else>
+                            <var cmd="set AltStep Quick" />
+                        </else>
+
+                        <addtochat>Alt Step: $AltStep</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="Cycle(UseAltStep)">
+                        <if advanced='"$UseAltStep"="No"'>
+                            <var cmd="set UseAltStep Yes" />
+                        </if>
+                        <else>
+                            <var cmd="set UseAltStep No" />
+                        </else>
+
+                        <addtochat>Use Alt Step: $UseAltStep</addtochat>
+                    </elseif>
+                    <elseif SpellTargetRaw="Cycle(SelectStepTarget)">
+                        <if advanced='"$SelectStepTarget"="No"'>
+                            <var cmd="set SelectStepTarget Yes" />
+                        </if>
+                        <else>
+                            <var cmd="set SelectStepTarget No" />
+                        </else>
+
+                        <addtochat>Select step target: $SelectStepTarget</addtochat>
+                    </elseif>
+                </if>
+            </elseif>
+        </if>
+    </include>
+
+    <!-- Define the base layer for the $CurrentSet variable to use. -->
+    <include name="DefineBaseLayer">
+        <if status="Engaged">
+            <if advanced='"$Use-OffenseMode"!="None"'>
+                <var cmd="set OMode $Use-OffenseMode" />
+            </if>
+            <else>
+                <var cmd="set OMode $OffenseMode" />
+            </else>
+
+            <var cmd="set BaseLayer TP-$TPWeapon-$OMode-$DefenseMode" />
+
+            <if advanced='"$AggressiveMode"="On"'>
+                <var cmd="set UseAggressive $AgressiveLayer" />
+            </if>
+            <else>
+                <var cmd="set UseAggressive None" />
+            </else>
+        </if>
+        <else>
+            <var cmd="set BaseLayer Idle-$Idlearea-$IdleMode" />
+        </else>
+    </include>
+
+
+    <!-- Define the general weaponskill set based on certain vars. -->
+    <!-- Define which weaponskill mode to use. -->
+    <include name="DefineWeaponskillSet">
+        <if spell="$MagicalWS">
+            <var cmd="set WSSet WS-%spell" />
+        </if>
+        <else>
+            <if advanced='"$Use-WSMode" != "None"'>
+                <var cmd="set TempMode $Use-WSMode" />
+            </if>
+            <else>
+                <if advanced='"$WSMode"="default"'>
+                    <if advanced='"$OffenseMode"="Acc" OR "$OffenseMode"="MaxAcc"' notspell="$SingleHitWS">
+                        <var cmd="set TempMode Acc" />
+                    </if>
+                    <elseif spell="$CritWS" BuffActive="Blood Rage">
+                        <var cmd="set TempMode Crit" />
+                    </elseif>
+                    <elseif mode="OR" advanced='"$OffenseMode"="Str" OR "$OffenseMode"="Crit"'
+                      BuffActive="Berserk|Last Resort|Attack Boost|Building Flourish|Chaos Roll">
+                        <var cmd="set TempMode Mod" />
+                    </elseif>
+                    <elseif BuffActive="Voidwatcher">
+                        <var cmd="set TempMode Att" />
+                    </elseif>
+                    <else>
+                        <var cmd="set TempMode Att" />
+                    </else>
+                </if>
+                <else>
+                    <var cmd="set TempMode $WSMode" />
+                </else>
+            </else>
+
+            <if advanced='Regex("$TempMode", "$Options.WSModes")'>
+                <var cmd="set WSSet WS-%spell-$TempMode" />
+            </if>
+            <else>
+                <var cmd="set WSSet WS-%spell-Att" />
+            </else>
+        </else>
+
+        <if advanced='$Debug=1'>
+            <addtochat>WS Set: $WSSet</addtochat>
+        </if>
+    </include>
+
+
+    <!-- Change to appropriate gear set at proper times. -->
+    <include name="HandleEquippingGear">
+        <!-- INCLUDE ONLY AFTER [CurrentSet] HAS BEEN DEFINED BY YOUR JOB RULES. -->
+
+        <if advanced='$Debug=1'>
+            <addtochat>Current Set: $CurrentSet</addtochat>
+        </if>
+
+        <!-- After all calculations are done, if the spellcast was run due to a Trigger action,
+             just equip the specified gear and return. -->
+        <if type="Trigger">
+            <equip set="$CurrentSet" />
+            <return />
+        </if>
+
+        <if type="JobAbility|WeaponSkill|Step|Waltz|Flourish*|Scholar">
+            <aftercastdelay delay="0.5" />
+        </if>
+
+        <!-- Aftercast equipment resolution deferred.  Avoid up-front lag
+             from doing these calculations now. -->
+        <if status="resting">
+            <equip when="all" set="Resting-$RestMode" />
+        </if>
+        <elseif spell="Autoset">
+            <equip when="idle|engaged" set="$CurrentSet" />
+        </elseif>
+        <else>
+            <!-- Change to <equip> line if you want to test current direct lag. -->
+            <!-- <equip when="aftercast" set="$CurrentSet" /> -->
+            <command when="aftercast">$UpdateAftercast</command>
+        </else>
+
+    </include>
+
+    <!-- Handle evaluation of sets and equipping gear at aftercast time slot
+         instead of doing all the work before the requested action.  Helps
+         reduce lag effects. -->
+    <include name="ChangeGearAftercast">
+        <if type="Trigger" spell="Update" SpellTargetRaw=".Aftercast">
+            <cancelspell />
+
+            <if notstatus="Dead|Zoning">
+                <equip set="$CurrentSet" />
+            </if>
+
+            <return />
+        </if>
+    </include>
+
+    <!-- White mage spells which are cast using <stal> will, if STALMode is
+         set to 'stpt', get converted to <stpt> or <stpc>. -->
+    <include name="ConvertSTALTargets">
+        <if type="WhiteMagic" SpellTargetRaw="&lt;stal&gt;" advanced='"$STALMode"!="stal"'>
+            <changetarget target="&lt;$STALMode&gt;" />
+        </if>
+    </include>
+
+
+
+    <!-- Elemental Staff Rules -->
+    <include name="ElementalStaffRules">
+        <if skill="ElementalMagic">
+            <if spell="Burn|Frost|Choke|Rasp|Shock|Drown">
+                <equip when="precast|midcast">
+                    <main>$Staff-Acc-%SpellElement</main>
+                </equip>
+            </if>
+            <else>
+                <if advanced='"$CastingMode" = "Proc"'>
+                    <equip when="precast|midcast">
+                        <main>$Staff-Proc-%SpellElement</main>
+                    </equip>
+                </if>
+                <else>
+                    <equip when="precast|midcast">
+                        <main>$Staff-Dmg-%SpellElement</main>
+                        <sub>Wizzan Grip</sub>
+                    </equip>
+                </else>
+            </else>
+
+            <if NotAdvanced='Regex("$Staff-FastCastAmt-%SpellElement", "^[$]")'>
+                <equip when="precast">
+                    <main>$Staff-FastCast-%SpellElement</main>
+                </equip>
+            </if>
+        </if>
+        <elseif skill="HealingMagic" spell="Cure*|Cura*">
+            <equip when="precast|midcast">
+                <main>$Staff-Cures</main>
+            </equip>
+        </elseif>
+        <elseif skill="EnfeeblingMagic">
+            <equip when="precast|midcast">
+                <main>$Staff-Acc-%SpellElement</main>
+            </equip>
+            <if NotAdvanced='Regex("$Staff-FastCastAmt-%SpellElement", "^[$]")'>
+                <equip when="precast">
+                    <main>$Staff-FastCast-%SpellElement</main>
+                </equip>
+            </if>
+        </elseif>
+        <elseif type="BardSong">
+            <if spelltargettype="MONSTER|NPC">
+                <equip when="precast|midcast">
+                    <main>$Staff-Acc-%SpellElement</main>
+                </equip>
+            </if>
+            <if NotAdvanced='Regex("$Staff-FastCastAmt-%SpellElement", "^[$]")'>
+                <equip when="precast">
+                    <main>$Staff-FastCast-%SpellElement</main>
+                </equip>
+            </if>
+        </elseif>
+        <elseif skill="DivineMagic">
+            <if spell="Banish*|Holy*">
+                <equip when="precast|midcast">
+                    <main>$Staff-Dmg-%SpellElement</main>
+                </equip>
+            </if>
+            <else>
+                <equip when="precast|midcast">
+                    <main>$Staff-Acc-%SpellElement</main>
+                </equip>
+            </else>
+        </elseif>
+        <elseif skill="DarkMagic">
+            <equip when="precast|midcast">
+                <main>$Staff-Acc-%SpellElement</main>
+            </equip>
+            <if NotSpell="Stun" NotAdvanced='Regex("$Staff-FastCastAmt-%SpellElement", "^[$]")'>
+                <equip when="precast">
+                    <main>$Staff-FastCast-%SpellElement</main>
+                </equip>
+            </if>
+        </elseif>
+    </include>
+
+    <!-- Swapping in Obi/Zodiac Ring/Twilight Cape when using Elemental Magic.
+         Assumed to be imported in after check for skill="ElementalMagic" has
+         already been done. -->
+    <include name="ObiRingCape-ElementalMagic">
+        <if element="%DayElement">
+            <if skill="ElementalMagic" notspell="Burn|Frost|Choke|Rasp|Shock|Drown">
+                <if advanced='"ZodiacRing"!="0"' notelement="Light|Dark">
+                    <equip when="midcast">
+                        <rring>Zodiac Ring</rring>
+                    </equip>
+                </if>
+
+                <if advanced='"$TwilightCape"!="0"'>
+                    <equip when="midcast">
+                        <back>Twilight Cape</back>
+                    </equip>
+                </if>
+
+                <if NotAdvanced='Regex("$Obi-%SpellElement", "^[$]")'>
+                    <equip when="midcast">
+                        <waist>$Obi-%spellElement</waist>
+                    </equip>
+                </if>
+            </if>
+        </if>
+
+        <elseif element="%WeatherElement">
+            <if advanced='"$Obi-%spellElement"!="0"'>
+                <if skill="ElementalMagic" notspell="Burn|Frost|Choke|Rasp|Shock|Drown">
+                    <equip when="midcast">
+                        <waist>$Obi-%spellElement</waist>
+                    </equip>
+
+                    <if advanced='"$TwilightCape"!="0"'>
+                        <equip when="midcast">
+                            <back>Twilight Cape</back>
+                        </equip>
+                    </if>
+                </if>
+            </if>
+        </elseif>
+    </include>
+
+    <!-- Swapping in Obi/Zodiac Ring/Twilight Cape when using Healing Magic.
+         Assumed to be imported in after check for skill="HealingMagic" has
+         already been done. -->
+    <include name="ObiRingCape-HealingMagic">
+        <if element="%DayElement">
+            <if spell="Cure*|Cura*">
+                <if NotAdvanced='Regex("$Obi-%SpellElement", "^[$]")'>
+                    <equip when="midcast">
+                        <waist>$Obi-%SpellElement</waist>
+                    </equip>
+                </if>
+
+                <if advanced='"$TwilightCape"!="0"'>
+                    <equip when="midcast">
+                        <back>Twilight Cape</back>
+                    </equip>
+                </if>
+            </if>
+        </if>
+
+        <elseif element="%WeatherElement">
+            <if NotAdvanced='Regex("$Obi-%SpellElement", "^[$]")'>
+                <if spell="Cure*|Cura*">
+                    <equip when="midcast">
+                        <waist>$Obi-%SpellElement</waist>
+                    </equip>
+
+                    <if advanced='"$TwilightCape"!="0"'>
+                        <equip when="midcast">
+                            <back>Twilight Cape</back>
+                        </equip>
+                    </if>
+                </if>
+            </if>
+        </elseif>
+    </include>
+
+    <!-- Swapping in Obi/Zodiac Ring/Twilight Cape when using Divine Magic.
+         Assumed to be imported in after check for skill="DivineMagic" has
+         already been done. -->
+    <include name="ObiRingCape-DivineMagic">
+        <if element="%DayElement">
+            <if spell="Banish*|Holy*">
+                <if advanced='"$TwilightCape"!="0"'>
+                    <equip when="midcast">
+                        <back>Twilight Cape</back>
+                    </equip>
+                </if>
+
+                <if NotAdvanced='Regex("$Obi-%SpellElement", "^[$]")'>
+                    <equip when="midcast">
+                        <waist>$Obi-%SpellElement</waist>
+                    </equip>
+                </if>
+            </if>
+        </if>
+
+        <elseif element="%WeatherElement">
+            <if NotAdvanced='Regex("$Obi-%SpellElement", "^[$]")'>
+                <if spell="Banish*|Holy*">
+                    <equip when="midcast">
+                        <waist>$Obi-%SpellElement</waist>
+                    </equip>
+
+                    <if advanced='"$TwilightCape"!="0"'>
+                        <equip when="midcast">
+                            <back>Twilight Cape</back>
+                        </equip>
+                    </if>
+                </if>
+            </if>
+        </elseif>
+    </include>
+
+    <!-- Swapping in Obi/Zodiac Ring/Twilight Cape when using Quick Draw.
+         Assumed to be imported in after check for type="CorsairShot" has
+         already been done. -->
+    <include name="ObiRingCape-CorsairShot">
+        <if notelement="Light|Dark">
+            <if element="%DayElement">
+                <if advanced='"ZodiacRing"!="0"'>
+                    <equip when="precast">
+                        <rring>Zodiac Ring</rring>
+                    </equip>
+                </if>
+
+                <if NotAdvanced='Regex("$Obi-%SpellElement", "^[$]")'>
+                    <equip when="precast">
+                        <waist>$Obi-%SpellElement</waist>
+                    </equip>
+                </if>
+            </if>
+
+            <elseif element="%WeatherElement">
+                <if NotAdvanced='Regex("$Obi-%SpellElement", "^[$]")'>
+                    <equip when="precast">
+                        <waist>$Obi-%SpellElement</waist>
+                    </equip>
+                </if>
+            </elseif>
+        </if>
+    </include>
+
+    <!-- Swapping in Obi/Zodiac Ring/Twilight Cape when using Ninjutsu.
+         Assumed to be imported in after check for type="Ninjutsu" has
+         already been done. -->
+    <include name="ObiRingCape-Ninjutsu">
+        <if element="%DayElement">
+            <if spell="Katon*|Hyoton*|Huton*|Doton*|Suiton*|Raiton*">
+                <if advanced='"ZodiacRing"!="0"'>
+                    <equip when="midcast">
+                        <rring>Zodiac Ring</rring>
+                    </equip>
+                </if>
+
+                <if advanced='"$TwilightCape"!="0"'>
+                    <equip when="midcast">
+                        <back>Twilight Cape</back>
+                    </equip>
+                </if>
+
+                <if NotAdvanced='Regex("$Obi-%SpellElement", "^[$]")'>
+                    <equip when="midcast">
+                        <waist>$Obi-%SpellElement</waist>
+                    </equip>
+                </if>
+            </if>
+        </if>
+
+        <elseif element="%WeatherElement">
+            <if NotAdvanced='Regex("$Obi-%SpellElement", "^[$]")'>
+                <if spell="Katon*|Hyoton*|Huton*|Doton*|Suiton*|Raiton*">
+                    <equip when="midcast">
+                        <waist>$Obi-%SpellElement</waist>
+                    </equip>
+
+                    <if advanced='"$TwilightCape"!="0"'>
+                        <equip when="midcast">
+                            <back>Twilight Cape</back>
+                        </equip>
+                    </if>
+                </if>
+            </if>
+        </elseif>
+    </include>
+
+    <!-- Swapping in Obi/Zodiac Ring/Twilight Cape when using Blue Magic.
+         Assumed to be imported in after check for skill="BlueMagic" has
+         already been done. -->
+    <include name="ObiRingCape-BlueMagic">
+        <if element="%DayElement">
+            <if spell="*Whisker|*Grudge|Thermal*|Mind Blast|Regurg*|Ice Break|Leaf*|Thunderbolt|Dark Orb">
+                <if advanced='"ZodiacRing"!="0"'>
+                    <equip when="midcast">
+                        <rring>Zodiac Ring</rring>
+                    </equip>
+                </if>
+
+                <if advanced='"$TwilightCape"!="0"'>
+                    <equip when="midcast">
+                        <back>Twilight Cape</back>
+                    </equip>
+                </if>
+
+                <if NotAdvanced='Regex("$Obi-%SpellElement", "^[$]")'>
+                    <equip when="midcast">
+                        <waist>$Obi-%SpellElement</waist>
+                    </equip>
+                </if>
+            </if>
+        </if>
+
+        <elseif element="%WeatherElement">
+            <if NotAdvanced='Regex("$Obi-%SpellElement", "^[$]")'>
+                <if spell="*Whisker|*Grudge|Thermal*|Mind Blast|Regurg*|Ice Break|Leaf*|Thunderbolt|Dark Orb">
+                    <equip when="midcast">
+                        <waist>$Obi-%SpellElement</waist>
+                    </equip>
+
+                    <if advanced='"$TwilightCape"!="0"'>
+                        <equip when="midcast">
+                            <back>Twilight Cape</back>
+                        </equip>
+                    </if>
+                </if>
+            </if>
+        </elseif>
+    </include>
+
+    <!-- Swapping in Obi/Zodiac Ring/Twilight Cape when using Dark Magic.
+         Assumed to be imported in after check for skill="DarkMagic" has
+         already been done. -->
+    <include name="ObiRingCape-DarkMagic">
+        <if element="%DayElement">
+            <if spell="Drain*|Aspir*|Kaustra">
+                <if advanced='"$TwilightCape"!="0"'>
+                    <equip when="midcast">
+                        <back>Twilight Cape</back>
+                    </equip>
+                </if>
+
+                <if NotAdvanced='Regex("$Obi-%SpellElement", "^[$]")'>
+                    <equip when="midcast">
+                        <waist>$Obi-%SpellElement</waist>
+                    </equip>
+                </if>
+            </if>
+        </if>
+
+        <elseif element="%WeatherElement">
+            <if NotAdvanced='Regex("$Obi-%SpellElement", "^[$]")'>
+                <if spell="Drain*|Aspir*|Kaustra">
+                    <equip when="midcast">
+                        <waist>$Obi-%SpellElement</waist>
+                    </equip>
+
+                    <if advanced='"$TwilightCape"!="0"'>
+                        <equip when="midcast">
+                            <back>Twilight Cape</back>
+                        </equip>
+                    </if>
+                </if>
+            </if>
+        </elseif>
+    </include>
+
+    <!-- Automatically generate notifications when buffs are about to wear off (15 second warning). -->
+    <!-- MUST include RecastDurations in vars section. -->
+    <include name="RecastWarnings">
+        <if skill="EnhancingMagic">
+            <if spell="Enlight">
+                <var cmd="set Buff-Duration 120" />
+            </if>
+            <elseif spell="Haste|Phalanx|Phalanx II|Temper|Reprisal|En*">
+                <var cmd="set Buff-Duration 180" />
+            </elseif>
+            <elseif spell="Refresh II|Refresh">
+                <var cmd="set Buff-Duration 150" />
+            </elseif>
+            <elseif spell="*Spikes">
+                <var cmd="set Buff-Duration 140" />
+            </elseif>
+            <else>
+                <!-- Anything else we don't want to give warnings for. -->
+                <var cmd="set Buff-Duration 0" />
+            </else>
+
+            <if advanced='$Buff-Duration &gt; 0'>
+                <!-- Account for rdm stuff that extends durations -->
+                <if mainjob="Rdm">
+                    <var cmd="setcalc BuffDurationMult 100 + ($EstoqueurCape*10) + ($EstoqueurFeet*10)" />
+
+                    <if BuffActive="Composure">
+                        <if SpellTargetType="SELF">
+                            <var cmd="setcalc BuffDurationMult $BuffDurationMult * 3" />
+                        </if>
+                        <elseif SpellTargetType="PLAYER">
+                            <var cmd="setcalc BuffDurationMult $BuffDurationMult + $EstoqueurSetBonus" />
+                        </elseif>
+                    </if>
+
+                    <var cmd="setcalc Buff-Duration $Buff-Duration * $BuffDurationMult / 100" />
+                </if>
+                <elseif mainjob="Sch">
+                    <var cmd="setcalc BuffDurationMult 100" />
+
+                    <if mode="OR" BuffActive="Perpetuance" advanced='"$PerpFlag"="Yes"'>
+                        <!-- 2.5x duration for Perpetuance with AF3+2 hands. -->
+                        <var cmd="setcalc BuffDurationMult 200 + (25 * $SchPerpHands)" />
+                    </if>
+
+                    <var cmd="setcalc Buff-Duration $Buff-Duration * $BuffDurationMult / 100" />
+                </elseif>
+
+                <var cmd="setcalc Warn-Duration $Buff-Duration - 15" />
+                <command when="Aftercast">wait $Warn-Duration;input /echo ~~~~~~~~~~ [%spell] &lt;%SpellTargetName&gt; wearing off in 15 sec. ~~~~~~~~~~</command>
+            </if>
+        </if>
+        <elseif type="Samba">
+            <if mainjob="Dnc">
+                <var cmd="set Buff-Duration 120" />
+            </if>
+            <else>
+                <var cmd="set Buff-Duration 90" />
+            </else>
+
+            <var cmd="setcalc Warn-Duration $Buff-Duration - 15" />
+            <command when="Aftercast">wait $Warn-Duration;input /echo [%spell] ~~~~~~~~~ Wearing off in 15 sec.</command>
+        </elseif>
+        <elseif mode="or" skill="EnfeeblingMagic|DivineMagic|BlueMagic|Singing" type="CorsairShot">
+            <if Spell="Sleep|Sleepga|Light Shot|Sheep Song">
+                <var cmd="set Buff-Duration 60" />
+            </if>
+            <elseif Spell="Sleep II|Sleepga II|Repose|Dream Flower|Soporific|Yawn">
+                <var cmd="set Buff-Duration 90" />
+            </elseif>
+            <elseif Spell="Foe Lullaby|Horde Lullaby">
+                <var cmd="set Buff-Duration 36" />
+            </elseif>
+            <elseif Spell="Foe Lullaby II|Horde Lullaby II">
+                <var cmd="set Buff-Duration 72" />
+            </elseif>
+            <elseif Spell="Break">
+                <var cmd="set Buff-Duration 30" />
+            </elseif>
+            <else>
+                <var cmd="set Buff-Duration 0" />
+            </else>
+            
+          
+            <if advanced='$Buff-Duration &gt; 0'>
+                <var cmd="inc SleepOrder" />
+
+                <if advanced='$Buff-Duration &gt; 40'>
+                    <var cmd="setcalc Warn-Duration $Buff-Duration - 30" />
+                    <command when="Aftercast">wait $Warn-Duration;input /echo [%spell] &lt;%spellTargetName&gt; ($SleepOrder) wearing off in 30 sec.</command>
+                </if>
+
+                <var cmd="setcalc Warn-Duration $Buff-Duration - 10" />
+                <command when="Aftercast">wait $Warn-Duration;input /echo [%spell] &lt;%spellTargetName&gt; ($SleepOrder) wearing off in 10 sec.;spellcast var dec SleepOrder</command>
+            </if>
+        </elseif>
+    </include>
+
+    <!-- Include for calculating expected cast time for a given spell, to use in
+         determining which gear swaps are feasible. -->
+    <include name="FastCastCalculations">
+        <if type="WhiteMagic|BlackMagic|BardSong|Ninjutsu">
+            <!-- Don't bother for vary fast-casting spells. -->
+            <if casttimegt="1">
+                <if skill="HealingMagic">
+                    <if spell="Cure*|Cura*">
+                        <var cmd="set FastCastAmt $CureFastCast" />
+                    </if>
+                    <else>
+                        <var cmd="set FastCastAmt $HealFastCast" />
+                    </else>
+                </if>
+                <elseif skill="EnhancingMagic">
+                    <var cmd="set FastCastAmt $EnhancingFastCast" />
+                </elseif>
+                <elseif skill="ElementalMagic">
+                    <var cmd="set FastCastAmt $ElementalFastCast" />
+    
+                    <if mainjob="BLM">
+                        <if mainjoblvlgt="89">
+                            <var cmd="setcalc FastCastAmt $FastCastAmt + 25" />
+                        </if>
+                        <else>
+                            <var cmd="setcalc FastCastAmt $FastCastAmt + 15" />
+                        </else>
+                    </if>
+                </elseif>
+    
+                <var cmd="setcalc FastCastAmt $FastCastAmt + $GeneralFastCast" />
+    
+                <if mainjob="RDM">
+                    <var cmd="setcalc FastCastAmt $FastCastAmt + 30" />
+                </if>
+                <elseif subjob="RDM">
+                    <var cmd="setcalc FastCastAmt $FastCastAmt + 15" />
+                </elseif>
+
+    
+                <if NotAdvanced='Regex("$Staff-FastCastAmt-%SpellElement", "^[$]")'>
+                    <var cmd="setcalc FastCastAmt $FastCastAmt + $Staff-FastCastAmt-%SpellElement" />
+                </if>
+    
+    
+                <if BuffActive="Light Arts|Addendum: White">
+                    <if type="WhiteMagic">
+                        <var cmd="setcalc FastCastAmt $FastCastAmt + ((100-$FastCastAmt)* 0.1)" />
+                    </if>
+                    <elseif type="BlackMagic">
+                        <var cmd="setcalc FastCastAmt $FastCastAmt - ((100-$FastCastAmt)* 0.2)" />
+                    </elseif>
+                </if>
+                <elseif BuffActive="Dark Arts|Addendum: Black">
+                    <if type="BlackMagic">
+                        <var cmd="setcalc FastCastAmt $FastCastAmt + ((100-$FastCastAmt)* 0.1)" />
+                    </if>
+                    <elseif type="WhiteMagic">
+                        <var cmd="setcalc FastCastAmt $FastCastAmt - ((100-$FastCastAmt)* 0.2)" />
+                    </elseif>
+                </elseif>
+                
+                <if advanced='$FastCastAmt > 80'>
+                    <var cmd="setcalc FastCastAmt 80" />
+                </if>
+    
+                <var cmd="setcalc FCCastTime (%CastTime * (100-$FastCastAmt)) / 100" />
+    
+                <if advanced='$FCCastTime > 1'>
+                    <var cmd="set FastCastMode Normal" />
+                </if>
+                <elseif advanced='$FCCastTime > 0.7'>
+                    <var cmd="set FastCastMode Moderate" />
+                </elseif>
+                <else>
+                    <var cmd="set FastCastMode Quick" />
+                </else>
+            </if>
+            <else>
+                <var cmd="set FastCastMode Quick" />
+            </else>
+        </if>
+        <else>
+            <var cmd="set FastCastMode None" />
+        </else>
+    </include>
+
+    <!-- Proc rules exclusive to blm for testing spell procs. -->
+    <!-- Staff choice is already handled in Staffs include. -->
+    <include name="TestProcRules">
+        <!-- Turn on: //castingmode proc
+             Turn off: //castingmode proc.off
+             Set element: //firetrigger proc (or whichever element~trigger)
+             Cast spell: //anyelementtrigger proc-t3
+                         //anyelementtrigger proc-t4
+                         //anyelementtrigger proc-ga3
+                         //anyelementtrigger proc-AM
+                         //anyelementtrigger proc-brd
+         -->
+             
+        <if spell="CastingMode" SpellTargetRaw="Proc*">
+            <cancelspell />
+
+            <if BuffActive="Visitant|Voidwatcher">
+                <if SpellTargetRaw="*.off|*:off">
+                    <var cmd="set CastingMode Normal" />
+                </if>
+                <elseif SpellTargetRaw="*.toggle|*:toggle">
+                    <if advanced='"$CastingMode"="Proc"'>
+                        <var cmd="set CastingMode Normal" />
+                    </if>
+                    <else>
+                        <var cmd="set CastingMode Proc" />
+                    </else>
+                </elseif>
+                <else>
+                    <var cmd="set CastingMode Proc" />
+                </else>
+            </if>
+            <else>
+                <var cmd="set CastingMode Normal" />
+            </else>
+
+            <addtochat>CastingMode=$CastingMode, Procelement=$ProcElement</addtochat>
+            <return />
+        </if>
+        <!-- In Abyssea, do spell conversion -->
+        <elseif BuffActive="Visitant">
+            <if type="Trigger" skill="ElementalTrigger">
+                <if NotElement="None|Any|All" SpellTargetRaw="Proc">
+                    <var cmd="set ProcElement %spellElement" />
+                    <addtochat>CastingMode=$CastingMode, Procelement=$ProcElement</addtochat>
+                    <cancelspell />
+                    <return />
+                </if>
+                <elseif spell="AnyElementTrigger" advanced='"$CastingMode"="Proc"'>
+                    <var cmd="set Procspell None" />
+
+                    <if SpellTargetRaw="Proc-T3">
+                        <var cmd="set Procspell $T3-$ProcElement" />
+                    </if>
+                    <elseif SpellTargetRaw="Proc-T4">
+                        <var cmd="set Procspell $T4-$ProcElement" />
+                    </elseif>
+                    <elseif SpellTargetRaw="Proc-Ga3">
+                        <var cmd="set Procspell $T-G3-$ProcElement" />
+                    </elseif>
+                    <elseif SpellTargetRaw="Proc-AM">
+                        <var cmd="set Procspell $T-AM-$ProcElement" />
+                    </elseif>
+                    <elseif SpellTargetRaw="Proc-Brd">
+                        <var cmd="set Procspell $T-Brd-$ProcElement" />
+                    </elseif>
+                    <else>
+                        <addtochat>Unknown Proc: [%SpellTargetRaw]</addtochat>
+                    </else>
+
+                    <if advanced='"$Procspell" != "None"'>
+                        <changespell spell="$Procspell" />
+                        <changetarget target="&lt;t&gt;" />
+                    </if>
+                    <addtochat>Test spell ($Procspell): %spell &gt; %spellTarget</addtochat>
+                </elseif>
+            </if>
+        </elseif>
+    </include>
+    
+    <!-- Experimental code for a universal trigger to activate a job's 2HR. -->
+    <include name="Use2HR">
+        <if type="Trigger" spell="ClassTrigger" SpellTargetRaw="2HR">
+            <if mainjob="War">
+                <changespell spell="Mighty Strikes" />
+                <changetarget target="&lt;me&gt;" />
+            </if>
+            <elseif mainjob="Mnk">
+            </elseif>
+            <elseif mainjob="Whm">
+            </elseif>
+            <elseif mainjob="Blm">
+            </elseif>
+            <elseif mainjob="Rdm">
+            </elseif>
+            <elseif mainjob="Thf">
+            </elseif>
+            <elseif mainjob="Pld">
+            </elseif>
+            <elseif mainjob="Brd">
+            </elseif>
+            <elseif mainjob="Bst">
+            </elseif>
+            <elseif mainjob="Rng">
+            </elseif>
+            <elseif mainjob="Drk">
+            </elseif>
+            <elseif mainjob="Sam">
+            </elseif>
+            <elseif mainjob="Nin">
+            </elseif>
+            <elseif mainjob="Drg">
+            </elseif>
+            <elseif mainjob="Smn">
+            </elseif>
+            <elseif mainjob="Blu">
+            </elseif>
+            <elseif mainjob="Pup">
+            </elseif>
+            <elseif mainjob="Cor">
+            </elseif>
+            <elseif mainjob="Sch">
+            </elseif>
+            <elseif mainjob="Dnc">
+            </elseif>
+        </if>
+    </include>
+
+    <!-- Trigger to notify the user at a user-specified interval from the
+         time the trigger is used.
+         Use trigger77 for public /party notifications.
+         Use trigger78 for private notifications that include the /tell chime.
+
+         Syntax (for a 5 minute/300 second timer):
+         /ma trigger77 300
+     -->
+    <include name="RespawnTimer">
+        <if type="Trigger">
+            <!-- Trigger 77 for /party notifications -->
+            <if spell="Trigger77">
+                <!-- Validate input duration -->
+                <if advanced='Regex("%spellTargetRaw", "^\d+$")'>
+                    <!-- Basic warning at full duration -->
+                    <addtochat color="6">~~~~ Starting public respawn timer: %spellTargetRaw seconds.</addtochat>
+                    <command>wait %spellTargetRaw;input /p Respawn time &lt;call12&gt;</command>
+
+                    <!-- Additional warning when one minute remaining -->
+                    <var cmd="setcalc Warn-Duration %spellTargetRaw - 60" />
+                    <if advanced='$Warn-Duration &gt; 0'>
+                        <command>wait $Warn-Duration;input /p One minute warning &lt;call14&gt;</command>
+                    </if>
+                </if>
+                <else>
+                    <addtochat>Invalid timer duration: %SpellTargetRaw</addtochat>
+                </else>
+            </if>
+            <!-- Trigger 78 for private notifications -->
+            <elseif spell="Trigger78">
+                <!-- Validate input duration -->
+                <if advanced='Regex("%spellTargetRaw", "^\d+$")'>
+                    <!-- Basic warning at full duration -->
+                    <addtochat color="6">~~~~ Starting private respawn timer: %spellTargetRaw seconds.</addtochat>
+                    <command>wait %spellTargetRaw;input /ma Trigger80 0</command>
+
+                    <!-- Additional warning when one minute remaining -->
+                    <var cmd="setcalc Warn-Duration %spellTargetRaw - 60" />
+                    <if advanced='$Warn-Duration &gt; 0'>
+                        <command>wait $Warn-Duration;input /ma Trigger80 60</command>
+                    </if>
+                </if>
+                <else>
+                    <addtochat>Invalid timer duration: %spellTargetRaw</addtochat>
+                </else>
+            </elseif>
+            <!-- Custom notification code for /tell chime messages. -->
+            <elseif spell="Trigger80">
+                <if spelltargetraw="0">
+                    <addtochat color="12">~~~~ Respawn timer is up.</addtochat>
+                </if>
+                <else>
+                    <addtochat color="12">~~~~ One minute warning for respawn timer.</addtochat>
+                </else>
+            </elseif>
+        </if>
+    </include>
+</includes>

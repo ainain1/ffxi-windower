@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<settings>
+    <!--
+	This file controls the settings for the Find plugin.
+	Settings in the <global> section apply to all characters
+	
+	The available settings are:
+	xPos
+	yPos
+	font
+	fontSize
+	textA
+	textR
+	textG
+	textB
+	backgroundA
+	backgroundR
+	backgroundG
+	backgroundB
+	trackingText - Starting text to display.  If you want multiple lines of default
+	text, use a CDATA element.  i.e.
+	<trackingText><![CDATA[Line 1
+	Line 2]]></trackingText>
+	-->
+    <global>
+        <xPos>10</xPos>
+        <yPos>200</yPos>
+        <font>Arial</font>
+        <fontSize>10</fontSize>
+        <textA>255</textA>
+        <textR>255</textR>
+        <textG>255</textG>
+        <textB>255</textB>
+        <backgroundA>190</backgroundA>
+        <backgroundR>0</backgroundR>
+        <backgroundG>0</backgroundG>
+        <backgroundB>0</backgroundB>
+        <trackingText></trackingText>
+    </global>
+    <!--
+	You may also override specific settings on a per-character basis here.  For example,
+	if you wanted a character named Dave to have a default display of:
+	Shihei: <# of Shihei>
+	
+	You would use:
+	<Dave>
+		<trackingText>Shihei: ${ALL:shihei}</trackingText>
+	</Dave>
+	-->
+</settings>

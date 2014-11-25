@@ -1,0 +1,24 @@
+// ========== Salvage Cells ==========
+// ===== Equipment Cells =====
+if item is 5365 then pass //Incus Cell (Weapon)
+if item is 5366 then pass //Castellanus Cell (Head/Neck)
+if item is 5367 then pass //Cumulus Cell (Body)
+if item is 5368 then pass //Radiatus Cell (Hand)
+if item is 5369 then pass //Stratus Cell (Legs/Feet)
+if item is 5370 then pass //Cirrocumulus Cell (Back/Waist)
+if item is 5371 then pass //Undulatus Cell (Ranged/Ammo)
+if item is 5372 then pass //Virga Cell (Ring/Earring)
+// ===== Action Cells =====
+if item is 5373 then pass //Duplicatus Cell (Support job)
+if item is 5374 then pass //Opacus Cell (Abilities)
+if item is 5375 then pass //Praecipitatio Cell (Magic)
+// ===== Attribute Cells =====
+if item is 5376 then pass //Pannus Cell (STR)
+if item is 5377 then pass //Fractus Cell (DEX)
+if item is 5378 then pass //Congestus Cell (VIT)
+if item is 5379 then pass //Nimbus Cell (AGI)
+if item is 5380 then pass //Velum Cell (INT)
+if item is 5381 then pass //Pileus Cell (MND)
+if item is 5382 then pass //Mediocris Cell (CHR)
+if item is 5383 then pass //Humilus Cell (HP)
+if item is 5384 then pass //Spissatus Cell (MP)
