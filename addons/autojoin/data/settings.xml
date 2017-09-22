@@ -1,9 +1,9 @@
 <?xml version="1.1" ?>
 <settings>
-	<global>
+    <global>
         <autodecline>false</autodecline>
         <blacklist />
         <mode>blacklist</mode>
         <whitelist />
-	</global>
+    </global>
 </settings>

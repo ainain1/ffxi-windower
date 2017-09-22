@@ -1,0 +1,17 @@
+sets.exported={
+    main={ name="Claidheamh Soluis", augments={'Attack+6','"Dbl.Atk."+3','AGI+16',}},
+    sub="Buramenk'ah",
+    ammo="Mantoptera Eye",
+    head={ name="Taeon Chapeau", augments={'Crit.hit rate+2','DEX+4',}},
+    body={ name="Rawhide Vest", augments={'HP+49','"Subtle Blow"+6','"Triple Atk."+2',}},
+    hands={ name="Taeon Gloves", augments={'Crit.hit rate+2','STR+2 VIT+2',}},
+    legs={ name="Taeon Tights", augments={'DEF+8','"Triple Atk."+1','Weapon skill damage +2%',}},
+    feet={ name="Taeon Boots", augments={'Weapon Skill Acc.+10',}},
+    neck="Rancor Collar",
+    waist="Fotia Belt",
+    left_ear="Steelflash Earring",
+    right_ear="Bladeborn Earring",
+    left_ring="Apate Ring",
+    right_ring="Epona's Ring",
+    back="Atheling Mantle",
+}

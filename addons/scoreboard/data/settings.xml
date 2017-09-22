@@ -1,16 +1,16 @@
 <?xml version="1.1" ?>
 <settings>
-	<!--
-		This file controls the settings for the Scoreboard plugin.
-		Settings in the <global> section apply to all characters
-		
-		The available settings are:
-		posX - x coordinate for position
-		posY - y coordinate for position
-		numPlayers - The maximum number of players to display damage for
-		bgTransparency - Transparency level for the background. 0-255 range
-	-->
-	<global>
+    <!--
+        This file controls the settings for the Scoreboard plugin.
+        Settings in the <global> section apply to all characters
+        
+        The available settings are:
+        posX - x coordinate for position
+        posY - y coordinate for position
+        numPlayers - The maximum number of players to display damage for
+        bgTransparency - Transparency level for the background. 0-255 range
+    -->
+    <global>
         <UpdateFrequency>0.5</UpdateFrequency>
         <bgtransparency>200</bgtransparency>
         <display>
@@ -61,8 +61,8 @@
         <sbcolor>204</sbcolor>
         <showallidps>true</showallidps>
         <visible>true</visible>
-	</global>
-	<tanag>
+    </global>
+    <tanag>
         <display>
             <pos>
                 <x>1168</x>
@@ -70,9 +70,9 @@
             </pos>
             <text>
                 <stroke>
-                    <alpha>-64770</alpha>
+                    <alpha>16516605</alpha>
                 </stroke>
             </text>
         </display>
-	</tanag>
+    </tanag>
 </settings>

@@ -34,7 +34,7 @@ require 'pack'
 
 _addon.name = 'PointWatch'
 _addon.author = 'Byrth'
-_addon.version = 0.141111
+_addon.version = 0.150811
 _addon.command = 'pw'
 
 settings = config.load('data\\settings.xml',default_settings)
@@ -45,8 +45,6 @@ box.current_string = ''
 box:show()
 
 initialize()
-
-
 
 windower.register_event('incoming chunk',function(id,org,modi,is_injected,is_blocked)
     if is_injected then return end
@@ -71,6 +69,9 @@ windower.register_event('incoming chunk',function(id,org,modi,is_injected,is_blo
                     -- print(param_1,param_2,param_3,param_4) -- DEBUGGING STATEMENT -------------------------
                     if zone_message_functions[i] then
                         zone_message_functions[i](param_1,param_2,param_3,param_4)
+                    end
+                    if i:contains("visitant_status_") then
+                        abyssea.update_time = os.clock()
                     end
                 end
             end
@@ -102,16 +103,17 @@ windower.register_event('incoming chunk',function(id,org,modi,is_injected,is_blo
     elseif id == 0x61 then
         xp.current = org:unpack('H',0x11)
         xp.tnl = org:unpack('H',0x13)
+        accolades.current = math.floor(org:byte(0x5A)/4) + org:byte(0x5B)*2^6 + org:byte(0x5C)*2^14
     elseif id == 0x63 and org:byte(5) == 2 then
         lp.current = org:unpack('H',9)
-        lp.number_of_merits = org:byte(11)%64
-        lp.maximum_merits = org:byte(0x0D)%64
+        lp.number_of_merits = org:byte(11)%128
+        lp.maximum_merits = org:byte(0x0D)%128
     elseif id == 0x63 and org:byte(5) == 5 then
         local offset = windower.ffxi.get_player().main_job_id*6+13 -- So WAR (ID==1) starts at byte 19
         cp.current = org:unpack('H',offset)
-        cp.number_of_job_points = org:byte(offset+2)
+        cp.number_of_job_points = org:unpack('H',offset+2)
     elseif id == 0x110 then
-        sparks.current = org:unpack('H',5)
+        sparks.current = org:unpack('I',5)
     elseif id == 0xB and box:visible() then
         zoning_bool = true
         box:hide()
@@ -124,10 +126,21 @@ end)
 windower.register_event('zone change',function(new,old)
     if res.zones[new].english:sub(1,7) == 'Dynamis' then
         dynamis.entry_time = os.clock()
+        abyssea.update_time = 0
+        abyssea.time_remaining = 0
         dynamis.time_limit = 3600
         dynamis.zone = new
         cur_func,loadstring_err = loadstring("current_string = "..settings.strings.dynamis)
+    elseif res.zones[new].english:sub(1,7) == 'Abyssea' then
+        abyssea.update_time = os.clock()
+        abyssea.time_remaining = 5
+        dynamis.entry_time = 0
+        dynamis.time_limit = 0
+        dynamis.zone = 0
+        cur_func,loadstring_err = loadstring("current_string = "..settings.strings.abyssea)
     else
+        abyssea.update_time = 0
+        abyssea.time_remaining = 0
         dynamis.entry_time = 0
         dynamis.time_limit = 0
         dynamis.zone = 0
@@ -141,11 +154,15 @@ end)
 
 windower.register_event('addon command',function(...)
     local commands = {...}
-    local first_cmd = table.remove(commands,1)
-    if approved_commands[first_cmd] then
+    local first_cmd = table.remove(commands,1):lower()
+    if approved_commands[first_cmd] and #commands >= approved_commands[first_cmd].n then
         local tab = {}
-        for i,v in pairs(commands) do
+        for i,v in ipairs(commands) do
             tab[i] = tonumber(v) or v
+            if i <= approved_commands[first_cmd].n and type(tab[i]) ~= approved_commands[first_cmd].t then
+                print('Pointwatch: texts library command ('..first_cmd..') requires '..approved_commands[first_cmd].n..' '..approved_commands[first_cmd].t..'-type input'..(approved_commands[first_cmd].n > 1 and 's' or ''))
+                return
+            end
         end
         texts[first_cmd](box,unpack(tab))
         settings.text_box_settings = box._settings
@@ -181,6 +198,12 @@ function update_box()
     if dynamis.entry_time ~= 0 and dynamis.entry_time+dynamis.time_limit-os.clock() > 0 then
         dynamis.time_remaining = os.date('!%H:%M:%S',dynamis.entry_time+dynamis.time_limit-os.clock())
         dynamis.KIs = X_or_O(dynamis._KIs.Crimson)..X_or_O(dynamis._KIs.Azure)..X_or_O(dynamis._KIs.Amber)..X_or_O(dynamis._KIs.Alabaster)..X_or_O(dynamis._KIs.Obsidian)
+    elseif abyssea.update_time ~= 0 then
+        local time_less_then = math.floor((os.clock() - abyssea.update_time)/60)
+        abyssea.time_remaining = abyssea.time_remaining-time_less_then
+        if time_less_then >= 1 then
+            abyssea.update_time = os.clock()
+        end
     else
         dynamis.time_remaining = 0
         dynamis.KIs = ''
@@ -247,7 +270,7 @@ zone_message_functions = {
     pearl_ebon_gold_silvery = function(p1,p2,p3,p4)
         abyssea.pearlescent = p1
         abyssea.ebon = p2
-        abyssea.gold = p3
+        abyssea.golden = p3
         abyssea.silvery = p4
     end,
     azure_ruby_amber = function(p1,p2,p3,p4)
@@ -256,6 +279,9 @@ zone_message_functions = {
         abyssea.amber = p3
     end,
     visitant_status_gain = function(p1,p2,p3,p4)
+        abyssea.time_remaining = p1
+    end,
+    visitant_status_update = function(p1,p2,p3,p4)
         abyssea.time_remaining = p1
     end,
     visitant_status_wears_off = function(p1,p2,p3,p4)
@@ -271,6 +297,11 @@ function exp_msg(val,msg)
     if msg == 718 or msg == 735 then
         cp.registry[t] = (cp.registry[t] or 0) + val
         cp.total = cp.total + val
+        cp.current = cp.current + val
+        if cp.current > cp.tnjp and cp.number_of_job_points ~= cp.maximum_job_points then
+            cp.number_of_job_points = math.min(cp.number_of_job_points + math.floor(cp.current/cp.tnjp),cp.maximum_job_points)
+            cp.current = cp.current%cp.tnjp
+        end
     elseif msg == 8 or msg == 105 then
         xp.registry[t] = (xp.registry[t] or 0) + val
         xp.total = xp.total + val
@@ -283,10 +314,11 @@ function exp_msg(val,msg)
         end
     elseif msg == 371 or msg == 372 then
         lp.registry[t] = (lp.registry[t] or 0) + val
+        lp.current = lp.current + val
         if lp.current + val >= lp.tnm and lp.number_of_merits ~= lp.maximum_merits then
             -- Merit Point gained!
-            lp.current = lp.current + val - lp.tnm
-            lp.number_of_merits = lp.number_of_merits + 1
+            lp.number_of_merits = lp.number_of_merits + math.min(math.floor(lp.current/lp.tnm),lp.maximum_merits)
+            lp.current = lp.current%lp.tnm
         else
             -- If a merit point was not gained, 
             lp.current = math.min(lp.current+val,lp.tnm-1)

@@ -7,67 +7,69 @@
 	The available settings are:
 	-->
     <global>
-        <graphicalMode>true</graphicalMode>
-        <slimMode>false</slimMode>
-        <flashOnCompletion>true</flashOnCompletion>
-        <showTenths>true</showTenths>
-        <highRed>255</highRed>
-        <highGreen>0</highGreen>
-        <highBlue>0</highBlue>
-        <medRed>255</medRed>
-        <medGreen>160</medGreen>
-        <medBlue>0</medBlue>
-        <lowRed>0</lowRed>
-        <lowGreen>255</lowGreen>
-        <lowBlue>0</lowBlue>
-        <textA>255</textA>
-        <textR>255</textR>
-        <textG>255</textG>
-        <textB>255</textB>
-        <flashR>255</flashR>
-        <flashG>255</flashG>
-        <flashB>0</flashB>
-        <fontName>Arial</fontName>
-        <fontSize>8</fontSize>
-        <fontBold>false</fontBold>
-        <recastX>20</recastX>
-        <recastY>350</recastY>
-        <buffsX>190</buffsX>
-        <buffsY>350</buffsY>
-        <customX>360</customX>
-        <customY>350</customY>
-        <barSpacing>0</barSpacing>
-        <recastTimerLimit>8</recastTimerLimit>
-        <buffsTimerLimit>8</buffsTimerLimit>
-        <customTimerLimit>8</customTimerLimit>
-        <enableRecast>true</enableRecast>
-        <enableBuffs>true</enableBuffs>
-        <orderAlphabetically>false</orderAlphabetically>
-        <show1HourName>true</show1HourName>
-        <bgA>128</bgA>
-        <bgR>0</bgR>
-        <bgG>0</bgG>
-        <bgB>0</bgB>
-        <songCancel>false</songCancel>
-        <rollCancel>false</rollCancel>
-        <whitelistMode>false</whitelistMode>
-        <recastList />
-        <buffList />
-        <extendText>true</extendText>
-        <textColoring>false</textColoring>
-        <medPercent>0.5</medPercent>
-        <lowPercent>0.25</lowPercent>
-        <flashDuration>2</flashDuration>
-        <recastLowToHigh>true</recastLowToHigh>
-        <buffLowToHigh>false</buffLowToHigh>
-        <sortType>Creation</sortType>
-        <buffsLowToHigh>false</buffsLowToHigh>
-        <customLowToHigh>false</customLowToHigh>
-        <recastFlashDuration>2</recastFlashDuration>
-        <buffsFlashDuration>2</buffsFlashDuration>
-        <customFlashDuration>2</customFlashDuration>
-        <buffsList />
-        <stroke>false</stroke>
+        <GraphicalMode>true</GraphicalMode>
+        <SlimMode>false</SlimMode>
+        <ShowTenths>true</ShowTenths>
+        <HighRed>255</HighRed>
+        <HighGreen>0</HighGreen>
+        <HighBlue>0</HighBlue>
+        <MedRed>255</MedRed>
+        <MedGreen>160</MedGreen>
+        <MedBlue>0</MedBlue>
+        <LowRed>0</LowRed>
+        <LowGreen>255</LowGreen>
+        <LowBlue>0</LowBlue>
+        <TextA>255</TextA>
+        <TextR>255</TextR>
+        <TextG>255</TextG>
+        <TextB>255</TextB>
+        <FlashR>255</FlashR>
+        <FlashG>255</FlashG>
+        <FlashB>0</FlashB>
+        <FontName>Arial</FontName>
+        <FontSize>8</FontSize>
+        <FontBold>false</FontBold>
+        <RecastX>720</RecastX>
+        <RecastY>875</RecastY>
+        <BuffsX>920</BuffsX>
+        <BuffsY>875</BuffsY>
+        <CustomX>360</CustomX>
+        <CustomY>350</CustomY>
+        <BarSpacing>0</BarSpacing>
+        <RecastTimerLimit>10</RecastTimerLimit>
+        <BuffsTimerLimit>10</BuffsTimerLimit>
+        <CustomTimerLimit>10</CustomTimerLimit>
+        <EnableRecast>true</EnableRecast>
+        <EnableBuffs>true</EnableBuffs>
+        <Show1HourName>true</Show1HourName>
+        <BGA>128</BGA>
+        <BGR>0</BGR>
+        <BGG>0</BGG>
+        <BGB>0</BGB>
+        <!--If true, only items on the recast/buff lists will be displayed-->
+        <WhitelistMode>false</WhitelistMode>
+        <ExtendText>true</ExtendText>
+        <TextColoring>false</TextColoring>
+        <MedPercent>0.5</MedPercent>
+        <LowPercent>0.25</LowPercent>
+        <RecastLowToHigh>true</RecastLowToHigh>
+        <!--One of: Alphabetical, Creation, Duration-->
+        <SortType>Creation</SortType>
+        <BuffsLowToHigh>false</BuffsLowToHigh>
+        <CustomLowToHigh>false</CustomLowToHigh>
+        <RecastFlashDuration>2</RecastFlashDuration>
+        <BuffsFlashDuration>2</BuffsFlashDuration>
+        <CustomFlashDuration>2</CustomFlashDuration>
+        <!--If true will show a font outline-->
+        <Stroke>false</Stroke>
+        <!--List of ability names to display recasts for if in whitelistMode and to exclude otherwise-->
+        <AbilityRecastFilter />
+        <!--List of spell names to display recasts for if in whitelistMode and to exclude otherwise-->
+        <SpellRecastFilter />
+        <!--List of ability names to display buffs for if in whitelistMode and to exclude otherwise-->
+        <AbilityBuffFilter />
+        <!--List of spell names to display buffs for if in whitelistMode and to exclude otherwise-->
+        <SpellBuffFilter />
     </global>
     <!--
 	You may also override specific settings on a per-character basis here.

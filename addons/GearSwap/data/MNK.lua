@@ -67,13 +67,13 @@ function init_gear_sets()
         back="Tuilha Cape",legs="Hesychast's Hose +1",feet="Anchorite's Gaiters +1"}
 
     sets.precast.JA['Chakra'] = {ammo="Iron Gobbet",
-        head="Felistris Mask",
+        head="Taeon Chapeau",
         body="Anchorite's Cyclas +1",hands="Hesychast's Gloves +1",ring1="Spiral Ring",
         back="Iximulew Cape",waist="Caudata Belt",legs="Qaaxo Tights",feet="Thurandaut Boots +1"}
 
     -- Waltz set (chr and vit)
     sets.precast.Waltz = {ammo="Sonia's Plectrum",
-        head="Felistris Mask",
+        head="Taeon Chapeau",
         body="Otronif Harness +1",hands="Hesychast's Gloves +1",ring1="Spiral Ring",
         back="Iximulew Cape",waist="Caudata Belt",legs="Qaaxo Tights",feet="Otronif Boots +1"}
         
@@ -96,12 +96,12 @@ function init_gear_sets()
        
     -- Weaponskill sets
     -- Default set for any weaponskill that isn't any more specifically defined
-    sets.precast.WS = {ammo="Thew Bomblet",
+    sets.precast.WS = {ammo="Mantoptera Eye",
         head="Whirlpool Mask",neck=gear.ElementalGorget,ear1="Brutal Earring",ear2="Moonshade Earring",
         body="Qaaxo Harness",hands="Hesychast's Gloves +1",ring1="Rajas Ring",ring2="Epona's Ring",
         back="Atheling Mantle",waist="Caudata Belt",legs="Quiahuiz Trousers",feet="Manibozho Boots"}
     sets.precast.WSAcc = {ammo="Honed Tathlum",body="Manibozho Jerkin",back="Letalis Mantle",feet="Qaaxo Leggings"}
-    sets.precast.WSMod = {ammo="Tantra Tathlum",head="Felistris Mask",legs="Hesychast's Hose +1",feet="Daihanshi Habaki"}
+    sets.precast.WSMod = {ammo="Tantra Tathlum",head="Taeon Chapeau",legs="Hesychast's Hose +1",feet="Daihanshi Habaki"}
     sets.precast.MaxTP = {ear1="Bladeborn Earring",ear2="Steelflash Earring"}
     sets.precast.WS.Acc = set_combine(sets.precast.WS, sets.precast.WSAcc)
     sets.precast.WS.Mod = set_combine(sets.precast.WS, sets.precast.WSMod)
@@ -122,7 +122,7 @@ function init_gear_sets()
     sets.precast.WS['Dragon Kick']     = set_combine(sets.precast.WS, {feet="Daihanshi Habaki"})
     sets.precast.WS['Tornado Kick']    = set_combine(sets.precast.WS, {ammo="Tantra Tathlum",ring1="Spiral Ring"})
     sets.precast.WS['Spinning Attack'] = set_combine(sets.precast.WS, {
-        head="Felistris Mask",waist="Chaac Belt",ear1="Bladeborn Earring",ear2="Steelflash Earring"})
+        head="Taeon Chapeau",waist="Chaac Belt",ear1="Bladeborn Earring",ear2="Steelflash Earring"})
 
     sets.precast.WS["Raging Fists"].Acc = set_combine(sets.precast.WS["Raging Fists"], sets.precast.WSAcc)
     sets.precast.WS["Howling Fist"].Acc = set_combine(sets.precast.WS["Howling Fist"], sets.precast.WSAcc)
@@ -170,18 +170,18 @@ function init_gear_sets()
     
 
     -- Idle sets
-    sets.idle = {ammo="Thew Bomblet",
-        head="Felistris Mask",neck="Wiglen Gorget",ear1="Bladeborn Earring",ear2="Steelflash Earring",
+    sets.idle = {ammo="Mantoptera Eye",
+        head="Taeon Chapeau",neck="Wiglen Gorget",ear1="Bladeborn Earring",ear2="Steelflash Earring",
         body="Anchorite's Cyclas +1",hands="Hesychast's Gloves +1",ring1="Sheltered Ring",ring2="Defending Ring",
         back="Iximulew Cape",waist="Isla Belt",legs="Hesychast's Hose +1",feet="Hermes' Sandals"}
 
-    sets.idle.Town = {ammo="Thew Bomblet",
+    sets.idle.Town = {ammo="Mantoptera Eye",
         head="Whirlpool Mask",neck="Asperity Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
         body="Anchorite's Cyclas +1",hands="Hesychast's Gloves +1",ring1="Sheltered Ring",ring2="Defending Ring",
         back="Atheling Mantle",waist="Isla Belt",legs="Hesychast's Hose +1",feet="Hermes' Sandals"}
     
-    sets.idle.Weak = {ammo="Thew Bomblet",
-        head="Felistris Mask",neck="Wiglen Gorget",ear1="Brutal Earring",ear2="Bloodgem Earring",
+    sets.idle.Weak = {ammo="Mantoptera Eye",
+        head="Taeon Chapeau",neck="Wiglen Gorget",ear1="Brutal Earring",ear2="Bloodgem Earring",
         body="Hesychast's Cyclas",hands="Hesychast's Gloves +1",ring1="Sheltered Ring",ring2="Meridian Ring",
         back="Iximulew Cape",waist="Black Belt",legs="Qaaxo Tights",feet="Hermes' Sandals"}
     
@@ -213,29 +213,29 @@ function init_gear_sets()
     -- EG: sets.engaged.Dagger.Accuracy.Evasion
     
     -- Normal melee sets
-    sets.engaged = {ammo="Thew Bomblet",
-        head="Felistris Mask",neck="Asperity Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
+    sets.engaged = {ammo="Mantoptera Eye",
+        head="Taeon Chapeau",neck="Asperity Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
         body="Thaumas Coat",hands="Hesychast's Gloves +1",ring1="Rajas Ring",ring2="Epona's Ring",
-        back="Atheling Mantle",waist="Windbuffet Belt",legs="Hesychast's Hose +1",feet="Anchorite's Gaiters +1"}
-    sets.engaged.SomeAcc = {ammo="Honed Tathlum",
+        back="Atheling Mantle",waist="Windbuffet Belt",legs="Taeon Tights",feet="Anchorite's Gaiters +1"}
+    sets.engaged.SomeAcc = {ammo="Mantoptera Eye",
         head="Whirlpool Mask",neck="Ej Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
         body="Qaaxo Harness",hands="Hesychast's Gloves +1",ring1="Rajas Ring",ring2="Epona's Ring",
         back="Atheling Mantle",waist="Anguinus Belt",legs="Hesychast's Hose +1",feet="Anchorite's Gaiters +1"}
     sets.engaged.Acc = {ammo="Honed Tathlum",
-        head="Whirlpool Mask",neck="Ej Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
+        head="Whirlpool Mask",neck="Iqabi Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
         body="Otronif Harness +1",hands="Hesychast's Gloves +1",ring1="Patricius Ring",ring2="Epona's Ring",
-        back="Letalis Mantle",waist="Anguinus Belt",legs="Manibozho Brais",feet="Qaaxo Leggings"}
-    sets.engaged.Mod = {ammo="Thew Bomblet",
-        head="Felistris Mask",neck="Asperity Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
+        back="Letalis Mantle",waist="Windbuffet Belt",legs="Manibozho Brais",feet="Anchorite's Gaiters +1"}
+    sets.engaged.Mod = {ammo="Mantoptera Eye",
+        head="Taeon Chapeau",neck="Asperity Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
         body="Qaaxo Harness",hands="Anchorite's Gloves +1",ring1="Rajas Ring",ring2="Epona's Ring",
         back="Atheling Mantle",waist="Windbuffet Belt",legs="Hesychast's Hose +1",feet="Anchorite's Gaiters +1"}
 
     -- Defensive melee hybrid sets
-    sets.engaged.PDT = {ammo="Thew Bomblet",
+    sets.engaged.PDT = {ammo="Mantoptera Eye",
         head="Uk'uxkaj Cap",neck="Twilight Torque",ear1="Bladeborn Earring",ear2="Steelflash Earring",
         body="Otronif Harness +1",hands="Otronif Gloves",ring1="Patricius Ring",ring2="Epona's Ring",
         back="Iximulew Cape",waist="Windbuffet Belt",legs="Hesychast's Hose +1",feet="Otronif Boots +1"}
-    sets.engaged.SomeAcc.PDT = {ammo="Honed Tathlum",
+    sets.engaged.SomeAcc.PDT = {ammo="Mantoptera Eye",
         head="Whirlpool Mask",neck="Ej Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
         body="Qaaxo Harness",hands="Hesychast's Gloves +1",ring1="Patricius Ring",ring2="Epona's Ring",
         back="Atheling Mantle",waist="Anguinus Belt",legs="Hesychast's Hose +1",feet="Anchorite's Gaiters +1"}
@@ -243,7 +243,7 @@ function init_gear_sets()
         head="Whirlpool Mask",neck="Twilight Torque",ear1="Bladeborn Earring",ear2="Steelflash Earring",
         body="Otronif Harness +1",hands="Otronif Gloves",ring1="Patricius Ring",ring2="Epona's Ring",
         back="Letalis Mantle",waist="Anguinus Belt",legs="Qaaxo Tights",feet="Qaaxo Leggings"}
-    sets.engaged.Counter = {ammo="Thew Bomblet",
+    sets.engaged.Counter = {ammo="Mantoptera Eye",
         head="Whirlpool Mask",neck="Asperity Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
         body="Otronif Harness +1",hands="Otronif Gloves",ring1="K'ayres Ring",ring2="Epona's Ring",
         back="Atheling Mantle",waist="Windbuffet Belt",legs="Anchorite's Hose",feet="Otronif Boots +1"}
@@ -265,8 +265,8 @@ function init_gear_sets()
 
 
     -- Footwork combat form
-    sets.engaged.Footwork = {ammo="Thew Bomblet",
-        head="Felistris Mask",neck="Asperity Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
+    sets.engaged.Footwork = {ammo="Mantoptera Eye",
+        head="Taeon Chapeau",neck="Asperity Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
         body="Qaaxo Harness",hands="Hesychast's Gloves +1",ring1="Rajas Ring",ring2="Epona's Ring",
         back="Atheling Mantle",waist="Windbuffet Belt",legs="Hesychast's Hose +1",feet="Anchorite's Gaiters +1"}
     sets.engaged.Footwork.Acc = {ammo="Honed Tathlum",

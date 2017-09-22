@@ -1,116 +1,14 @@
 `````````````````````````````````````````````````````````````````````
-[ 4.0.4890.17383 ] 2013-06-14 02:42:57.3508906 UTC
+[ 4.2.5564.39855 ] 2016-11-08 15:59:38.1685643 UTC
 ---------------------------------------------------------------------
-System.InvalidOperationException: Operation is not valid due to the current state of the object.
-   at #=qdJDer2Fvty0Bvl1Ni7j8TbxeLgLklgq0ixO6_eZCmaQ=.#=q0ETVMH0JFffrZEPsp6O_2w==(String #=qkOw3mZMlMVPchBEg1MZdIA==, #=qYzqXXolfMeNdmdT7O3HWz0pf2qnDaZ00LzAE6gKJfwA= #=q6Mn$eMsC3PXFc8Ox1bM2hQ==, TimeSpan #=qPQByBsSdcnq6YTNyzqpptg==)
-   at #=qdJDer2Fvty0Bvl1Ni7j8TbxeLgLklgq0ixO6_eZCmaQ=.#=qYTCFKCdQAKAX3xHQxzO4VA==(String #=q9N4yUZ1ymcv8HrIdlB39Sg==, #=qYzqXXolfMeNdmdT7O3HWz0pf2qnDaZ00LzAE6gKJfwA= #=qrNpnMEkZScehrmtS1BfqqQ==)
-   at #=qNOHDHz9hm9sgKhplLSW1vD9tIz1qDgKkBUjd4z$uXxg=.#=q5Ou66kB59q4UqjCTyoS5yQ==()
-   at #=qGJkuNjOEBU3Eh7Qb62GuvJkyJwR1MKvZS_Z7hIKVy04=.#=q_RFEvs3lOd579pudnarpuw==(#=qFYidEfM4VrEH5OZ_mBn1Ug== #=q1vFrI78K3ZwZ4X5V5sflvQ==)
-   at #=qFYidEfM4VrEH5OZ_mBn1Ug==.#=qy$XIwBXQ3gy3Ve$ETobyHw==()
-   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.ThreadHelper.ThreadStart()
-`````````````````````````````````````````````````````````````````````
-
-`````````````````````````````````````````````````````````````````````
-[ 4.0.4890.17383 ] 2013-06-14 02:43:06.8124317 UTC
----------------------------------------------------------------------
-System.InvalidOperationException: Operation is not valid due to the current state of the object.
-   at #=qdJDer2Fvty0Bvl1Ni7j8TbxeLgLklgq0ixO6_eZCmaQ=.#=q0ETVMH0JFffrZEPsp6O_2w==(String #=qkOw3mZMlMVPchBEg1MZdIA==, #=qYzqXXolfMeNdmdT7O3HWz0pf2qnDaZ00LzAE6gKJfwA= #=q6Mn$eMsC3PXFc8Ox1bM2hQ==, TimeSpan #=qPQByBsSdcnq6YTNyzqpptg==)
-   at #=qdJDer2Fvty0Bvl1Ni7j8TbxeLgLklgq0ixO6_eZCmaQ=.#=qYTCFKCdQAKAX3xHQxzO4VA==(String #=q9N4yUZ1ymcv8HrIdlB39Sg==, #=qYzqXXolfMeNdmdT7O3HWz0pf2qnDaZ00LzAE6gKJfwA= #=qrNpnMEkZScehrmtS1BfqqQ==)
-   at #=qNOHDHz9hm9sgKhplLSW1vD9tIz1qDgKkBUjd4z$uXxg=.#=q5Ou66kB59q4UqjCTyoS5yQ==()
-   at #=qGJkuNjOEBU3Eh7Qb62GuvJkyJwR1MKvZS_Z7hIKVy04=.#=q_RFEvs3lOd579pudnarpuw==(#=qFYidEfM4VrEH5OZ_mBn1Ug== #=q1vFrI78K3ZwZ4X5V5sflvQ==)
-   at #=qFYidEfM4VrEH5OZ_mBn1Ug==.#=qy$XIwBXQ3gy3Ve$ETobyHw==()
-   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.ThreadHelper.ThreadStart()
-`````````````````````````````````````````````````````````````````````
-
-`````````````````````````````````````````````````````````````````````
-[ 4.0.4890.17383 ] 2013-06-14 06:54:27.3649900 UTC
----------------------------------------------------------------------
-System.InvalidOperationException: Operation is not valid due to the current state of the object.
-   at #=qdJDer2Fvty0Bvl1Ni7j8TbxeLgLklgq0ixO6_eZCmaQ=.#=q0ETVMH0JFffrZEPsp6O_2w==(String #=qkOw3mZMlMVPchBEg1MZdIA==, #=qYzqXXolfMeNdmdT7O3HWz0pf2qnDaZ00LzAE6gKJfwA= #=q6Mn$eMsC3PXFc8Ox1bM2hQ==, TimeSpan #=qPQByBsSdcnq6YTNyzqpptg==)
-   at #=qdJDer2Fvty0Bvl1Ni7j8TbxeLgLklgq0ixO6_eZCmaQ=.#=qYTCFKCdQAKAX3xHQxzO4VA==(String #=q9N4yUZ1ymcv8HrIdlB39Sg==, #=qYzqXXolfMeNdmdT7O3HWz0pf2qnDaZ00LzAE6gKJfwA= #=qrNpnMEkZScehrmtS1BfqqQ==)
-   at #=qNOHDHz9hm9sgKhplLSW1vD9tIz1qDgKkBUjd4z$uXxg=.#=q5Ou66kB59q4UqjCTyoS5yQ==()
-   at #=qGJkuNjOEBU3Eh7Qb62GuvJkyJwR1MKvZS_Z7hIKVy04=.#=q_RFEvs3lOd579pudnarpuw==(#=qFYidEfM4VrEH5OZ_mBn1Ug== #=q1vFrI78K3ZwZ4X5V5sflvQ==)
-   at #=qFYidEfM4VrEH5OZ_mBn1Ug==.#=qy$XIwBXQ3gy3Ve$ETobyHw==()
-   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.ThreadHelper.ThreadStart()
-`````````````````````````````````````````````````````````````````````
-
-`````````````````````````````````````````````````````````````````````
-[ 4.0.4890.17383 ] 2013-06-14 06:54:41.1657794 UTC
----------------------------------------------------------------------
-System.InvalidOperationException: Operation is not valid due to the current state of the object.
-   at #=qdJDer2Fvty0Bvl1Ni7j8TbxeLgLklgq0ixO6_eZCmaQ=.#=q0ETVMH0JFffrZEPsp6O_2w==(String #=qkOw3mZMlMVPchBEg1MZdIA==, #=qYzqXXolfMeNdmdT7O3HWz0pf2qnDaZ00LzAE6gKJfwA= #=q6Mn$eMsC3PXFc8Ox1bM2hQ==, TimeSpan #=qPQByBsSdcnq6YTNyzqpptg==)
-   at #=qdJDer2Fvty0Bvl1Ni7j8TbxeLgLklgq0ixO6_eZCmaQ=.#=qYTCFKCdQAKAX3xHQxzO4VA==(String #=q9N4yUZ1ymcv8HrIdlB39Sg==, #=qYzqXXolfMeNdmdT7O3HWz0pf2qnDaZ00LzAE6gKJfwA= #=qrNpnMEkZScehrmtS1BfqqQ==)
-   at #=qNOHDHz9hm9sgKhplLSW1vD9tIz1qDgKkBUjd4z$uXxg=.#=q5Ou66kB59q4UqjCTyoS5yQ==()
-   at #=qGJkuNjOEBU3Eh7Qb62GuvJkyJwR1MKvZS_Z7hIKVy04=.#=q_RFEvs3lOd579pudnarpuw==(#=qFYidEfM4VrEH5OZ_mBn1Ug== #=q1vFrI78K3ZwZ4X5V5sflvQ==)
-   at #=qFYidEfM4VrEH5OZ_mBn1Ug==.#=qy$XIwBXQ3gy3Ve$ETobyHw==()
-   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.ThreadHelper.ThreadStart()
-`````````````````````````````````````````````````````````````````````
-
-`````````````````````````````````````````````````````````````````````
-[ 4.0.4890.17383 ] 2013-06-14 06:55:10.4544546 UTC
----------------------------------------------------------------------
-System.InvalidOperationException: Operation is not valid due to the current state of the object.
-   at #=qdJDer2Fvty0Bvl1Ni7j8TbxeLgLklgq0ixO6_eZCmaQ=.#=q0ETVMH0JFffrZEPsp6O_2w==(String #=qkOw3mZMlMVPchBEg1MZdIA==, #=qYzqXXolfMeNdmdT7O3HWz0pf2qnDaZ00LzAE6gKJfwA= #=q6Mn$eMsC3PXFc8Ox1bM2hQ==, TimeSpan #=qPQByBsSdcnq6YTNyzqpptg==)
-   at #=qdJDer2Fvty0Bvl1Ni7j8TbxeLgLklgq0ixO6_eZCmaQ=.#=qYTCFKCdQAKAX3xHQxzO4VA==(String #=q9N4yUZ1ymcv8HrIdlB39Sg==, #=qYzqXXolfMeNdmdT7O3HWz0pf2qnDaZ00LzAE6gKJfwA= #=qrNpnMEkZScehrmtS1BfqqQ==)
-   at #=qNOHDHz9hm9sgKhplLSW1vD9tIz1qDgKkBUjd4z$uXxg=.#=q5Ou66kB59q4UqjCTyoS5yQ==()
-   at #=qGJkuNjOEBU3Eh7Qb62GuvJkyJwR1MKvZS_Z7hIKVy04=.#=q_RFEvs3lOd579pudnarpuw==(#=qFYidEfM4VrEH5OZ_mBn1Ug== #=q1vFrI78K3ZwZ4X5V5sflvQ==)
-   at #=qFYidEfM4VrEH5OZ_mBn1Ug==.#=qy$XIwBXQ3gy3Ve$ETobyHw==()
-   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.ThreadHelper.ThreadStart()
-`````````````````````````````````````````````````````````````````````
-
-`````````````````````````````````````````````````````````````````````
-[ 4.1.5097.39107 ] 2013-12-28 02:04:27.6448280 UTC
----------------------------------------------------------------------
-System.IO.DirectoryNotFoundException: Could not find a part of the path 'E:\Backup\Windower4\updates\temp'.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.FileSystemEnumerableIterator`1.CommonInit()
-   at System.IO.FileSystemEnumerableIterator`1..ctor(String path, String originalUserPath, String searchPattern, SearchOption searchOption, SearchResultHandler`1 resultHandler, Boolean checkHost)
-   at System.IO.DirectoryInfo.InternalGetFiles(String searchPattern, SearchOption searchOption)
-   at System.IO.DirectoryInfo.GetFiles()
-   at #=q$JgxTo_kqokNXg7DXgVwVSVnOaw5NewKBWmyRPfiOzc=.#=qpv2uAxzxoTjg6LBP9ZMDog==()
-   at #=qSRzObxQycKgVYsY7wCkBMJZnRCgPXBHKBBkmsPh_MzU=.#=q2IHgOYKWNYxUSla2vSCShw==()
-   at #=qzbRpHT_3tz5NPpEvt1yxNEfFAz8_pJ18rRxMj6i2uqA=.#=qtBMZzOYZb6$C9xzc2zKOSg==(#=q3ud4bx7RbDJjsARQfmNcYg== #=q1vFrI78K3ZwZ4X5V5sflvQ==)
-   at #=q3ud4bx7RbDJjsARQfmNcYg==.#=qNTTGourPxrBbfixqg6TCLg==()
-   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Threading.ThreadHelper.ThreadStart()
-`````````````````````````````````````````````````````````````````````
-
-`````````````````````````````````````````````````````````````````````
-[ 4.1.5114.42749 ] 2014-01-18 23:07:51.4033279 UTC
----------------------------------------------------------------------
-System.IO.DirectoryNotFoundException: Could not find a part of the path 'E:\Backup\Windower4\updates\temp'.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.FileSystemEnumerableIterator`1.CommonInit()
-   at System.IO.FileSystemEnumerableIterator`1..ctor(String path, String originalUserPath, String searchPattern, SearchOption searchOption, SearchResultHandler`1 resultHandler, Boolean checkHost)
-   at System.IO.DirectoryInfo.InternalGetFiles(String searchPattern, SearchOption searchOption)
-   at System.IO.DirectoryInfo.GetFiles()
-   at #=qIerENBRvVzG_fmx1JF5_ZJmiw5spIZuiRipnK5NETiI=.#=qLWQXAv2M8CXnrX3QzHr_jA==()
-   at #=qxNTX98iGw1JPkWVTchCOTPMIhSMWso5whwYNyMC7ifw=.#=q4NXtkFPshEYKOKbMAQEjNw==()
-   at #=qM9EJYR6b9pDEd2iHjLydC$BcPXLPPAq8AO3gaJG$RSk=.#=q8pTUCSwj6vBFYijWu$ZzxA==(#=qoPMI4_fk$Nm$uF$jZq8z9A== #=qkSHmXRZSel5kD7nsO$E1lA==)
-   at #=qoPMI4_fk$Nm$uF$jZq8z9A==.#=qav9FVComJWu2k_c7i_yB0A==()
+System.ArgumentNullException: Value cannot be null.
+Parameter name: path1
+   at System.IO.Path.Combine(String path1, String path2)
+   at #=qPVzKPXreBMK$G_TScC8d1Ctb_fGj44I1J70nspZgfgc=.#=q$pww7u7a8E5KBZ87oKIoig==(String #=qoOfmmNOMqhuJULvaMcWu2w==, #=qdWKs2YH5SnFgXJPCF1szgPXoHSmmSh4DrfoUED_SDBo= #=quTc0RVW0C2_5GERaxMw4LQ==, Boolean #=qhFOX1aUHv3mgiXMa34qGNQ==, TimeSpan #=qFEzHGxyOne7p37rEWbV8$w==)
+   at #=qPVzKPXreBMK$G_TScC8d1Ctb_fGj44I1J70nspZgfgc=.#=qsKKl1l0g1HURDWit8B79Fw==(String #=qqKTShJx7xnazuWOpJ6ZDeg==, #=qdWKs2YH5SnFgXJPCF1szgPXoHSmmSh4DrfoUED_SDBo= #=qiV1cyIFi8uzxd23Z9RTz8A==, Boolean #=qvxtyf2yqPR87sOWe96PA4A==)
+   at #=qvticlh8sdG9urHCodAc05R$Pt$DrlamfeVITJje_ohY=.#=qxA0hzrjWSVf3wZHstSp6qA==()
+   at #=q4ao$U6CJ_ca3wGsQbteYRInNOUKn7px0EZirpC9v2dQ=.#=qRSqZ29WH0ZYrlsLq$sgMxA==(#=q9gJgdStyyOZoRfONVWltog== #=qhFHi0z6eBl3jv5Ev3xCTig==)
+   at #=q9gJgdStyyOZoRfONVWltog==.#=q1GDlKxdSu3j9WeEYkyufMQ==()
    at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
    at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)

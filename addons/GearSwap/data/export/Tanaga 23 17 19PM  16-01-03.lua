@@ -1,0 +1,17 @@
+sets.exported={
+    main={ name="Claidheamh Soluis", augments={'Attack+6','"Dbl.Atk."+3','AGI+16',}},
+    sub="Buramenk'ah",
+    ammo="Impatiens",
+    head={ name="Helios Band", augments={'"Mag.Atk.Bns."+2','Magic crit. hit rate +2',}},
+    body={ name="Hagondes Coat", augments={'Phys. dmg. taken -1%','Mag. Acc.+7',}},
+    hands={ name="Helios Gloves", augments={'"Mag.Atk.Bns."+5','Magic crit. hit rate +4',}},
+    legs={ name="Helios Spats", augments={'"Mag.Atk.Bns."+11',}},
+    feet="Tutyr Sabots",
+    neck="Baetyl Pendant",
+    waist="Fotia Belt",
+    left_ear="Hecate's Earring",
+    right_ear="Strophadic Earring",
+    left_ring="Shiva Ring",
+    right_ring="Shiva Ring",
+    back="Toro Cape",
+}

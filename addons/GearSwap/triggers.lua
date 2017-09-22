@@ -1,4 +1,4 @@
---Copyright (c) 2013, Byrthnoth
+--Copyright (c) 2013~2016, Byrthnoth
 --All rights reserved.
 
 --Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,7 @@
 --Returns:
 ---- none or ''
 -----------------------------------------------------------------------------------
-windower.register_event('outgoing text',function(original,modified,blocked,ffxi)
+windower.register_event('outgoing text',function(original,modified,blocked,ffxi,extra_stuff,extra2)
     windower.debug('outgoing text')
     if gearswap_disabled then return modified end
     
@@ -51,10 +51,21 @@ windower.register_event('outgoing text',function(original,modified,blocked,ffxi)
     if splitline.n == 0 then return end
 
     local command = splitline[1]
+    local bstpet = command == '/bstpet'
     local unified_prefix = unify_prefix[command]
-    local abil,temptarg, temp_mob_arr
-    if splitline[2] then
-        abil = splitline[2]:gsub(string.char(7),' '):lower()
+    local abil, temptarg, temp_mob_arr
+    if splitline[2] and not bstpet then
+        abil = splitline[2]:gsub(string.char(7),' '):lower() -- Why am I removing \x7?
+    elseif splitline[2] and bstpet and tonumber(splitline[2]) then
+        local pet_abilities = {}
+        for _,v in ipairs(windower.ffxi.get_abilities().job_abilities) do
+            if v >= bstpet_range.min and v <= bstpet_range.max then
+                pet_abilities[#pet_abilities+1] = v
+            end
+        end
+        if pet_abilities[tonumber(splitline[2])] then
+            abil = res.job_abilities[pet_abilities[tonumber(splitline[2])]].name:gsub(string.char(7),' '):lower() -- .name, or .english?
+        end
     end
     
     if validabils[language][unified_prefix] and validabils[language][unified_prefix][abil] then
@@ -68,49 +79,59 @@ windower.register_event('outgoing text',function(original,modified,blocked,ffxi)
             st_flag = nil
             return true
         elseif temp_mob_arr then
-            logit('\n\n'..tostring(os.clock)..'(93) temp_mod: '..tostring(temp_mod))
             refresh_globals()
             
-            local r_line
+            local r_line, find_monster_ability
             
-            if unified_prefix == '/ma' then
-                r_line = copy_entry(res.spells[validabils[language][unified_prefix][abil]])
-                storedcommand = command..' "'..r_line[language]..'" '
-            elseif unified_prefix == '/ms' then
-                if player.species then
+            function find_monster_ability(abil)
+                local line = false
+                if player.species and player.species.tp_moves then
                     -- Iterates over currently available monster TP moves instead of using validabils
                     for i,v in pairs(player.species.tp_moves) do
                         if res.monster_abilities[i][language]:lower() == abil then
-                            r_line = copy_entry(res.monster_abilities[i])
+                            line = copy_entry(res.monster_abilities[i])
                             break
                         end
                     end
                 end
-                storedcommand = command..' "'..r_line[language]..'" '
+                return line
+            end
+                        
+            if unified_prefix == '/ma' then
+                r_line = copy_entry(res.spells[validabils[language][unified_prefix][abil]])
+                storedcommand = command..' "'..windower.to_shift_jis(r_line[language])..'" '
+            elseif unified_prefix == '/ms' and find_monster_ability(abil) then
+                r_line = find_monster_ability(abil)
+                storedcommand = command..' "'..windower.to_shift_jis(r_line[language])..'" '
             elseif unified_prefix == '/ws' then
                 r_line = copy_entry(res.weapon_skills[validabils[language][unified_prefix][abil]])
-                storedcommand = command..' "'..r_line[language]..'" '
+                storedcommand = command..' "'..windower.to_shift_jis(r_line[language])..'" '
             elseif unified_prefix == '/ja' then
                 r_line = copy_entry(res.job_abilities[validabils[language][unified_prefix][abil]])
-                storedcommand = command..' "'..r_line[language]..'" '
+                if bstpet then
+                    storedcommand = command..' '..splitline[2]
+                else
+                    storedcommand = command..' "'..windower.to_shift_jis(r_line[language])..'" '
+                end
             elseif unified_prefix == '/item' then
                 r_line = copy_entry(res.items[validabils[language][unified_prefix][abil]])
                 r_line.prefix = '/item'
                 r_line.type = 'Item'
-                storedcommand = command..' "'..r_line[language]..'" '
+                storedcommand = command..' "'..windower.to_shift_jis(r_line[language])..'" '
             elseif unified_prefix == '/ra' then
                 r_line = copy_entry(resources_ranged_attack)
                 storedcommand = command..' '
             end
             
             r_line.name = r_line[language]
-            spell = spell_complete(r_line)
+            local spell = spell_complete(r_line)
             spell.target = temp_mob_arr
             spell.action_type = action_type_map[command]
             
             if filter_pretarget(spell) then
                 if tonumber(splitline[splitline.n]) then
-                    local ts = mk_command_registry_entry(spell,spell.target.id) -- find_command_registry_key('spell',spell) or
+                    -- If the target is a number
+                    local ts = command_registry:new_entry(spell)
                     
                     if spell.prefix == '/item' then
                         -- Item use packet handling here
@@ -122,8 +143,9 @@ windower.register_event('outgoing text',function(original,modified,blocked,ffxi)
                             command_registry[ts].proposed_packet = assemble_menu_item_packet(spell.target.id,spell.target.index,spell.id)
                         end
                     else
-                        command_registry[ts].proposed_packet = assemble_action_packet(spell.target.id,spell.target.index,outgoing_action_category_table[unify_prefix[spell.prefix]],spell.id)
+                        command_registry[ts].proposed_packet = assemble_action_packet(spell.target.id,spell.target.index,outgoing_action_category_table[unify_prefix[spell.prefix]],spell.id,initialize_arrow_offset(spell.target))
                     end
+                    -- The packets created above should not be used.
                     if command_registry[ts].proposed_packet then
                         equip_sets('precast',ts,spell)
                         return true
@@ -142,7 +164,7 @@ end)
 
 
 -----------------------------------------------------------------------------------
---Name: inc_action(act)
+--Name: parse.i[0x028](act)
 --Desc: Calls midcast or aftercast functions as appropriate in response to incoming
 --      action packets.
 --Args:
@@ -151,7 +173,8 @@ end)
 --Returns:
 ---- none
 -----------------------------------------------------------------------------------
-function inc_action(act)
+parse.i[0x028] = function (data)
+    local act = windower.packets.parse_action(data)
     if gearswap_disabled or act.category == 1 then return end
     
 --    local spell_res = ActionPacket.new(act):get_spell()
@@ -175,7 +198,7 @@ function inc_action(act)
         prefix = 'pet_'
     end
     
-    spell = get_spell(act)
+    local spell = get_spell(act)
 --    if not spell_res or (spell.english ~= spell_res.english) then print('Did not match.',spell.english,spell_res) end
     
     if spell then logit('\n\n'..tostring(os.clock)..'(178) Event Action: '..tostring(spell[language])..' '..tostring(act.category))
@@ -183,9 +206,9 @@ function inc_action(act)
     
     if spell and spell[language] then
         spell.target = target_complete(windower.ffxi.get_mob_by_id(act.targets[1].id))
-        spell.action_type = action_type_map[unify_prefix[spell.prefix or 'Mon']]
+        spell.action_type = action_type_map[unify_prefix[spell.prefix or 'Monster']]
     elseif S{84,78}:contains(act.targets[1].actions[1].message) then -- "Paralyzed" and "too far away" respectively
-        local ts,tab = delete_command_registry_by_id(act.targets[1].id)
+        local ts,tab = command_registry:delete_by_id(act.targets[1].id)
         if tab and tab.spell and tab.spell.prefix == '/pet' then 
             tab.spell.interrupted = true
             equip_sets('pet_aftercast',nil,tab.spell)
@@ -212,13 +235,13 @@ function inc_action(act)
     -- For some reason avatar Out of Range messages send two packets (Category 4 and Category 7)
     -- Category 4 contains real information, while Category 7 does not.
     -- I do not know if this will affect automatons being interrupted.
-    
-    
-    ts = find_command_registry_key('spell',spell)
+    local ts = command_registry:find_by_spell(spell)
     if (jas[act.category] or uses[act.category]) then
         if uses[act.category] and act.param == 28787 then
             spell.action_type = 'Interruption'
             spell.interrupted = true
+        else
+            spell.value = act.targets[1].actions[1].param
         end
         if ts then --or spell.prefix == '/item' then
             -- Only aftercast things that were precasted.
@@ -227,7 +250,7 @@ function inc_action(act)
             command_registry[ts].midaction = false
             equip_sets(prefix..'aftercast',ts,spell)
         elseif debugging.command_registry then
-            windower.add_to_chat(8,'GearSwap (Debug Mode): Hitting Aftercast without detecting an entry in command_registry')
+            msg.debugging('Hitting Aftercast without detecting an entry in command_registry')
         end
     elseif (readies[act.category] and act.param == 28787) then -- and not (act.category == 9 or (act.category == 7 and prefix == 'pet_'))) then
         spell.action_type = 'Interruption'
@@ -239,10 +262,11 @@ function inc_action(act)
             if command_registry[ts] then command_registry[ts].midaction = false end
             equip_sets(prefix..'aftercast',ts,spell)
         elseif debugging.command_registry then
-            windower.add_to_chat(8,'GearSwap (Debug Mode): Hitting Aftercast without detecting an entry in command_registry')
+            msg.debugging('Hitting Aftercast without detecting an entry in command_registry')
         end
-    elseif readies[act.category] and prefix == 'pet_' and act.targets[1].actions[1].message ~= 0 then -- Entry for pet midcast. Excludes the second packet of "Out of range" BPs.
-        ts = mk_command_registry_entry(spell)
+    elseif readies[act.category] and prefix == 'pet_' and act.targets[1].actions[1].message ~= 0 then
+        -- Entry for pet midcast. Excludes the second packet of "Out of range" BPs.
+        ts = command_registry:new_entry(spell)
         refresh_globals()
         command_registry[ts].pet_midaction = true
         equip_sets('pet_midcast',ts,spell)
@@ -252,9 +276,8 @@ end
 
 
 -----------------------------------------------------------------------------------
---Name: inc_action_message(arr)
---Desc: Calls midcast or aftercast functions as appropriate in response to incoming
---      action message packets.
+--Name: parse.i[0x029](data)
+--Desc: Responds to incoming action message packets.
 --Args:
 ---- arr - Action message packet arguments (described on the dev wiki):
   -- actor_id,target_id,param_1,param_2,param_3,actor_index,target_index,message_id)
@@ -262,11 +285,22 @@ end
 --Returns:
 ---- none
 -----------------------------------------------------------------------------------
-function inc_action_message(arr)
-    windower.debug('action message')
+parse.i[0x029] = function (data)
     if gearswap_disabled then return end
+    local arr = {}
+    arr.actor_id = data:unpack('I',0x05)
+    arr.target_id = data:unpack('I',0x09)
+    arr.param_1 = data:unpack('I',0x0D)
+    arr.param_2 = data:unpack('I',0x11)%64 -- First 6 bits
+    arr.param_3 = math.floor(data:unpack('I',0x11)/64) -- Rest
+    arr.actor_index = data:unpack('H',0x15)
+    arr.target_index = data:unpack('H',0x17)
+    arr.message_id = data:unpack('H',0x19)%32768
+    
+    
+    windower.debug('action message')
     if T{6,20,113,406,605,646}:contains(arr.message_id) then -- death messages
-        local ts,tab = delete_command_registry_by_id(arr.target_id)
+        local ts,tab = command_registry:delete_by_id(arr.target_id)
         if tab and tab.spell and tab.spell.prefix == '/pet' then
             equip_sets('pet_aftercast',nil,tab.spell)
         elseif tab and tab.spell then
@@ -291,7 +325,7 @@ function inc_action_message(arr)
     
     if unable_to_use:contains(arr.message_id) then
         logit('\n\n'..tostring(os.clock)..'(195) Event Action Message: '..tostring(message_id)..' Interrupt')
-        local ts,tab = find_command_registry_by_time('player')
+        local ts,tab = command_registry:find_by_time()
         
         if tab and tab.spell then
             tab.spell.interrupted = true

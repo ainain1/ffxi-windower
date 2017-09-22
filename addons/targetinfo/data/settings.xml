@@ -1,6 +1,6 @@
 <?xml version="1.1" ?>
 <settings>
-	<global>
+    <global>
         <bg>
         <!-- Background settings. -->
             <alpha>102</alpha>
@@ -36,10 +36,18 @@
                 <blue>255</blue>
                 <font>Consolas</font>
                 <fonts>
+
                 </fonts>
                 <green>255</green>
                 <red>255</red>
                 <size>12</size>
+                <stroke>
+                    <alpha>255</alpha>
+                    <blue>0</blue>
+                    <green>0</green>
+                    <red>0</red>
+                    <width>0</width>
+                </stroke>
             </text>
         </display>
         <pos>
@@ -59,5 +67,5 @@
             <red>255</red>
             <size>12</size>
         </text>
-	</global>
+    </global>
 </settings>

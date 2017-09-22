@@ -3,14 +3,21 @@ This library provides a set of functions to aid in debugging.
 ]]
 
 _libs = _libs or {}
-_libs.logger = true
-_libs.strings = _libs.strings or require('strings')
-_libs.chat = _libs.chat or require('chat')
+
+require('strings')
+require('chat')
+
+local string, chat = _libs.strings, _libs.chat
+local table = require('table')
 
 local logger = {}
-logger.defaults = {}
+
+_libs.logger = logger
+
+_raw = _raw or {}
 
 -- Set up, based on addon.
+logger.defaults = {}
 logger.defaults.logtofile = false
 logger.defaults.defaultfile = 'lua.log'
 logger.defaults.logcolor = 207
@@ -70,6 +77,7 @@ function log(...)
     captionlog(nil, logger.settings.logcolor, ...)
 end
 
+_raw.error = error
 function error(...)
     captionlog('Error', logger.settings.errorcolor, ...)
 end
@@ -194,11 +202,22 @@ function table.tovstring(t, keys, indentlevel)
         kt[k] = key
     end
     table.sort(kt, function(x, y)
-        return type(x) ~= type(y) and type(x) == 'number' or x < y
+        return type(x) ~= type(y) and type(x) == 'number' or type(x) == 'number' and type(y) == 'number' and x < y
     end)
 
     for i, key in pairs(kt) do
         val = t[key]
+        
+        local function sanitize(val)
+            local ret
+            if type(val) == 'string' then
+                ret = '"' .. val:gsub('"','\\"') .. '"'
+            else
+                ret = tostring(val)
+            end
+            return ret
+        end
+        
         -- Check for nested tables
         if type(val) == 'table' then
             if val.tovstring then
@@ -207,18 +226,14 @@ function table.tovstring(t, keys, indentlevel)
                 valstr = table.tovstring(val, keys, indentlevel + 1)
             end
         else
-            if type(val) == 'string' then
-                valstr = '"' .. val .. '"'
-            else
-                valstr = tostring(val)
-            end
+            valstr = sanitize(val)
         end
 
         -- Append one line with indent.
         if not keys and tonumber(key) then
-            tstr = tstr .. indent .. '    ' .. valstr
+            tstr = tstr .. indent .. '    ' .. '[' .. sanitize(key) .. ']=' .. valstr
         else
-            tstr = tstr .. indent .. '    ' .. tostring(key) .. '=' .. valstr
+            tstr = tstr .. indent .. '    ' .. '[' .. sanitize(key) .. ']=' .. valstr
         end
 
         -- Add comma, unless it's the last value.
@@ -249,6 +264,8 @@ end
 local config = require('config')
 
 logger.settings = config.load('../libs/logger.xml', logger.defaults)
+
+return logger
 
 --[[
 Copyright © 2013-2014, Windower

@@ -1,14 +1,16 @@
 --[[
-A library to handle ingame resources, as provided by the Radsources XMLs. It will look for the files in Windower/plugins/resources.
+    A library to handle ingame resources, as provided by the Radsources XMLs. It will look for the files in Windower/plugins/resources.
 ]]
 
 _libs = _libs or {}
-_libs.resources = true
-_libs.functions = _libs.functions or require('functions')
-_libs.tables = _libs.tables or require('tables')
-_libs.strings = _libs.strings or require('strings')
-_libs.files = _libs.files or require('files')
-_libs.xml = _libs.xml or require('xml')
+
+require('functions')
+require('tables')
+require('strings')
+
+local functions, table, string = _libs.functions, _libs.tables, _libs.strings
+local files = require('files')
+local xml = require('xml')
 
 local fns = {}
 
@@ -16,6 +18,7 @@ local slots = {}
 
 local language_string = _addon and _addon.language and _addon.language:lower() or windower.ffxi.get_info().language:lower()
 local language_string_log = language_string .. '_log'
+local language_string_short = language_string .. '_short'
 
 -- The metatable for all sub tables of the root resource table
 local resource_mt = {}
@@ -28,9 +31,12 @@ local resources = setmetatable({}, {__index = function(t, k)
     end
 end})
 
+_libs.resources = resources
+
 local redict = {
     name = language_string,
     name_log = language_string_log,
+    name_short = language_string_short,
     english = 'en',
     japanese = 'ja',
     english_log = 'enl',
@@ -51,9 +57,9 @@ function resource_group(r, fn, attr)
     attr = redict[attr] or attr
 
     local res = {}
-    for index, item in pairs(r) do
-        if fn(item[attr]) then
-            res[index] = item
+    for value, id in table.it(r) do
+        if fn(value[attr]) then
+            res[id] = value
         end
     end
 
@@ -61,42 +67,21 @@ function resource_group(r, fn, attr)
     return setmetatable(res, resource_mt)
 end
 
-local resource_alt_fns = {}
-
-resource_alt_fns.it = function(t)
-    local key = nil
-    return function()
-        repeat
-            key = next(t, key)
-        until type(key) == 'number' or type(key) == 'nil'
-        return rawget(t, key), key
-    end
-end
-
-resource_alt_fns.map = function(t, fn)
-    local res = T{}
-
-    for val, key in t:it() do
-        res[key] = fn(val)
-    end
-
-    return res
-end
-
-resource_alt_fns.key_map = function(t, fn)
-    local res = T{}
-
-    for val, key in t:it() do
-        res[fn(key)] = val
-    end
-
-    return res
-end
+resource_mt.__class = 'Resource'
 
 resource_mt.__index = function(t, k)
-    return slots[t]:contains(k) and resource_group:endapply(k) or resource_alt_fns[k] or table[k]
+    local res = slots[t] and slots[t]:contains(k) and resource_group:endapply(k)
+
+    if not res then
+        res = table[k]
+        if class(res) == 'Resource' then
+            slots[res] = slots[t]
+        end
+    end
+
+    return res
 end
-resource_mt.__class = 'Resource'
+
 resource_mt.__tostring = function(t)
     return '{' .. t:map(table.get:endapply('name')):concat(', ') .. '}'
 end
@@ -228,7 +213,7 @@ lookup = {
 return resources
 
 --[[
-Copyright © 2013-2014, Windower
+Copyright © 2013-2015, Windower
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

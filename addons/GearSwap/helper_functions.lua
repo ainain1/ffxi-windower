@@ -1,4 +1,4 @@
---Copyright (c) 2013, Byrthnoth
+--Copyright (c) 2013~2016, Byrthnoth
 --All rights reserved.
 
 --Redistribution and use in source and binary forms, with or without
@@ -100,10 +100,7 @@ end
 ---- Filtered key
 -----------------------------------------------------------------------------------
 function user_key_filter(val)
-    if type(val) == 'string' then
-        val = string.lower(val)
-    end
-    return val
+    return type(val) == 'string' and string.lower(val) or val
 end
 
 
@@ -204,6 +201,45 @@ end
 
 
 -----------------------------------------------------------------------------------
+----Name: to_windower_bag_api(str)
+-- Takes strings and converts them to resources table key format
+----Args:
+-- str - String to be converted to the windower bag API version
+-----------------------------------------------------------------------------------
+----Returns:
+-- a lower case string with ' ' replaced with ''
+-----------------------------------------------------------------------------------
+function to_windower_bag_api(str)
+    return __raw.lower(str:gsub(' ',''))
+end
+
+-----------------------------------------------------------------------------------
+----Name: to_bag_api(str)
+-- Takes strings and converts them to resources table key format
+----Args:
+-- str - String to be converted to the windower bag API version
+-----------------------------------------------------------------------------------
+----Returns:
+-- a lower case string with ' ' eliminated
+-----------------------------------------------------------------------------------
+function to_bag_api(str)
+    return __raw.lower(str:gsub(' ',''))
+end
+
+-----------------------------------------------------------------------------------
+----Name: to_windower_compact(str)
+-- Takes strings and converts them to a compact version of the resource table key
+----Args:
+-- str - String to be converted to the windower API version
+-----------------------------------------------------------------------------------
+----Returns:
+-- a lower case string with ' ' replaced with ''
+-----------------------------------------------------------------------------------
+function to_windower_compact(str)
+    return __raw.lower(str:gsub(' ',''))
+end
+
+-----------------------------------------------------------------------------------
 ----Name: get_job_names()
 -- Returns the short and long form of the job name
 ----Args:
@@ -258,12 +294,13 @@ end
 -- Merges any additional gear sets (...) into the provided base set.
 -- Ensures that only valid slot keys/elements are used in the combined set.
 ----Args:
+-- respect_disable - boolean indicating whether the disable_table should be respected.
 -- baseSet - The set that all the other sets are combined into.  May be an empty set.
 -----------------------------------------------------------------------------------
 ----Returns:
 -- Returns the modified base set, after all other sets have been merged into it.
 -----------------------------------------------------------------------------------
-function set_merge(baseSet, ...)
+function set_merge(respect_disable, baseSet, ...)
     local combineSets = {...}
 
     local canCombine = table.all(combineSets, function(t) return type(t) == 'table' end)
@@ -280,14 +317,14 @@ function set_merge(baseSet, ...)
     -- the slot disabled, assign the item to the not_sent_out_equip table.
     for _,set in pairs(cleanSetsList) do
         for slot,item in pairs(set) do
-            if disable_table[slot_map[slot]] then
+            if respect_disable and disable_table[slot_map[slot]] then
                 not_sent_out_equip[slot] = item
             else
                 baseSet[slot] = item
             end
         end
     end
-
+    
     return baseSet
 end
 
@@ -326,19 +363,24 @@ function parse_set_to_keys(str)
         -- Try aaa.bbb set names first
         while sep == '.' do
             _,_,key,sep,remainder = remainder:find("^([^%.%[]*)(%.?%[?)(.*)")
+            -- "key" is everything that is not . or [ 0 or more times.
+            -- "sep" is the next divider, which is necessarily . or [
+            -- "remainder" is everything after that
             result:append(key)
         end
         
         -- Then try aaa['bbb'] set names.
         -- Be sure to account for both single and double quote enclosures.
         -- Ignore periods contained within quote strings.
-        while sep == '[' do
+        while sep == '[' do 
             _,_,sep,remainder = remainder:find([=[^(%'?%"?)(.*)]=]) --' --block bad text highlighting
+            -- "sep" is the first ' or " found (or nil)
+            -- remainder is everything after that (or nil)
             if sep == "'" then
                 _,_,key,stop,sep,remainder = remainder:find("^([^']+)('])(%.?%[?)(.*)")
             elseif sep == '"' then
                 _,_,key,stop,sep,remainder = remainder:find('^([^"]+)("])(%.?%[?)(.*)')
-            elseif #sep == 0 then
+            elseif not sep or #sep == 0 then
                 -- If there is no single or double quote detected, attempt to treat the index as a number or boolean
                 local _,_,pot_key,pot_stop,pot_sep,pot_remainder = remainder:find('^([^%]]+)(])(%.?%[?)(.*)')
                 if tonumber(pot_key) then
@@ -387,6 +429,31 @@ end
 
 
 -----------------------------------------------------------------------------------
+--Name: initialize_arrow_offset(mob_table)
+--Desc: Returns the current target arrow offset.
+--Args:
+---- mob_table - Monster table of the target monster
+-----------------------------------------------------------------------------------
+--Returns:
+---- table - Keys x, y, and z with the respective current offsets from the target.
+-----------------------------------------------------------------------------------
+function initialize_arrow_offset(mob_table)
+    local backtab = {}
+    local arrow = windower.ffxi.get_info().target_arrow
+    
+    if arrow.x == 0 and arrow.y == 0 and arrow.z == 0 then
+        return arrow
+    end
+    
+    backtab.x = arrow.x-mob_table.x
+    backtab.y = arrow.y-mob_table.y
+    backtab.z = arrow.z-mob_table.z
+    return backtab
+end
+
+
+
+-----------------------------------------------------------------------------------
 --Name: assemble_action_packet(target_id,target_index,category,spell_id)
 --Desc: Puts together an "action" packet (0x1A)
 --Args:
@@ -398,7 +465,7 @@ end
 --Returns:
 ---- string - An action packet. First four bytes are dummy bytes.
 -----------------------------------------------------------------------------------
-function assemble_action_packet(target_id,target_index,category,spell_id)
+function assemble_action_packet(target_id,target_index,category,spell_id,arrow_offset)
     local outstr = string.char(0x1A,0x08,0,0)
     outstr = outstr..string.char( (target_id%256), math.floor(target_id/256)%256, math.floor( (target_id/65536)%256) , math.floor( (target_id/16777216)%256) )
     outstr = outstr..string.char( (target_index%256), math.floor(target_index/256)%256)
@@ -407,9 +474,9 @@ function assemble_action_packet(target_id,target_index,category,spell_id)
     if category == 16 then
         spell_id = 0
     end
-    
-    outstr = outstr..string.char( (spell_id%256), math.floor(spell_id/256)%256)
-    return outstr..string.char(0,0)
+        
+    outstr = outstr..string.char( (spell_id%256), math.floor(spell_id/256)%256)..string.char(0,0) .. 'fff':pack(arrow_offset.x,arrow_offset.z,arrow_offset.y)
+    return outstr
 end
 
 
@@ -433,7 +500,7 @@ function assemble_use_item_packet(target_id,target_index,item_id)
     if inventory_index then
         outstr = outstr..string.char(inventory_index%256)..string.char(0,bag_id,0,0,0)
     else
-        debug_mode_chat('Proposed item: '..(res.items[item_id][language] or item_id)..' not found in inventory.')
+        msg.debugging('Proposed item: '..(res.items[item_id][language] or item_id)..' not found in inventory.')
         return
     end
     return outstr
@@ -464,18 +531,18 @@ function assemble_menu_item_packet(target_id,target_index,...)
             count = count + 1
         end
     end
-    if count > 9 then
-        debug_mode_chat('Too many items ('..count..') passed to the assemble_menu_item_packet function')
-        return
-    end
     
     local unique_items = 0
     for i,v in pairs(counts) do
         outstr = outstr.."I":pack(v)
         unique_items = unique_items + 1
     end
-    for i = 1,10-unique_items do
-        outstr = outstr..string.char(0,0,0,0)
+    if unique_items > 9 then
+        msg.debugging('Too many items ('..unique_items..') passed to the assemble_menu_item_packet function')
+        return
+    end
+    while #outstr < 0x30 do
+        outstr = outstr..string.char(0)
     end
     
     -- Inventory Index for the one unit
@@ -485,11 +552,11 @@ function assemble_menu_item_packet(target_id,target_index,...)
         if inventory_index then
             outstr = outstr..string.char(inventory_index%256)
         else
-            debug_mode_chat('Proposed item: '..(res.items[i][language] or i)..' not found in inventory.')
+            msg.debugging('Proposed item: '..(res.items[i][language] or i)..' not found in inventory.')
             return
         end
     end
-    for i = 1,10-unique_items do
+    while #outstr < 0x3A do
         outstr = outstr..string.char(0)
     end
     -- Target Index
@@ -513,35 +580,13 @@ end
 ---- bag_id - The item's bag ID (if it exists)
 -----------------------------------------------------------------------------------
 function find_usable_item(item_id,bool)
-    local inventory_index,bag_id
-    for i,v in pairs(items.temporary) do
-        if v and v.id == item_id then
-            inventory_index = i
-            bag_id = 3
-            break
-        end
-    end
-    
-    -- Should I add some kind of filter for enchanted items?
-    if not inventory_index then
-        for i,v in pairs(items.inventory) do
-            if v and v.id == item_id and (not bool or is_usable_item(v)) then
-                inventory_index = i
-                bag_id = 0
-                break
+    for _,bag in ipairs(usable_item_bags) do
+        for i,v in pairs(items[to_windower_bag_api(bag.en)]) do
+            if type(v) == 'table' and v.id == item_id and (v.status == 5 or v.status == 0) and (not bool or is_usable_item(v)) then
+                return i, bag.id
             end
         end
     end
-    if not inventory_index then
-        for i,v in pairs(items.wardrobe) do
-            if v and v.id == item_id and (not bool or is_usable_item(v)) then
-                inventory_index = i
-                bag_id = 8
-                break
-            end
-        end
-    end
-    return inventory_index,bag_id
 end
 
 -----------------------------------------------------------------------------------
@@ -560,85 +605,106 @@ function is_usable_item(i_tab)
 end
 
 -----------------------------------------------------------------------------------
+--Name: number_of_jps(jp_tab)
+--Desc: Gives the total number of job points spent on that job
+--Args:
+---- jp_tab - One table from windower.ffxi.get_player().job_points[job]
+-----------------------------------------------------------------------------------
+--Returns:
+---- The total number of job points spent on that job.
+-----------------------------------------------------------------------------------
+function number_of_jps(jp_tab)
+    local count = 0
+    for _,v in pairs(jp_tab) do
+        count = count + v*(v+1)
+    end
+    return count/2
+end
+
+-----------------------------------------------------------------------------------
 --Name: filter_pretarget(spell)
---Desc: Determines whether the current player is capable of using the proposed spell
+--Desc: Determines whether the current player is capable of using the proposed action
 ----    at pretarget.
 --Args:
----- spell - current spell table
+---- action - current action
 -----------------------------------------------------------------------------------
 --Returns:
 ---- false to cancel further command processing and just return the command.
 -----------------------------------------------------------------------------------
-function filter_pretarget(spell)
-    local category = outgoing_action_category_table[unify_prefix[spell.prefix]]
+function filter_pretarget(action)
+    local category = outgoing_action_category_table[unify_prefix[action.prefix]]
+    local bool = true
+    local err
     if world.in_mog_house then
-        debug_mode_chat("Unable to execute commands. Currently in a Mog House zone.")
+        msg.debugging("Unable to execute commands. Currently in a Mog House zone.")
         return false
     elseif category == 3 then
         local available_spells = windower.ffxi.get_spells()
-        local spell_jobs = copy_entry(res.spells[spell.id].levels)
-        
-        -- Filter for spells that you do not know. Exclude Impact.
-        if not available_spells[spell.id] and not spell.id == 503 then
-            debug_mode_chat("Unable to execute command. You do not know that spell ("..(res.spells[spell.id][language] or spell.id)..")")
-        -- Filter for spells that you know, but do not currently have access to
-        elseif (not spell_jobs[player.main_job_id] or not (spell_jobs[player.main_job_id] <= player.main_job_level)) and
-            (not spell_jobs[player.sub_job_id] or not (spell_jobs[player.sub_job_id] <= player.sub_job_level)) then
-            debug_mode_chat("Unable to execute command. You do not have access to that spell ("..(res.spells[spell.id][language] or spell.id)..")")
-            return false
-        -- At this point, we know that it is technically castable by this job combination if the right conditions are met.
-        elseif player.main_job_id == 20 and ((addendum_white[spell.id] and not buffactive[401] and not buffactive[416]) or
-            (addendum_black[spell.id] and not buffactive[402] and not buffactive[416])) and
-            not (spell_jobs[player.sub_job_id] and spell_jobs[player.sub_job_id] <= player.sub_job_level) then
-            
-            if addendum_white[spell.id] then
-                debug_mode_chat("Unable to execute command. Addendum: White required for that spell ("..(res.spells[spell.id][language] or spell.id)..")")
-            end
-            if addendum_black[spell.id] then
-                debug_mode_chat("Unable to execute command. Addendum: Black required for that spell ("..(res.spells[spell.id][language] or spell.id)..")")
-            end
-            return false
-        elseif player.sub_job_id == 20 and ((addendum_white[spell.id] and not buffactive[401] and not buffactive[416]) or
-            (addendum_black[spell.id] and not buffactive[402] and not buffactive[416])) and
-            not (spell_jobs[player.main_job_id] and spell_jobs[player.main_job_id] <= player.main_job_level) then
-                        
-            if addendum_white[spell.id] then
-                debug_mode_chat("Unable to execute command. Addendum: White required for that spell ("..(res.spells[spell.id][language] or spell.id)..")")
-            end
-            if addendum_black[spell.id] then
-                debug_mode_chat("Unable to execute command. Addendum: Black required for that spell ("..(res.spells[spell.id][language] or spell.id)..")")
-            end
-            return false
-        elseif spell.type == 'BlueMagic' and not ((player.main_job_id == 16 and table.contains(windower.ffxi.get_mjob_data().spells,spell.id)) or
-            ((buffactive[485] or buffactive[505]) and unbridled_learning_set[spell.english])) and not
-            (player.sub_job_id == 16 and table.contains(windower.ffxi.get_sjob_data().spells,spell.id)) then
-            -- This code isn't hurting anything, but it doesn't need to be here either.
-            debug_mode_chat("Unable to execute command. Blue magic must be set to cast that spell ("..(res.spells[spell.id][language] or spell.id)..")")
-            return false
-        elseif spell.type == 'Ninjutsu'  then
-            if player.main_job_id ~= 13 and player.sub_job_id ~= 13 then
-                debug_mode_chat("Unable to make action packet. You do not have access to that spell ("..(spell[language] or spell.id)..")")
-                return false
-            elseif not player.inventory[tool_map[spell.english][language]] and not (player.main_job_id == 13 and player.inventory[universal_tool_map[spell.english][language]]) then
-                debug_mode_chat("Unable to make action packet. You do not have the proper tools.")
-                return false
-            end
-        end
+        bool,err = check_spell(available_spells,action)
     elseif category == 7 or category == 9 then
         local available = windower.ffxi.get_abilities()
-        if category == 7 and not S(available.weapon_skills)[spell.id] then
-            debug_mode_chat("Unable to execute command. You do not have access to that ability ("..(res.weapon_skills[spell.id][language] or spell.id)..")")
-            return false
-        elseif category == 9 and not S(available.job_abilities)[spell.id] then
-            debug_mode_chat("Unable to execute command. You do not have access to that ability ("..(res.job_abilities[spell.id][language] or spell.id)..")")
-            return false
+        available = S(available.job_abilities):union(S(available.weapon_skills))
+        if not available[action.id] then
+            bool,err = false,"Unable to excute command. You do not have access to that ability."
         end
-    elseif category == 25 and (not player.main_job_id == 23 or not player.species or not player.species.tp_moves[spell.id] or not (player.species.tp_moves[spell.id] <= player.main_job_level)) then
+    elseif category == 25 and (not player.main_job_id == 23 or not windower.ffxi.get_mjob_data().species or
+        not res.monstrosity[windower.ffxi.get_mjob_data().species] or not res.monstrosity[windower.ffxi.get_mjob_data().species].tp_moves[action.id] or
+        not (res.monstrosity[windower.ffxi.get_mjob_data().species].tp_moves[action.id] <= player.main_job_level)) then
         -- Monstrosity filtering
-        debug_mode_chat("Unable to execute command. You do not have access to that monsterskill ("..(res.monster_abilities[spell.id][language] or spell.id)..")")
+        msg.debugging("Unable to execute command. You do not have access to that monsterskill ("..(res.monster_abilities[action.id][language] or action.id)..")")
         return false
     end
     
+    if err then
+        msg.debugging(err)
+    end
+    return bool
+end
+
+
+-----------------------------------------------------------------------------------
+--Name: check_spell(available_spells,spell)
+--Desc: Determines whether the current player is capable of using the proposed spell
+----    at precast.
+--Args:
+---- available_spells - current set of available spells
+---- spell - current spell table
+-----------------------------------------------------------------------------------
+--Returns:
+---- false if the spell is not currently accessible
+-----------------------------------------------------------------------------------
+function check_spell(available_spells,spell)
+    -- Filter for spells that you do not know. Exclude Impact.
+    local spell_jobs = copy_entry(res.spells[spell.id].levels)
+    if not available_spells[spell.id] and not (spell.id == 503 or spell.id == 417) then
+        return false,"Unable to execute command. You do not know that spell ("..(res.spells[spell.id][language] or spell.id)..")"
+    -- Filter for spells that you know, but do not currently have access to
+    elseif (not spell_jobs[player.main_job_id] or not (spell_jobs[player.main_job_id] <= player.main_job_level or
+        (spell_jobs[player.main_job_id] >= 100 and number_of_jps(player.job_points[__raw.lower(res.jobs[player.main_job_id].ens)]) >= spell_jobs[player.main_job_id]) ) ) and
+        (not spell_jobs[player.sub_job_id] or not (spell_jobs[player.sub_job_id] <= player.sub_job_level)) and not (player.main_job_id == 23) then
+        return false,"Unable to execute command. You do not have access to that spell ("..(res.spells[spell.id][language] or spell.id)..")"
+    -- At this point, we know that it is technically castable by this job combination if the right conditions are met.
+    elseif player.main_job_id == 20 and ((addendum_white[spell.id] and not buffactive[401] and not buffactive[416]) or
+        (addendum_black[spell.id] and not buffactive[402] and not buffactive[416])) and
+        not (spell_jobs[player.sub_job_id] and spell_jobs[player.sub_job_id] <= player.sub_job_level) then
+        return false,"Unable to execute command. Addendum required for that spell ("..(res.spells[spell.id][language] or spell.id)..")"
+    elseif player.sub_job_id == 20 and ((addendum_white[spell.id] and not buffactive[401] and not buffactive[416]) or
+        (addendum_black[spell.id] and not buffactive[402] and not buffactive[416])) and
+        not (spell_jobs[player.main_job_id] and (spell_jobs[player.main_job_id] <= player.main_job_level or
+        (spell_jobs[player.main_job_id] >= 100 and number_of_jps(player.job_points[__raw.lower(res.jobs[player.main_job_id].ens)]) >= spell_jobs[player.main_job_id]) ) ) then
+        return false,"Unable to execute command. Addendum required for that spell ("..(res.spells[spell.id][language] or spell.id)..")"
+    elseif spell.type == 'BlueMagic' and not ((player.main_job_id == 16 and table.contains(windower.ffxi.get_mjob_data().spells,spell.id)) 
+        or unbridled_learning_set[spell.english]) and
+        not (player.sub_job_id == 16 and table.contains(windower.ffxi.get_sjob_data().spells,spell.id)) then
+        -- This code isn't hurting anything, but it doesn't need to be here either.
+        return false,"Unable to execute command. Blue magic must be set to cast that spell ("..(res.spells[spell.id][language] or spell.id)..")"
+    elseif spell.type == 'Ninjutsu'  then
+        if player.main_job_id ~= 13 and player.sub_job_id ~= 13 then
+            return false,"Unable to make action packet. You do not have access to that spell ("..(spell[language] or spell.id)..")"
+        elseif not player.inventory[tool_map[spell.english][language]] and not (player.main_job_id == 13 and player.inventory[universal_tool_map[spell.english][language]]) then
+            return false,"Unable to make action packet. You do not have the proper tools."
+        end
+    end
     return true
 end
 
@@ -655,15 +721,48 @@ end
 -----------------------------------------------------------------------------------
 function filter_precast(spell)
     if not spell.target.id or not spell.target.index then
-        if debugging.general then windower.add_to_chat(8,'No target id or index') end
+        if debugging.general then msg.debugging('No target id or index') end
         return false
     end
     return true
 end
 
 
+local cmd_reg = {}
+Command_Registry = {}
+
+function Command_Registry.new()
+    local new_instance = {_self={last_removed=os.clock()}}
+    local function remove_old_entries (t)
+        -- Removes old command registry entries.
+        for i,v in pairs(t) do
+            local lim = (type(v) == 'table' and (v.spell and v.spell.cast_time and v.spell.cast_time*1.1+2 or
+                v.spell and v.spell.prefix=='/pet' and 5 or
+                v.spell and v.spell.action_type and delay_map_to_action_type[v.spell.action_type] or
+                3) + (v.pretarget_cast_delay or 0) + (v.precast_cast_delay or 0))
+                -- Sets it to normal casting time + 10% +1 for anything with a defined cast_time, or 1 if there is no defined cast time.
+            if tonumber(i) and os.time()-i >= lim then
+                cmd_reg.delete_entry(t,i)
+            end
+        end
+        return os.clock()
+    end
+
+    return setmetatable(new_instance, {__index = function(t, k)
+            if os.clock() - rawget(rawget(t,'_self'),'last_removed') > 0.04 then
+                rawset(rawget(t,'_self'),'last_removed', remove_old_entries(t))
+            end
+            if rawget(cmd_reg, k) ~= nil then
+                return rawget(cmd_reg,k)
+            else
+                return rawget(t,k)
+            end
+        end})
+end
+
+
 -----------------------------------------------------------------------------------
---Name: mk_command_registry_entry(sp)
+--Name: cmd_reg:new_entry(sp)
 --Desc: Makes a new entry in command_registry.
 --Args:
 ---- sp - Resources line for the current spell
@@ -671,50 +770,45 @@ end
 --Returns:
 ---- ts - index for command_registry
 -----------------------------------------------------------------------------------
-function mk_command_registry_entry(sp)
+function cmd_reg:new_entry(sp)
     local ts = os.time()
-    remove_old_command_registry_entries(ts)
-    while command_registry[ts] do
+    while rawget(self,ts) do
         ts = ts+0.001
     end
-    command_registry[ts] = {}
-    command_registry[ts].cast_delay = 0
-    command_registry[ts].spell = sp
-    command_registry[ts].timestamp = ts
+    rawset(self,ts,{pretarget_cast_delay=0, precast_cast_delay=0, cancel_spell=false, new_target=false, current_event='nascent', spell=sp, timestamp=ts,target_arrow={x=0,y=0,z=0}})
     if debugging.command_registry then
-        windower.add_to_chat(8,'GearSwap (Debug Mode): Creating a new command_registry entry: '..windower.to_shift_jis(tostring(ts)..' '..tostring(command_registry[ts])))
+        msg.addon_msg('Creating a new command_registry entry: '..windower.to_shift_jis(tostring(ts)..' '..tostring(self[ts])))
     end
     return ts
 end
 
 
 -----------------------------------------------------------------------------------
---Name: remove_old_command_registry_entries(ts)
---Desc: Removes all command_registry entries more than 20 seconds old.
+--Name: cmd_reg:delete_entry(ts)
+--Desc: Makes a new entry in command_registry.
 --Args:
----- ts - The current time, as obtained from os.time()
+---- ts - timestamp of the command registry entry to be deleted
 -----------------------------------------------------------------------------------
 --Returns:
----- none
+---- bool - true indicates a successful deletion
 -----------------------------------------------------------------------------------
-function remove_old_command_registry_entries(ts)
-    for i,v in pairs(command_registry) do
-        local lim = 20 -- 20 second default limit (good for spells?)
-        if v.spell and v.spell.action_type then
-            if delay_map_to_action_type[v.spell.action_type] then
-                lim = delay_map_to_action_type[v.spell.action_type]
-            end
+function cmd_reg:delete_entry(ts)
+    if rawget(self,ts) then
+        if debugging.command_registry then
+            msg.debugging('Deleting a command_registry entry: '..windower.to_shift_jis(tostring(ts)..' '..tostring(rawget(self,ts))))
         end
-        if ts-i >= lim then
-            command_registry[i] = nil
-        end
+        rawset(self,ts,nil)
+        return true
+    elseif debugging.command_registry then
+        msg.debugging('Attempted to delete a command_registry entry that did not exist: '..windower.to_shift_jis(tostring(ts) ))
     end
+    return false
 end
 
 
 -----------------------------------------------------------------------------------
---Name: find_command_registry_key(typ,value)
---Desc: Returns the proper unified prefix, or "Mosnter " in the case of a monster action
+--Name: cmd_reg:find_by_spell(value)
+--Desc: Returns the proper unified prefix, or "Monster" in the case of a monster action
 --Args:
 ---- typ - 'spell', 'timestamp', or 'id'
 ---- value - The spell, timestamp, or id
@@ -723,92 +817,77 @@ end
 --Returns:
 ---- timestamp index of command_registry
 -----------------------------------------------------------------------------------
-function find_command_registry_key(typ,value)
-    if typ == 'spell' then
-        -- Finds all entries of a given spell in the table.
-        -- Returns the one with the most recent timestamp.
-        -- Actions that do not have timestamps yet (have not hit midcast) are given lowest priority.
-        local potential_entries,current_time,winner,winning_ind = {},os.time()
-        for i,v in pairs(command_registry) do
-            if v.spell and v.spell.prefix == value.prefix and v.spell.name == value.name then
-                potential_entries[i] = v.timestamp or 0
-            elseif v.spell and v.spell.name == 'Double-Up' and value.type == 'CorsairRoll' then
-                -- Double Up ability uses will return action packets that match Corsair Rolls rather than Double Up
-                potential_entries[i] = v.timestamp or 0
-            end
-        end
-        for i,v in pairs(potential_entries) do
-            if not winner or (current_time - v < current_time - winner) then
-                winner = v
-                winning_ind = i
-            end
-        end
-        return winning_ind
-    elseif typ == 'timestamp' then
-        for i,v in pairs(command_registry) do
-            if v.index_timestamp == value then
-                return i
-            end
-        end
-    elseif typ == 'id' then
-        for i,v in pairs(command_registry) do
-            if v.spell and v.spell.target and value == v.spell.target.id then
-                return i
-            end
+function cmd_reg:find_by_spell(value)
+    -- Finds all entries of a given spell in the table.
+    -- Returns the one with the most recent timestamp.
+    -- Actions that do not have timestamps yet (have not hit midcast) are given lowest priority.
+    local potential_entries,current_time,winner,ts = {},os.time()
+    for i,v in pairs(self) do
+        if type(v) == 'table' and v.spell and v.spell.prefix == value.prefix and v.spell.name == value.name then
+            potential_entries[i] = v.timestamp or 0
+        elseif type(v) == 'table' and v.spell and v.spell.name == 'Double-Up' and value.type == 'CorsairRoll' then
+            -- Double Up ability uses will return action packets that match Corsair Rolls rather than Double Up
+            potential_entries[i] = v.timestamp or 0
         end
     end
+    for i,v in pairs(potential_entries) do
+        if not winner or (current_time - v < current_time - winner) then
+            winner = v
+            ts = i
+        end
+    end
+    return ts
 end
 
 
 -----------------------------------------------------------------------------------
---Name: find_command_registry_by_time()
+--Name: cmd_reg:find_by_time()
 --Desc: Finds the most recent command_registry entry
 --Args:
----- target - 'player' or 'pet'
------------------------------------------------------------------------------------
---Returns:
 ---- none
 -----------------------------------------------------------------------------------
-function find_command_registry_by_time(target)
+--Returns:
+---- ts,discovered entry
+-----------------------------------------------------------------------------------
+function cmd_reg:find_by_time(target_time)
     local time_stamp,ts
-    local time_now = os.time()
+    target_time = target_time or os.time()
     
-    -- Iterate over command_registry looking for the spell with the closest timestamp
-    -- possible that matches the target type.
+    -- Iterate over command_registry looking for the spell with the closest timestamp.
     -- Call aftercast with this spell's information (interrupted) if one is found.
-    for i,v in pairs(command_registry) do
-        if not time_stamp or (v.timestamp and ((time_now - v.timestamp) < (time_now - time_stamp))) then
+    for i,v in pairs(self) do
+        if not time_stamp or (type(v) == 'table' and v.timestamp and ((target_time - v.timestamp) < (target_time - time_stamp))) then
             time_stamp = v.timestamp
             ts = i
         end
     end
     if time_stamp then
-        return ts,table.reassign({},command_registry[ts])
+        return ts,table.reassign({},self[ts])
     end
 end
 
 
 -----------------------------------------------------------------------------------
---Name: delete_command_registry_by_id(id)
+--Name: cmd_reg:delete_by_id(id)
 --Desc: Deletes all command_registry entry based that match a given target ID.
 --Args:
 ---- id - ID of the target
 -----------------------------------------------------------------------------------
 --Returns:
----- none
+---- ts,last_entry for the deleted entry
 -----------------------------------------------------------------------------------
-function delete_command_registry_by_id(id)
-    local ts,last_tab
-    for i,v in pairs(command_registry) do
+function cmd_reg:delete_by_id(id)
+    local ts,last_entry
+    for i,v in pairs(self) do
         if v.spell and v.spell.target then
             if v.spell.target.id == id then
-                last_tab = table.reassign({},command_registry[i])
+                last_entry = table.reassign({},self[i])
                 ts = i
-                command_registry[i] = nil
+                self[i] = nil
             end
         end
     end
-    return ts,last_tab
+    return ts,last_entry
 end
 
 
@@ -854,17 +933,18 @@ function get_spell(act)
     else
         if not res.action_messages[msg_ID] or msg_ID == 31 then
             if act.category == 4 or act.category == 8 then
-                spell = copy_entry(res.spells[abil_ID])
+                spell = spell_complete(copy_entry(res.spells[abil_ID]))
                 if act.category == 4 and spell then spell.recast = act.recast end
             elseif T{6,13,14,15}:contains(act.category) then
-                spell = copy_entry(res.job_abilities[abil_ID]) -- May have to correct for charmed pets some day, but I'm not sure there are any monsters with TP moves that give no message.
+                spell = spell_complete(copy_entry(res.job_abilities[abil_ID])) -- May have to correct for charmed pets some day, but I'm not sure there are any monsters with TP moves that give no message.
             elseif T{3,7}:contains(act.category) then
-                spell = copy_entry(res.weapon_skills[abil_ID])
+                spell = spell_complete(copy_entry(res.weapon_skills[abil_ID]))
             elseif T{5,9}:contains(act.category) then
                 spell = copy_entry(res.items[abil_ID])
             else
                 spell = {name=tostring(msg_ID)}
             end
+            
             return spell
         end
         
@@ -933,6 +1013,17 @@ end
 ---- rline - modified resource line
 -----------------------------------------------------------------------------------
 function spell_complete(rline)
+    -- Hardcoded adjustments
+    if rline and rline.skill == 40 and buffactive.Pianissimo and rline.cast_time == 8 then
+        -- Pianissimo halves song casting time for buffs
+        rline.cast_time = 4
+        rline.targets.Party = true
+    end
+    if rline and rline.skill == 44 and buffactive.Entrust and string.find(rline.en,"Indi") then
+        -- Entrust allows Indi- spells to be cast on party members
+        rline.targets.Party = true
+    end
+    
     if rline == nil then
         return {tpaftercast = player.tp, mpaftercast = player.mp, mppaftercast = player.mpp}
     end
@@ -965,23 +1056,6 @@ function spell_complete(rline)
     return rline
 end
 
-
------------------------------------------------------------------------------------
---Name: debug_mode_chat(message)
---Desc: Checks _settings.debug_mode and outputs the message if necessary
---Args:
----- message - The debug message
------------------------------------------------------------------------------------
---Returns:
----- none
------------------------------------------------------------------------------------
-function debug_mode_chat(message)
-    if _settings.debug_mode then
-        windower.add_to_chat(8,"GearSwap (Debug Mode): "..windower.to_shift_jis(tostring(message)))
-    end
-end
-
-
 -----------------------------------------------------------------------------------
 --Name: logit()
 --Args:
@@ -992,13 +1066,65 @@ end
 ---- none
 -----------------------------------------------------------------------------------
 function logit(str)
-    if logging then
+    if debugging.logging then
+        if not logfile and windower.dir_exists('../addons/GearSwap/data/logs') then
+            logfile = io.open('../addons/GearSwap/data/logs/NormalLog'..tostring(os.clock())..'.log','w+')
+            logfile:write('GearSwap LOGGER HEADER\n')
+        end
         logfile:write(str)
         logfile:flush()
     end
 end
 
+msg = {}
 
+-----------------------------------------------------------------------------------
+--Name: msg.add_to_chat(col,str)
+--Args:
+---- col (num): Color to print out in (0x1F,col)
+---- str (string): String to be printed.
+-----------------------------------------------------------------------------------
+--Returns:
+---- none
+-----------------------------------------------------------------------------------
+function msg.add_to_chat(col,str)
+    if str == '' then return end
+    if col == 1 then
+        windower.add_to_chat(1,str)
+    else
+        windower.add_to_chat(1,string.char(0x1F,col%256)..str..string.char(0x1E,0x01))
+    end
+end
+
+-----------------------------------------------------------------------------------
+--Name: msg.debugging(message)
+--Desc: Checks _settings.debug_mode and outputs the message if necessary
+--Args:
+---- message - The debug message
+-----------------------------------------------------------------------------------
+--Returns:
+---- none
+-----------------------------------------------------------------------------------
+function msg.debugging(message)
+    if _settings.debug_mode or debugging.general or debugging.command_registry then
+        msg.add_to_chat(8,"GearSwap (Debug Mode): "..windower.to_shift_jis(tostring(message)))
+    end
+end
+
+-----------------------------------------------------------------------------------
+--Name: msg.addon_msg(col,str)
+--Args:
+---- col (num): Color to print out in (0x1F,col)
+---- str (string): String to be printed.
+-----------------------------------------------------------------------------------
+--Returns:
+---- none
+-----------------------------------------------------------------------------------
+function msg.addon_msg(col,str)
+    msg.add_to_chat(col,'GearSwap: '..str)
+end
+
+-- Set up the priority list structure
 
 -----------------------------------------------------------------------------------
 --Name: prioritize()
@@ -1010,37 +1136,45 @@ end
 --Returns:
 ---- none
 -----------------------------------------------------------------------------------
-function prioritize(priority_list,slot_id,priority)
+function prioritize(self,slot_id,priority)
     if priority and tonumber(priority) then -- Check that priority is number
-        rawset(priority_list,slot_id,priority)
+        rawset(self,slot_id,priority)
         return
     elseif priority then
-        windower.add_to_chat(123,'GearSwap: Invalid priority ('..tostring(priority)..') given')
+        msg.addon_msg(123,'Invalid priority ('..tostring(priority)..') given')
     end
-    rawset(priority_list,slot_id,0)
+    rawset(self,slot_id,0)
 end
 
 
+local priority_list = {}
+
+Priorities = {}
+function Priorities.new()
+    local new_instance = {}
+    return setmetatable(new_instance, { __index = function(t, k) if rawget(t, k) ~= nil then return rawget(t,k) else return rawget(priority_list,k) end end,
+        __newindex=prioritize})
+end
 
 -----------------------------------------------------------------------------------
---Name: priority_order()
+--Name: priority_list:it()
 --Args:
----- priority_list (table): Current list of slot priorities
+---- self (table): Current list of slot priorities
 -----------------------------------------------------------------------------------
 --Returns:
 ---- slot_id : Number from 0~15
 -----------------------------------------------------------------------------------
-function priority_order(priority_list)
+function priority_list:it()
     return function ()
         local maximum,slot_id = -math.huge
         for i=0,15 do
-            if priority_list[i] and (priority_list[i] > maximum or (priority_list[i] == maximum and priority_list[i] == -math.huge)) then
-                maximum = priority_list[i]
+            if self[i] and (self[i] > maximum or (self[i] == maximum and self[i] == -math.huge)) then
+                maximum = self[i]
                 slot_id = i
             end
         end
         if not slot_id then return end
-        priority_list[slot_id] = nil
+        self[slot_id] = nil
         return slot_id,maximum
     end
 end
@@ -1056,7 +1190,7 @@ end
 ---- slot name (string)
 -----------------------------------------------------------------------------------
 function toslotname(slot_id)
-    return default_slot_map[slot_id]
+    return rawget(default_slot_map,slot_id)
 end
 
 

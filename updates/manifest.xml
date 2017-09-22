@@ -1,35 +1,27 @@
 <update>
   <launcher>
-    <version>4.2.5414.29359</version>
+    <version>4.3.6349.32679</version>
   </launcher>
   <hook>
-    <version>4.2.9.0</version>
+    <version>4.3.2.1</version>
   </hook>
   <plugins>
     <plugin>
       <name>LuaCore</name>
-      <version>1.7.13.2</version>
+      <version>2.0.5.2</version>
       <required>true</required>
       <resources>true</resources>
     </plugin>
     <plugin>
-      <name>Attainment</name>
-      <version>2.2.6.9</version>
-      <description>
-        Tracks earned experience, cruor and Dynamis key items.
-      </description>
-      <resources>true</resources>
-    </plugin>
-    <plugin>
       <name>AutoExec</name>
-      <version>2.8.1.5</version>
+      <version>2.8.1.8</version>
       <description>
         Automatically run Windower commands in response to events.
       </description>
     </plugin>
     <plugin>
       <name>Bidder</name>
-      <version>1.4.1.8</version>
+      <version>1.4.1.10</version>
       <description>
         Open auction and delivery box menus anywhere.
       </description>
@@ -37,150 +29,78 @@
     </plugin>
     <plugin>
       <name>Binder</name>
-      <version>1.4.1.1</version>
+      <version>1.4.2.2</version>
       <description>
         Bind to the macro keys on your gaming keyboard or mouse.
       </description>
     </plugin>
     <plugin>
-      <name>BlinkMeNot</name>
-      <version>3.1.0.6</version>
-      <description>
-        Stop yourself or other players from blinking.
-      </description>
-    </plugin>
-    <plugin>
-      <name>BoxHelper</name>
-      <version>1.3.1.4</version>
-      <description>
-        Provides assistance opening Fields of Valor and Grounds of Valor treasure caskets.
-      </description>
-    </plugin>
-    <plugin>
-      <name>Cancel</name>
-      <version>1.0.1.4</version>
-      <description>
-        Adds a Windower command to cancel specific status effects.
-      </description>
-    </plugin>
-    <plugin>
-      <name>ChatLink</name>
-      <version>1.0.1.3</version>
-      <description>
-        Open or copy URLs from in-game.
-      </description>
-    </plugin>
-    <plugin>
       <name>ChatMon</name>
-      <version>1.10.0.3</version>
+      <version>1.10.0.6</version>
       <description>
         Adds an audible alert in response to chat events.
       </description>
     </plugin>
     <plugin>
-      <name>Clock</name>
-      <version>2.4.1.3</version>
-      <resources>true</resources>
+      <name>Config</name>
+      <version>2.0.1.3</version>
       <description>
-        Shows a clock in-game.
-      </description>
-    </plugin>
-    <plugin>
-      <name>ConsoleBG</name>
-      <version>2.3.2.1</version>
-      <description>
-        Adds a background color or image to the Windower console.
+        Adds several configuration options that are automatically applied to characters during play.
       </description>
     </plugin>
     <plugin>
       <name>DelayMeNot</name>
-      <version>1.0.0.1</version>
+      <version>1.0.0.3</version>
       <description>
         Removes the default delay for the macro bar with keyboard controls.
       </description>
     </plugin>
     <plugin>
-      <name>Distance</name>
-      <version>1.3.3.3</version>
-      <description>
-        Adds a display showing the distance to targets
-      </description>
-    </plugin>
-    <plugin>
-      <name>DrawDistance</name>
-      <version>2.2.1.3</version>
-      <description>
-        Extends the default draw distance.
-      </description>
-    </plugin>
-    <plugin>
       <name>FFOChat</name>
-      <version>1.1.0.4</version>
+      <version>1.1.1.2</version>
       <description>
         Chat on the FFOChat IRC server.
       </description>
     </plugin>
     <plugin>
       <name>FFXIDB</name>
-      <version>0.9.2.1</version>
+      <version>0.9.2.13</version>
       <description>
         Displays an in-game minimap.
       </description>
     </plugin>
     <plugin>
-      <name>Find</name>
-      <version>1.0.5.5</version>
-      <description>
-        Quickly locate or keep track of items.
-      </description>
-    </plugin>
-    <plugin>
         <name>FishingCrashFix</name>
-        <version>1.0.0.0</version>
+        <version>1.0.0.2</version>
         <description>
           Fixes the fishing crash introduced in the March 17 fishing update.
         </description>
     </plugin>
     <plugin>
-      <name>GearCollector</name>
-      <version>1.0.4.6</version>
-      <resources>true</resources>
-      <description>
-        Collect and store gear based on your Spellcast XML profiles.
-      </description>
-    </plugin>
-    <plugin>
       <name>Guildwork</name>
-      <version>1.4.2.7</version>
+      <version>1.4.3.5</version>
       <description>
         Interface with guildwork.com
       </description>
     </plugin>
     <plugin>
       <name>IME</name>
-      <version>1.2.1.3</version>
+      <version>1.2.1.6</version>
       <description>
         Allows typing in Japanese using the Windows input method editor.
       </description>
     </plugin>
     <plugin>
       <name>InfoBar</name>
-      <version>1.2.0.8</version>
+      <version>1.2.0.16</version>
       <resources>true</resources>
       <description>
         Displays a configurable bar showing information on your targets.
       </description>
     </plugin>
     <plugin>
-      <name>Itemizer</name>
-      <version>1.2.3.5</version>
-      <description>
-        Automatically moves ninja tools into your inventory before casting.  Also adds a Windower command to manually move items.
-      </description>
-    </plugin>
-    <plugin>
       <name>JaZero</name>
-      <version>1.2.2.9</version>
+      <version>1.2.2.15</version>
       <hidden>true</hidden>
       <description>
         Eliminates the job ability lock.
@@ -188,138 +108,67 @@
     </plugin>
     <plugin>
       <name>LightLuggage</name>
-      <version>4.0.1.1</version>
+      <version>4.0.1.3</version>
       <resources>true</resources>
       <description>
         Automatically stack items in your inventory and lot or pass items.
       </description>
     </plugin>
     <plugin>
-      <name>Logger</name>
-      <version>1.5.1.4</version>
-      <description>
-        Saves a copy of your Final Fantasy XI chat logs.
-      </description>
-    </plugin>
-    <plugin>
-      <name>PetTP</name>
-      <version>2.2.0.7</version>
-      <description>
-        Tracks pet vitals.
-      </description>
-    </plugin>
-    <plugin>
-      <name>PlasticSurgeon</name>
-      <version>1.1.1.5</version>
-      <description>
-        Locally alters your race, gender or face.
-      </description>
-    </plugin>
-    <plugin>
       <name>Run</name>
-      <version>1.3.1.3</version>
+      <version>1.3.1.5</version>
       <description>
         Start or stop external applications through Windower.
       </description>
     </plugin>
     <plugin>
       <name>Sandbox</name>
-      <version>1.0.1.5</version>
+      <version>1.0.1.14</version>
       <description>
-        Fix multiboxing chatlog issues.
+        Fix multiboxing issues by sandboxing elements shared between instances.
       </description>
-    </plugin>
-    <plugin>
-      <name>Silence</name>
-      <version>1.7.2.3</version>
-      <description>
-        Removes gear change spam.
-      </description>
-    </plugin>
-    <plugin>
-      <name>Spellcast</name>
-      <version>2.6.2.19</version>
-      <description>
-        Automatically swap gear based on rule profiles.
-      </description>
-      <hidden>true</hidden>
     </plugin>
     <plugin>
       <name>SSOrganizer</name>
-      <version>1.5.1.6</version>
+      <version>1.5.1.8</version>
       <description>
         Organizes screenshots based on character and area.
       </description>
     </plugin>
     <plugin>
       <name>StatusTimer</name>
-      <version>1.2.2.8</version>
+      <version>1.2.3.2</version>
       <description>
         Displays buff timers below your status effects.
       </description>
     </plugin>
     <plugin>
-      <name>Text</name>
-      <version>1.1.1.3</version>
-      <description>
-        Adds a Windower command to manage text boxes.
-      </description>
-    </plugin>
-    <plugin>
       <name>Tickle</name>
-      <version>1.1.2.3</version>
+      <version>1.1.2.5</version>
       <description>
         Displays the time remaining until your next resting tick.
       </description>
     </plugin>
     <plugin>
       <name>Timers</name>
-      <version>3.4.2.1</version>
+      <version>3.7.4.23</version>
       <resources>true</resources>
       <description>
         Tracks ability and spell recast timers, as well as durations on buffs that you cast.
       </description>
     </plugin>
     <plugin>
-      <name>Timestamp</name>
-      <version>2.2.1.3</version>
-      <description>
-        Adds a timestamp to chat log entries.
-      </description>
-    </plugin>
-    <plugin>
-      <name>TParty</name>
-      <version>1.2.2.9</version>
-      <description>
-        Show TP of party and alliance members and HPP of target.
-      </description>
-    </plugin>
-    <plugin>
-      <name>Unlimited</name>
-      <version>1.0.1.0</version>
-      <description>
-        Removes the game's native 30 FPS cap.
-      </description>
-    </plugin>
-    <plugin>
       <name>WeatherMon</name>
-      <version>1.0.1.8</version>
+      <version>1.0.1.11</version>
       <description>
         Track and play alerts based on weather changes.
       </description>
     </plugin>
     <plugin>
       <name>WinControl</name>
-      <version>1.6.1.4</version>
+      <version>1.6.1.7</version>
       <description>
         Manually control window positioning.
-      </description>
-    </plugin>
-    <plugin>
-      <name>ZoneTimer</name>
-      <version>1.2.1.4</version>
-      <description>
-        Displays a timer showing how long you have been in the current area.
       </description>
     </plugin>
   </plugins>

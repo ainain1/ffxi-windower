@@ -11,18 +11,16 @@
     ex.: 50,250,0,255|30 will draw a 50 yalms magenta circumference and a 30 yalms black circumference
 	-->
     <global>
-        <x>0</x>
-        <y>0</y>
         <zoom>100</zoom>
         <!-- 0~1000 -->
-        <opacity>75</opacity>
+        <Opacity>75</Opacity>
         <!-- 0~100 -->
-        <showpc>true</showpc>
-        <shownpc>true</shownpc>
-        <showmob>true</showmob>
-        <showmarker>true</showmarker>
+        <ShowPC>true</ShowPC>
+        <ShowNPC>true</ShowNPC>
+        <ShowMob>true</ShowMob>
+        <ShowMarker>true</ShowMarker>
         <targetline>true</targetline>
-        <ranges />
+        <Ranges />
         <debugMode>false</debugMode>
         <Zoom>100</Zoom>
         <Opacity>75</Opacity>
@@ -43,7 +41,7 @@
     <>
     <Y>5</Y>
     <Tanag>
-        <X>1492</X>
+        <X>1491</X>
         <Y>3</Y>
         <Zoom>30</Zoom>
     </Tanag>
@@ -171,4 +169,9 @@
         <X>1314</X>
         <Y>59</Y>
     </Ganat>
+    <Tanaga>
+        <Zoom>30</Zoom>
+        <X>1552</X>
+        <Y>36</Y>
+    </Tanaga>
 </settings>

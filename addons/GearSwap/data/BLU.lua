@@ -236,17 +236,16 @@ function init_gear_sets()
     sets.precast.FC = {ammo="Impatiens",
         head="Haruspex Hat",ear2="Loquacious Earring",
         body="Luhlaza Jubbah",hands="Thaumas Gloves",ring1="Prolix Ring",
-        back="Swith Cape +1",waist="Witful Belt",legs="Enif Cosciales",feet="Chelona Boots +1"}
+        back="Swith Cape +1",waist="Witful Belt",legs="Enif Cosciales",feet="Carmine Greaves"}
         
     sets.precast.FC['Blue Magic'] = set_combine(sets.precast.FC, {body="Mavi Mintan +2"})
 
        
     -- Weaponskill sets
     -- Default set for any weaponskill that isn't any more specifically defined
-    sets.precast.WS = {
-        head="Whirlpool Mask",neck=gear.ElementalGorget,ear1="Bladeborn Earring",ear2="Steelflash Earring",
-        body="Qaaxo Harness",hands="Assimilator's Bazubands +1",ring1="Rajas Ring",ring2="Epona's Ring",
-        back="Atheling Mantle",waist=gear.ElementalBelt,legs="Manibozho Brais",feet="Iuitl Gaiters +1"}
+    sets.precast.WS = {ammo="Mantoptera Eye", head="Taeon Chapeau", body="Rawhide Vest", hands="Taeon Gloves", 
+		legs="Taeon Tights", feet="Carmine Greaves", neck="Rancor Collar", waist="Fotia Belt",
+		left_ear="Steelflash Earring",right_ear="Bladeborn Earring",left_ring="Apate Ring",right_ring="Epona's Ring",back="Atheling Mantle"}
     
     sets.precast.WS.acc = set_combine(sets.precast.WS, {hands="Buremte Gloves"})
 
@@ -255,8 +254,12 @@ function init_gear_sets()
 
     sets.precast.WS['Sanguine Blade'] = {
         head="Hagondes Hat",neck="Eddy Necklace",ear1="Friomisi Earring",ear2="Hecate's Earring",
-        body="Hagondes Coat",hands="Mavi Bazubands +2",ring1="Acumen Ring",ring2="Strendu Ring",
+        body="Hagondes Coat +1",hands="Mavi Bazubands +2",ring1="Acumen Ring",ring2="Strendu Ring",
         back="Toro Cape",legs="Hagondes Pants",feet="Iuitl Gaiters +1"}
+		
+	sets.precast.WS['Chant du Cygne'] = {ammo="Mantoptera Eye", head="Taeon Chapeau", body="Rawhide Vest", hands="Taeon Gloves", 
+		legs="Taeon Tights", feet="Carmine Greaves", neck="Rancor Collar", waist="Fotia Belt",
+		left_ear="Steelflash Earring",right_ear="Bladeborn Earring",left_ring="Apate Ring",right_ring="Epona's Ring",back="Atheling Mantle"}
     
     
     -- Midcast Sets
@@ -270,20 +273,20 @@ function init_gear_sets()
     -- Physical Spells --
     
     sets.midcast['Blue Magic'].Physical = {ammo="Mavi Tathlum",
-        head="Whirlpool Mask",neck="Ej Necklace",ear1="Heartseeker Earring",ear2="Steelflash Earring",
-        body="Vanir Cotehardie",hands="Buremte Gloves",ring1="Rajas Ring",ring2="Spiral Ring",
-        back="Cornflower Cape",waist="Caudata Belt",legs="Nahtirah Trousers",feet="Qaaxo Leggings"}
+        head="Taeon Chapeau",neck="Asperity Necklace",ear1="Suppanomimi",ear2="Brutal Earring",
+        body="Rawhide Vest",hands="Assimilator's Bazubands +1",ring1="Rajas Ring",ring2="Epona's Ring",
+        back="Atheling Mantle",waist="Windbuffet Belt",legs="Taeon Tights",feet="Carmine Greaves"}
 
-    sets.midcast['Blue Magic'].PhysicalAcc = {ammo="Jukukik Feather",
-        head="Whirlpool Mask",neck="Ej Necklace",ear1="Heartseeker Earring",ear2="Steelflash Earring",
-        body="Luhlaza Jubbah",hands="Buremte Gloves",ring1="Rajas Ring",ring2="Patricius Ring",
-        back="Letalis Mantle",waist="Hurch'lan Sash",legs="Manibozho Brais",feet="Qaaxo Leggings"}
+    sets.midcast['Blue Magic'].PhysicalAcc = {ammo="Mantoptera Eye",
+        head="Taeon Chapeau",neck="Iqabi Necklace",ear1="Suppanomimi",ear2="Brutal Earring",
+        body="Rawhide Vest",hands="Assimilator's Bazubands +1",ring1="Rajas Ring",ring2="Epona's Ring",
+        back="Atheling Mantle",waist="Windbuffet Belt",legs="Taeon Tights",feet="Carmine Greaves"}
 
     sets.midcast['Blue Magic'].PhysicalStr = set_combine(sets.midcast['Blue Magic'].Physical,
         {body="Iuitl Vest",hands="Assimilator's Bazubands +1"})
 
     sets.midcast['Blue Magic'].PhysicalDex = set_combine(sets.midcast['Blue Magic'].Physical,
-        {ammo="Jukukik Feather",body="Iuitl Vest",hands="Assimilator's Bazubands +1",
+        {ammo="Mantoptera Eye",body="Iuitl Vest",hands="Assimilator's Bazubands +1",
          waist="Chaac Belt",legs="Manibozho Brais"})
 
     sets.midcast['Blue Magic'].PhysicalVit = set_combine(sets.midcast['Blue Magic'].Physical,
@@ -310,10 +313,9 @@ function init_gear_sets()
 
     -- Magical Spells --
     
-    sets.midcast['Blue Magic'].Magical = {ammo="Dosis Tathlum",
-        head="Hagondes Hat",neck="Eddy Necklace",ear1="Friomisi Earring",ear2="Hecate's Earring",
-        body="Hagondes Coat",hands="Mavi Bazubands +2",ring1="Icesoul Ring",ring2="Acumen Ring",
-        back="Cornflower Cape",waist="Caudata Belt",legs="Hagondes Pants",feet="Hagondes Sabots"}
+    sets.midcast['Blue Magic'].Magical = {main="Homestead Wand",sub="Eminent Wand",ammo="Impatiens",head="Helios Band", 
+		body="Hagondes Coat +1",hands="Helios Gloves",legs="Helios Spats",feet="Tutyr Sabots",neck="Baetyl Pendant",waist="Fotia Belt",
+		left_ear="Hecate's Earring",right_ear="Strophadic Earring",left_ring="Shiva Ring",right_ring="Shiva Ring",back="Toro Cape"}
 
     sets.midcast['Blue Magic'].Magical.Resistant = set_combine(sets.midcast['Blue Magic'].Magical,
         {body="Vanir Cotehardie",ring1="Sangoma Ring",legs="Iuitl Tights",feet="Mavi Basmak +2"})
@@ -328,10 +330,9 @@ function init_gear_sets()
 
     sets.midcast['Blue Magic'].MagicalDex = set_combine(sets.midcast['Blue Magic'].Magical)
 
-    sets.midcast['Blue Magic'].MagicAccuracy = {ammo="Mavi Tathlum",
-        head="Luhlaza Keffiyeh",neck="Ej Necklace",ear1="Lifestorm Earring",ear2="Psystorm Earring",
-        body="Vanir Cotehardie",hands=gear.macc_hagondes,ring2="Sangoma Ring",
-        back="Cornflower Cape",legs="Iuitl Tights",feet="Iuitl Gaiters +1"}
+    sets.midcast['Blue Magic'].MagicAccuracy = {ammo="Mavi Tathlum",head="Helios Band", 
+		body="Hagondes Coat +1",hands="Helios Gloves",legs="Helios Spats",feet="Tutyr Sabots",neck="Baetyl Pendant",waist="Fotia Belt",
+		left_ear="Hecate's Earring",right_ear="Strophadic Earring",left_ring="Shiva Ring",right_ring="Shiva Ring",back="Toro Cape"}
 
     -- Breath Spells --
     
@@ -384,24 +385,24 @@ function init_gear_sets()
     -- Resting sets
     sets.resting = {
         head="Ocelomeh Headpiece +1",neck="Wiglen Gorget",
-        body="Hagondes Coat",hands="Serpentes Cuffs",ring1="Sheltered Ring",ring2="Paguroidea Ring",
+        body="Respite Cloak",hands="Serpentes Cuffs",ring1="Sheltered Ring",ring2="Paguroidea Ring",
         waist="Austerity Belt",feet="Chelona Boots +1"}
     
     -- Idle sets
-    sets.idle = {ammo="Impatiens",
-        head="Whirlpool Mask",neck="Wiglen Gorget",ear1="Bloodgem Earring",ear2="Loquacious Earring",
-        body="Hagondes Coat",hands="Serpentes Cuffs",ring1="Defending Ring",ring2="Paguroidea Ring",
-        back="Shadow Mantle",waist="Flume Belt",legs="Crimson Cuisses",feet="Serpentes Sabots"}
+    sets.idle = {ammo="Mantoptera Eye",
+        head="Taeon Chapeau",neck="Asperity Necklace",ear1="Suppanomimi",ear2="Brutal Earring",
+        body="Assimilator's Jubbah +1",hands="Assimilator's Bazubands +1",ring1="Rajas Ring",ring2="Epona's Ring",
+        back="Atheling Mantle",waist="Windbuffet Belt",legs="Crimson Cuisses",feet="Carmine Greaves"}
 
     sets.idle.PDT = {ammo="Impatiens",
         head="Whirlpool Mask",neck="Wiglen Gorget",ear1="Bloodgem Earring",ear2="Loquacious Earring",
-        body="Hagondes Coat",hands="Iuitl Wristbands",ring1="Defending Ring",ring2="Paguroidea Ring",
+        body="Hagondes Coat +1",hands="Iuitl Wristbands",ring1="Defending Ring",ring2="Paguroidea Ring",
         back="Shadow Mantle",waist="Flume Belt",legs="Crimson Cuisses",feet="Iuitl Gaiters +1"}
 
-    sets.idle.Town = {main="Buramenk'ah",ammo="Impatiens",
-        head="Mavi Kavuk +2",neck="Wiglen Gorget",ear1="Bloodgem Earring",ear2="Loquacious Earring",
-        body="Luhlaza Jubbah",hands="Assimilator's Bazubands +1",ring1="Sheltered Ring",ring2="Paguroidea Ring",
-        back="Atheling Mantle",waist="Flume Belt",legs="Crimson Cuisses",feet="Luhlaza Charuqs"}
+    sets.idle.Town = {ammo="Mantoptera Eye",
+        head="Taeon Chapeau",neck="Asperity Necklace",ear1="Suppanomimi",ear2="Brutal Earring",
+        body="Assimilator's Jubbah +1",hands="Assimilator's Bazubands +1",ring1="Rajas Ring",ring2="Epona's Ring",
+        back="Atheling Mantle",waist="Windbuffet Belt",legs="Crimson Cuisses",feet="Carmine Greaves"}
 
     sets.idle.Learning = set_combine(sets.idle, sets.Learning)
 
@@ -414,45 +415,45 @@ function init_gear_sets()
 
     sets.defense.MDT = {ammo="Demonry Stone",
         head="Whirlpool Mask",neck="Twilight Torque",ear1="Bloodgem Earring",
-        body="Hagondes Coat",hands="Iuitl Wristbands",ring1="Defending Ring",ring2="Shadow Ring",
+        body="Hagondes Coat +1",hands="Iuitl Wristbands",ring1="Defending Ring",ring2="Shadow Ring",
         back="Engulfer Cape",waist="Flume Belt",legs="Nahtirah Trousers",feet="Iuitl Gaiters +1"}
 
     sets.Kiting = {legs="Crimson Cuisses"}
 
     -- Engaged sets
 
-    -- Variations for TP weapon and (optional) offense/defense modes.  Code will fall back on previous
+    -- Variations for  weapon and (optional) offense/defense modes.  Code will fall back on previous
     -- sets if more refined versions aren't defined.
     -- If you create a set with both offense and defense modes, the offense mode should be first.
     -- EG: sets.engaged.Dagger.Accuracy.Evasion
     
     -- Normal melee group
-    sets.engaged = {ammo="Jukukik Feather",
-        head="Whirlpool Mask",neck="Asperity Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
-        body="Luhlaza Jubbah",hands="Assimilator's Bazubands +1",ring1="Rajas Ring",ring2="Epona's Ring",
-        back="Atheling Mantle",waist="Windbuffet Belt",legs="Manibozho Brais",feet="Iuitl Gaiters +1"}
+    sets.engaged = {ammo="Mantoptera Eye",
+        head="Taeon Chapeau",neck="Asperity Necklace",ear1="Suppanomimi",ear2="Brutal Earring",
+        body="Rawhide Vest",hands="Assimilator's Bazubands +1",ring1="Rajas Ring",ring2="Epona's Ring",
+        back="Atheling Mantle",waist="Windbuffet Belt",legs="Taeon Tights",feet="Carmine Greaves"}
 
-    sets.engaged.Acc = {ammo="Jukukik Feather",
-        head="Whirlpool Mask",neck="Ej Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
-        body="Luhlaza Jubbah",hands="Buremte Gloves",ring1="Rajas Ring",ring2="Epona's Ring",
-        back="Letalis Mantle",waist="Hurch'lan Sash",legs="Manibozho Brais",feet="Qaaxo Leggings"}
+    sets.engaged.Acc = {ammo="Mantoptera Eye",
+        head="Taeon Chapeau",neck="Iqabi Necklace",ear1="Suppanomimi",ear2="Brutal Earring",
+        body="Rawhide Vest",hands="Taeon Gloves",ring1="Rajas Ring",ring2="Epona's Ring",
+        back="Atheling Mantle",waist="Windbuffet Belt",legs="Taeon Tights",feet="Carmine Greaves"}
 
-    sets.engaged.Refresh = {ammo="Jukukik Feather",
+    sets.engaged.Refresh = {ammo="Mantoptera Eye",
         head="Whirlpool Mask",neck="Asperity Necklace",ear1="Bladeborn Earring",ear2="Steelflash Earring",
         body="Luhlaza Jubbah",hands="Assimilator's Bazubands +1",ring1="Rajas Ring",ring2="Epona's Ring",
         back="Atheling Mantle",waist="Windbuffet Belt",legs="Manibozho Brais",feet="Qaaxo Leggings"}
 
-    sets.engaged.DW = {ammo="Jukukik Feather",
-        head="Whirlpool Mask",neck="Asperity Necklace",ear1="Heartseeker Earring",ear2="Dudgeon Earring",
-        body="Luhlaza Jubbah",hands="Assimilator's Bazubands +1",ring1="Rajas Ring",ring2="Epona's Ring",
-        back="Atheling Mantle",waist="Windbuffet Belt",legs="Manibozho Brais",feet="Iuitl Gaiters +1"}
+    sets.engaged.DW = {ammo="Mantoptera Eye",
+        head="Taeon Chapeau",neck="Asperity Necklace",ear1="Suppanomimi",ear2="Brutal Earring",
+        body="Rawhide Vest",hands="Assimilator's Bazubands +1",ring1="Rajas Ring",ring2="Epona's Ring",
+        back="Atheling Mantle",waist="Windbuffet Belt",legs="Taeon Tights",feet="Carmine Greaves"}
 
-    sets.engaged.DW.Acc = {ammo="Jukukik Feather",
-        head="Whirlpool Mask",neck="Ej Necklace",ear1="Heartseeker Earring",ear2="Dudgeon Earring",
-        body="Luhlaza Jubbah",hands="Buremte Gloves",ring1="Rajas Ring",ring2="Epona's Ring",
-        back="Letalis Mantle",waist="Hurch'lan Sash",legs="Manibozho Brais",feet="Qaaxo Leggings"}
+    sets.engaged.DW.Acc = {ammo="Mantoptera Eye",
+        head="Taeon Chapeau",neck="Iqabi Necklace",ear1="Suppanomimi",ear2="Brutal Earring",
+        body="Rawhide Vest",hands="Taeon Gloves",ring1="Rajas Ring",ring2="Epona's Ring",
+        back="Atheling Mantle",waist="Windbuffet Belt",legs="Taeon Tights",feet="Carmine Greaves"}
 
-    sets.engaged.DW.Refresh = {ammo="Jukukik Feather",
+    sets.engaged.DW.Refresh = {ammo="Mantoptera Eye",
         head="Whirlpool Mask",neck="Asperity Necklace",ear1="Heartseeker Earring",ear2="Dudgeon Earring",
         body="Luhlaza Jubbah",hands="Assimilator's Bazubands +1",ring1="Rajas Ring",ring2="Epona's Ring",
         back="Letalis Mantle",waist="Windbuffet Belt",legs="Manibozho Brais",feet="Qaaxo Leggings"}

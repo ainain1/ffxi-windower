@@ -54,10 +54,12 @@ return {
     [50] = {id=50,en="The Adoulin Islands",ja="アドゥリン諸島"},
     [51] = {id=51,en="East Ulbuka Territory",ja="東ウルブカ地方"},
     [52] = {id=52,en="Ra'Kaznar",ja="ラ・カザナル"},
+    [53] = {id=53,en="Escha",ja="エスカ"},
+    [54] = {id=54,en="Far East",ja="ひんがし"},
 }, {"id", "en", "ja"}
 
 --[[
-Copyright © 2013-2014, Windower
+Copyright © 2013-2017, Windower
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

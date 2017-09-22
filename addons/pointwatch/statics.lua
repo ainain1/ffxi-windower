@@ -29,7 +29,8 @@
 default_settings = {
     strings = {
         default = "xp.current..'/'..xp.tnl..'XP   '..lp.current..'/'..lp.tnm..'LP ['..lp.number_of_merits..'/'..lp.maximum_merits..']   XP/hr:'..string.format('%.1f',math.floor(xp.rate/100)/10)..'k   '..cp.current..'/'..cp.tnjp..'CP ['..cp.number_of_job_points..']   CP/hr:'..string.format('%.1f',math.floor(cp.rate/100)/10)..'k'",
-        dynamis = "xp.current..'/'..xp.tnl..'XP   '..lp.current..'/'..lp.tnm..'LP ['..lp.number_of_merits..'/'..lp.maximum_merits..']   XP/hr:'..string.format('%.1f',math.floor(xp.rate/100)/10)..'k   '..cp.current..'/'..cp.tnjp..'CP ['..cp.number_of_job_points..']   '..dynamis.KIs..'  '..dynamis.time_remaining"
+        dynamis = "xp.current..'/'..xp.tnl..'XP   '..lp.current..'/'..lp.tnm..'LP ['..lp.number_of_merits..'/'..lp.maximum_merits..']   XP/hr:'..string.format('%.1f',math.floor(xp.rate/100)/10)..'k   '..cp.current..'/'..cp.tnjp..'CP ['..cp.number_of_job_points..']   '..dynamis.KIs..'  '..dynamis.time_remaining",
+        abyssea = "xp.current..'/'..xp.tnl..'XP   '..lp.current..'/'..lp.tnm..'LP ['..lp.number_of_merits..'/'..lp.maximum_merits..']   XP/hr:'..string.format('%.1f',math.floor(xp.rate/100)/10)..'k   Amber:'..(abyssea.amber or 0)..'/Azure:'..(abyssea.azure or 0)..'/Ruby:'..(abyssea.ruby or 0)..'/Pearlescent:'..(abyssea.pearlescent or 0)..'/Ebon:'..(abyssea.ebon or 0)..'/Silvery:'..(abyssea.silvery or 0)..'/Golden:'..(abyssea.golden or 0)..'/Time Remaining:'..(abyssea.time_remaining or 0)"
         },
     text_box_settings = {
         pos = {
@@ -67,6 +68,9 @@ default_settings = {
 
 -- Approved textbox commands:
 approved_commands = S{'show','hide','pos','pos_x','pos_y','font','size','pad','color','alpha','transparency','bg_color','bg_alpha','bg_transparency'}
+approved_commands = {show={n=0},hide={n=0},pos={n=2,t='number'},pos_x={n=1,t='number'},pos_y={n=1,t='number'},
+    font={n=2,t='string'},size={n=1,t='number'},pad={n=1,t='number'},color={n=3,t='number'},alpha={n=1,t='number'},
+    transparency={n=1,t='number'},bg_color={n=3,t='number'},bg_alpha={n=1,t='number'},bg_transparency={n=1,t='number'}}
 
 
 -- Dynamis TE lists:
@@ -87,6 +91,7 @@ function initialize()
         total = 0,
         tnjp = 30000,
         number_of_job_points = 0,
+        maximum_job_points = 500,
     }
 
     
@@ -108,7 +113,12 @@ function initialize()
     
     sparks = {
         current = 0,
-        maximum = 50000,
+        maximum = 99999,
+    }
+    
+    accolades = {
+        current = 0,
+        maximum = 99999,
     }
     
     abyssea = {
@@ -119,6 +129,7 @@ function initialize()
         ebon = 0,
         silvery = 0,
         golden = 0,
+        update_time = 0,
         time_remaining = 0,
     }
     
@@ -139,7 +150,7 @@ function initialize()
         setfenv(cur_func,_G)
         dynamis.entry_time = os.clock()
         dynamis.zone = info.zone
-        error(123,'Loading PointWatch in Dynamis results in an inaccurate timer. Number of KIs is displayed.')
+        windower.add_to_chat(123,'Loading PointWatch in Dynamis results in an inaccurate timer. Number of KIs is displayed.')
     elseif info.logged_in then
         cur_func = loadstring("current_string = "..settings.strings.default)
         setfenv(cur_func,_G)

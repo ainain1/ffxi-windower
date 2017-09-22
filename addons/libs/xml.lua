@@ -2,15 +2,19 @@
     Small implementation of a fully-featured XML reader.
 ]]
 
+_libs = _libs or {}
+
+require('tables')
+require('lists')
+require('sets')
+require('strings')
+
+local table, list, set, string = _libs.tables, _libs.lists, _libs.sets, _libs.strings
+local files = require('files')
+
 local xml = {}
 
-_libs = _libs or {}
 _libs.xml = xml
-_libs.tables = _libs.tables or require('tables')
-_libs.lists = _libs.lists or require('lists')
-_libs.sets = _libs.sets or require('sets')
-_libs.strings = _libs.strings or require('strings')
-_libs.files = _libs.files or require('files')
 
 -- Local functions
 local entity_unescape
@@ -18,7 +22,6 @@ local xml_error
 local pcdata
 local attribute
 local validate_headers
-local parse
 local tokenize
 local get_namespace
 local classify
@@ -80,7 +83,7 @@ function xml.read(file)
         return xml_error('File not found: '..file.path)
     end
 
-    return parse(file:read())
+    return xml.parse(file:read())
 end
 
 -- Returns nil as the parsed table and an additional error message with an optional line number.
@@ -106,7 +109,7 @@ function validate_headers(headers)
 end
 
 -- Parsing function. Gets a string representation of an XML object and outputs a Lua table or an error message.
-function parse(content)
+function xml.parse(content)
     local quote = nil
     local headers = T{xmlhead='', dtds=T{}}
     local tag = ''
@@ -292,7 +295,14 @@ end
 -- Definition of a DOM object.
 local dom = T{}
 function dom.new(t)
-    return T{type='', name='', namespace=nil, value=nil, children=L{}}:update(t)
+    return T{
+        type = '',
+        name = '',
+        namespace = nil,
+        value = nil,
+        children = L{},
+        cdata = nil
+    }:update(t)
 end
 
 -- Returns the name of the element and the namespace, if present.
@@ -321,7 +331,7 @@ function classify(tokens, var)
     for line, intokens in ipairs(tokens) do
         for _, token in ipairs(intokens) do
             if token:startswith('<![CDATA[') then
-                parsed:last().children:append(dom.new({type = 'text', value = token:sub(10, -4)}))
+                parsed:last().children:append(dom.new({type = 'text', value = token:sub(10, -4), cdata = true}))
 
             elseif token:startswith('<!--') then
                 parsed:last().children:append(dom.new({type = 'comment', value = token:sub(5, -4)}))
@@ -573,7 +583,7 @@ end
 return xml
 
 --[[
-Copyright (c) 2013, Windower
+Copyright © 2013, Windower
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

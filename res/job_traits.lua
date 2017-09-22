@@ -111,10 +111,14 @@ return {
     [121] = {id=121,en="Inspiration",ja="インスパイア",element=6,icon_id=46,range=0,targets=0},
     [122] = {id=122,en="Sleight of Sword",ja="スライトソード",element=2,icon_id=42,range=0,targets=0},
     [123] = {id=123,en="Daken",ja="打剣",element=6,icon_id=46,range=0,targets=0},
+    [124] = {id=124,en="Superior",ja="スペリア",element=6,icon_id=46,range=0,targets=0},
+    [125] = {id=125,en="Magic Acc. Bonus",ja="魔法命中率アップ",element=6,icon_id=46,range=0,targets=0},
+    [126] = {id=126,en="Magic Eva. Bonus",ja="魔法回避率アップ",element=7,icon_id=47,range=0,targets=0},
+    [127] = {id=127,en="Smite",ja="スマイト",element=0,icon_id=40,range=0,targets=0},
 }, {"id", "en", "ja", "element", "icon_id", "range", "targets"}
 
 --[[
-Copyright © 2013-2014, Windower
+Copyright © 2013-2017, Windower
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

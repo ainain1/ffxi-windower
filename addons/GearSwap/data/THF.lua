@@ -81,12 +81,12 @@ function init_gear_sets()
 
     sets.buff['Sneak Attack'] = {ammo="Qirmiz Tathlum",
         head="Pillager's Bonnet +1",neck="Asperity Necklace",ear1="Dudgeon Earring",ear2="Heartseeker Earring",
-        body="Pillager's Vest +1",hands="Pillager's Armlets +1",ring1="Rajas Ring",ring2="Epona's Ring",
+        body="Pillager's Vest +1",hands="Pillager's Armlets",ring1="Rajas Ring",ring2="Epona's Ring",
         back="Atheling Mantle",waist="Patentia Sash",legs="Pillager's Culottes +1",feet="Plunderer's Poulaines +1"}
 
     sets.buff['Trick Attack'] = {ammo="Qirmiz Tathlum",
         head="Pillager's Bonnet +1",neck="Asperity Necklace",ear1="Dudgeon Earring",ear2="Heartseeker Earring",
-        body="Pillager's Vest +1",hands="Pillager's Armlets +1",ring1="Stormsoul Ring",ring2="Epona's Ring",
+        body="Pillager's Vest +1",hands="Pillager's Armlets",ring1="Stormsoul Ring",ring2="Epona's Ring",
         back="Atheling Mantle",waist="Patentia Sash",legs="Pillager's Culottes +1",feet="Plunderer's Poulaines +1"}
 
     -- Actions we want to use to tag TH.
@@ -105,7 +105,7 @@ function init_gear_sets()
     sets.precast.JA['Flee'] = {feet="Pillager's Poulaines +1"}
     sets.precast.JA['Hide'] = {body="Pillager's Vest +1"}
     sets.precast.JA['Conspirator'] = {} -- {body="Raider's Vest +2"}
-    sets.precast.JA['Steal'] = {head="Plunderer's Bonnet",hands="Pillager's Armlets +1",legs="Pillager's Culottes +1",feet="Pillager's Poulaines +1"}
+    sets.precast.JA['Steal'] = {head="Plunderer's Bonnet",hands="Pillager's Armlets",legs="Pillager's Culottes +1",feet="Pillager's Poulaines +1"}
     sets.precast.JA['Despoil'] = {legs="Raider's Culottes +2",feet="Raider's Poulaines +2"}
     sets.precast.JA['Perfect Dodge'] = {hands="Plunderer's Armlets +1"}
     sets.precast.JA['Feint'] = {} -- {legs="Assassin's Culottes +2"}
@@ -117,7 +117,7 @@ function init_gear_sets()
     -- Waltz set (chr and vit)
     sets.precast.Waltz = {ammo="Sonia's Plectrum",
         head="Whirlpool Mask",
-        body="Pillager's Vest +1",hands="Pillager's Armlets +1",ring1="Asklepian Ring",
+        body="Pillager's Vest +1",hands="Pillager's Armlets",ring1="Asklepian Ring",
         back="Iximulew Cape",waist="Caudata Belt",legs="Pillager's Culottes +1",feet="Plunderer's Poulaines +1"}
 
     -- Don't need any special gear for Healing Waltz.
@@ -139,7 +139,7 @@ function init_gear_sets()
     -- Default set for any weaponskill that isn't any more specifically defined
     sets.precast.WS = {ammo="Thew Bomblet",
         head="Whirlpool Mask",neck=gear.ElementalGorget,ear1="Bladeborn Earring",ear2="Steelflash Earring",
-        body="Pillager's Vest +1",hands="Pillager's Armlets +1",ring1="Rajas Ring",ring2="Epona's Ring",
+        body="Pillager's Vest +1",hands="Pillager's Armlets",ring1="Rajas Ring",ring2="Epona's Ring",
         back="Atheling Mantle",waist="Caudata Belt",legs="Manibozho Brais",feet="Iuitl Gaiters +1"}
     sets.precast.WS.Acc = set_combine(sets.precast.WS, {ammo="Honed Tathlum", back="Letalis Mantle"})
 
@@ -198,7 +198,7 @@ function init_gear_sets()
 
     sets.precast.WS['Aeolian Edge'] = {ammo="Jukukik Feather",
         head="Wayfarer Circlet",neck="Stoicheion Medal",ear1="Friomisi Earring",ear2="Moonshade Earring",
-        body="Wayfarer Robe",hands="Pillager's Armlets +1",ring1="Acumen Ring",ring2="Demon's Ring",
+        body="Wayfarer Robe",hands="Pillager's Armlets",ring1="Acumen Ring",ring2="Demon's Ring",
         back="Toro Cape",waist=gear.ElementalBelt,legs="Shneddick Tights +1",feet="Wayfarer Clogs"}
 
     sets.precast.WS['Aeolian Edge'].TH = set_combine(sets.precast.WS['Aeolian Edge'], sets.TreasureHunter)
@@ -210,13 +210,13 @@ function init_gear_sets()
 
     sets.midcast.FastRecast = {
         head="Whirlpool Mask",ear2="Loquacious Earring",
-        body="Pillager's Vest +1",hands="Pillager's Armlets +1",
+        body="Pillager's Vest +1",hands="Pillager's Armlets",
         back="Canny Cape",legs="Kaabnax Trousers",feet="Iuitl Gaiters +1"}
 
     -- Specific spells
     sets.midcast.Utsusemi = {
         head="Whirlpool Mask",neck="Ej Necklace",ear2="Loquacious Earring",
-        body="Pillager's Vest +1",hands="Pillager's Armlets +1",ring1="Beeline Ring",
+        body="Pillager's Vest +1",hands="Pillager's Armlets",ring1="Beeline Ring",
         back="Canny Cape",legs="Kaabnax Trousers",feet="Iuitl Gaiters +1"}
 
     -- Ranged gear
@@ -244,7 +244,7 @@ function init_gear_sets()
 
     sets.idle = {ammo="Thew Bomblet",
         head="Pillager's Bonnet +1",neck="Wiglen Gorget",ear1="Dudgeon Earring",ear2="Heartseeker Earring",
-        body="Pillager's Vest +1",hands="Pillager's Armlets +1",ring1="Sheltered Ring",ring2="Paguroidea Ring",
+        body="Pillager's Vest +1",hands="Pillager's Armlets",ring1="Sheltered Ring",ring2="Paguroidea Ring",
         back="Shadow Mantle",waist="Flume Belt",legs="Pillager's Culottes +1",feet="Skadi's Jambeaux +1"}
 
     sets.idle.Town = {main="Izhiikoh", sub="Sabebus",ammo="Thew Bomblet",
@@ -254,7 +254,7 @@ function init_gear_sets()
 
     sets.idle.Weak = {ammo="Thew Bomblet",
         head="Pillager's Bonnet +1",neck="Wiglen Gorget",ear1="Dudgeon Earring",ear2="Heartseeker Earring",
-        body="Pillager's Vest +1",hands="Pillager's Armlets +1",ring1="Sheltered Ring",ring2="Paguroidea Ring",
+        body="Pillager's Vest +1",hands="Pillager's Armlets",ring1="Sheltered Ring",ring2="Paguroidea Ring",
         back="Shadow Mantle",waist="Flume Belt",legs="Pillager's Culottes +1",feet="Skadi's Jambeaux +1"}
 
 
@@ -262,17 +262,17 @@ function init_gear_sets()
 
     sets.defense.Evasion = {
         head="Pillager's Bonnet +1",neck="Ej Necklace",
-        body="Qaaxo Harness",hands="Pillager's Armlets +1",ring1="Defending Ring",ring2="Beeline Ring",
+        body="Qaaxo Harness",hands="Pillager's Armlets",ring1="Defending Ring",ring2="Beeline Ring",
         back="Canny Cape",waist="Flume Belt",legs="Kaabnax Trousers",feet="Iuitl Gaiters +1"}
 
     sets.defense.PDT = {ammo="Iron Gobbet",
         head="Pillager's Bonnet +1",neck="Twilight Torque",
-        body="Iuitl Vest",hands="Pillager's Armlets +1",ring1="Defending Ring",ring2=gear.DarkRing.physical,
+        body="Iuitl Vest",hands="Pillager's Armlets",ring1="Defending Ring",ring2=gear.DarkRing.physical,
         back="Iximulew Cape",waist="Flume Belt",legs="Pillager's Culottes +1",feet="Iuitl Gaiters +1"}
 
     sets.defense.MDT = {ammo="Demonry Stone",
         head="Pillager's Bonnet +1",neck="Twilight Torque",
-        body="Pillager's Vest +1",hands="Pillager's Armlets +1",ring1="Defending Ring",ring2="Shadow Ring",
+        body="Pillager's Vest +1",hands="Pillager's Armlets",ring1="Defending Ring",ring2="Shadow Ring",
         back="Engulfer Cape",waist="Flume Belt",legs="Pillager's Culottes +1",feet="Iuitl Gaiters +1"}
 
 
@@ -283,41 +283,41 @@ function init_gear_sets()
     -- Normal melee group
     sets.engaged = {ammo="Thew Bomblet",
         head="Felistris Mask",neck="Asperity Necklace",ear1="Dudgeon Earring",ear2="Heartseeker Earring",
-        body="Qaaxo Harness",hands="Pillager's Armlets +1",ring1="Rajas Ring",ring2="Epona's Ring",
-        back="Atheling Mantle",waist="Patentia Sash",legs="Pillager's Culottes +1",feet="Plunderer's Poulaines +1"}
+        body="Qaaxo Harness",hands="Pillager's Armlets",ring1="Rajas Ring",ring2="Epona's Ring",
+        back="Atheling Mantle",waist="Goading Belt",legs="Quiahuiz Trousers",feet="Raider's Poulaines +2"}
     sets.engaged.Acc = {ammo="Honed Tathlum",
         head="Whirlpool Mask",neck="Ej Necklace",ear1="Dudgeon Earring",ear2="Heartseeker Earring",
-        body="Pillager's Vest +1",hands="Pillager's Armlets +1",ring1="Rajas Ring",ring2="Epona's Ring",
+        body="Pillager's Vest +1",hands="Pillager's Armlets",ring1="Rajas Ring",ring2="Epona's Ring",
         back="Letalis Mantle",waist="Hurch'lan Sash",legs="Manibozho Brais",feet="Qaaxo Leggings"}
         
     -- Mod set for trivial mobs (Skadi+1)
     sets.engaged.Mod = {ammo="Thew Bomblet",
         head="Felistris Mask",neck="Asperity Necklace",ear1="Dudgeon Earring",ear2="Heartseeker Earring",
-        body="Skadi's Cuirie +1",hands="Pillager's Armlets +1",ring1="Rajas Ring",ring2="Epona's Ring",
+        body="Skadi's Cuirie +1",hands="Pillager's Armlets",ring1="Rajas Ring",ring2="Epona's Ring",
         back="Atheling Mantle",waist="Patentia Sash",legs=gear.AugQuiahuiz,feet="Plunderer's Poulaines +1"}
 
     -- Mod set for trivial mobs (Thaumas)
     sets.engaged.Mod2 = {ammo="Thew Bomblet",
         head="Felistris Mask",neck="Asperity Necklace",ear1="Dudgeon Earring",ear2="Heartseeker Earring",
-        body="Thaumas Coat",hands="Pillager's Armlets +1",ring1="Rajas Ring",ring2="Epona's Ring",
+        body="Thaumas Coat",hands="Pillager's Armlets",ring1="Rajas Ring",ring2="Epona's Ring",
         back="Atheling Mantle",waist="Patentia Sash",legs="Pillager's Culottes +1",feet="Plunderer's Poulaines +1"}
 
     sets.engaged.Evasion = {ammo="Thew Bomblet",
         head="Felistris Mask",neck="Ej Necklace",ear1="Dudgeon Earring",ear2="Heartseeker Earring",
-        body="Qaaxo Harness",hands="Pillager's Armlets +1",ring1="Beeline Ring",ring2="Epona's Ring",
+        body="Qaaxo Harness",hands="Pillager's Armlets",ring1="Beeline Ring",ring2="Epona's Ring",
         back="Canny Cape",waist="Patentia Sash",legs="Kaabnax Trousers",feet="Qaaxo Leggings"}
     sets.engaged.Acc.Evasion = {ammo="Honed Tathlum",
         head="Whirlpool Mask",neck="Ej Necklace",ear1="Dudgeon Earring",ear2="Heartseeker Earring",
-        body="Pillager's Vest +1",hands="Pillager's Armlets +1",ring1="Beeline Ring",ring2="Epona's Ring",
+        body="Pillager's Vest +1",hands="Pillager's Armlets",ring1="Beeline Ring",ring2="Epona's Ring",
         back="Canny Cape",waist="Hurch'lan Sash",legs="Kaabnax Trousers",feet="Qaaxo Leggings"}
 
     sets.engaged.PDT = {ammo="Thew Bomblet",
         head="Felistris Mask",neck="Twilight Torque",ear1="Dudgeon Earring",ear2="Heartseeker Earring",
-        body="Iuitl Vest",hands="Pillager's Armlets +1",ring1="Defending Ring",ring2="Epona's Ring",
+        body="Iuitl Vest",hands="Pillager's Armlets",ring1="Defending Ring",ring2="Epona's Ring",
         back="Iximulew Cape",waist="Patentia Sash",legs="Iuitl Tights",feet="Qaaxo Leggings"}
     sets.engaged.Acc.PDT = {ammo="Honed Tathlum",
         head="Whirlpool Mask",neck="Twilight Torque",ear1="Dudgeon Earring",ear2="Heartseeker Earring",
-        body="Iuitl Vest",hands="Pillager's Armlets +1",ring1="Defending Ring",ring2="Epona's Ring",
+        body="Iuitl Vest",hands="Pillager's Armlets",ring1="Defending Ring",ring2="Epona's Ring",
         back="Canny Cape",waist="Hurch'lan Sash",legs="Iuitl Tights",feet="Qaaxo Leggings"}
 
 end

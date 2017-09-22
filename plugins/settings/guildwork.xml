@@ -1,5 +1,5 @@
 <settings>
     <global>
-        <verbose>false</verbose>
+        <Verbose>false</Verbose>
     </global>
 </settings>

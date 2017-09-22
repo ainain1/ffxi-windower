@@ -3,11 +3,17 @@ A library providing sets as a data structure.
 ]]
 
 _libs = _libs or {}
-_libs.sets = true
-_libs.tables = _libs.tables or require('tables')
-_libs.functions = _libs.functions or require('functions')
+
+require('tables')
+require('functions')
+
+local table, functions = _libs.tables, _libs.functions
 
 set = {}
+
+local set = set
+
+_libs.sets = set
 
 _meta = _meta or {}
 _meta.S = {}
@@ -38,18 +44,6 @@ end
 function set.empty(s)
     return next(s) == nil
 end
-
-function set.length(s)
-    local count = 0
-
-    for _ in pairs(s) do
-        count = count + 1
-    end
-
-    return count
-end
-
-_meta.S.__len = set.length
 
 function set.flat(s)
     for el in pairs(s) do
@@ -205,7 +199,7 @@ function set.it(s)
     local key = nil
     return function()
         key = next(s, key)
-        return key, true
+        return key
     end
 end
 
@@ -217,11 +211,16 @@ function set.clear(s)
     return s
 end
 
-function set.copy(s)
+function set.copy(s, deep)
+    deep = deep ~= false and true
     local res = {}
 
     for el in pairs(s) do
-        res[el] = true
+        if deep and type(el) == 'table' then
+            res[(not rawget(el, 'copy') and el.copy or table.copy)(el)] = true
+        else
+            res[el] = true
+        end
     end
 
     return setmetatable(res, _meta.S)
@@ -291,10 +290,16 @@ function set.format(s, trail, subs)
     local last
     if trail == 'and' then
         last = ' and '
+    elseif trail == 'or' then
+        last = ' or '
+    elseif trail == 'list' then
+        last = ', '
     elseif trail == 'csv' then
         last = ','
     elseif trail == 'oxford' then
         last = ', and '
+    elseif trail == 'oxford or' then
+        last = ', or '
     else
         warning('Invalid format for table.format: \''..trail..'\'.')
     end
@@ -325,7 +330,7 @@ function set.format(s, trail, subs)
 end
 
 --[[
-Copyright © 2013-2014, Windower
+Copyright © 2013-2015, Windower
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
