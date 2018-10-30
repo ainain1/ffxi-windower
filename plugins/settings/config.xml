@@ -12,10 +12,10 @@
         <AnimationFrameRate>0</AnimationFrameRate>
         <!--If set to true will enable footstep effects (both display and sound)-->
         <FootstepEffects>true</FootstepEffects>
-        <!--2 for 30 FPS, 1 for 60 FPS, 0 for uncapped frame rates-->
-        <FrameRateDivisor>2</FrameRateDivisor>
         <!--Time in minutes of inactivity until a disconnect, 0 to disable-->
         <AutoDisconnectTime>0</AutoDisconnectTime>
+        <!--2 for 30 FPS, 1 for 60 FPS, 0 for uncapped frame rates-->
+        <FrameRateDivisor>2</FrameRateDivisor>
     </global>
     <Tanaga>
         <!--2 for 30 FPS, 1 for 60 FPS, 0 for uncapped frame rates-->

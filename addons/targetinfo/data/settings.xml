@@ -1,6 +1,10 @@
 <?xml version="1.1" ?>
 <settings>
     <global>
+        <ShowFullID>true</ShowFullID>
+        <ShowHexID>true</ShowHexID>
+        <ShowSpeed>true</ShowSpeed>
+        <ShowTargetName>false</ShowTargetName>
         <bg>
         <!-- Background settings. -->
             <alpha>102</alpha>
@@ -27,8 +31,8 @@
             <padding>0</padding>
             <pos>
             <!-- Screen position. -->
-                <x>0</x>
-                <y>0</y>
+                <x>1500</x>
+                <y>950</y>
             </pos>
             <text>
             <!-- Text settings. -->
@@ -55,9 +59,6 @@
             <x>0</x>
             <y>0</y>
         </pos>
-        <showfullid>false</showfullid> <!-- Set to true if you want the full ID displayed. -->
-        <showhexid>true</showhexid>    <!-- Set to true if you want the shortened hex ID to be displayed (often used to describe mob IDs). -->
-        <showspeed>false</showspeed>   <!-- Set to true if you want movement speed to be displayed. -->
         <text>
         <!-- Text settings. -->
             <alpha>255</alpha>

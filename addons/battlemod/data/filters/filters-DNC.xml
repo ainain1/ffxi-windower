@@ -13,7 +13,7 @@
             <ranged>true</ranged>
             <readies>false</readies>
             <target>false</target>
-            <uses>false</uses>
+            <uses>true</uses>
         </alliance>
         <me>
         <!-- He's targeting you! -->
@@ -160,13 +160,13 @@
             <casting>false</casting>
             <damage>true</damage>
             <healing>true</healing>
-            <items>false</items>
+            <items>true</items>
             <melee>false</melee>
             <misses>true</misses>
             <ranged>false</ranged>
             <readies>false</readies>
             <target>false</target>
-            <uses>false</uses>
+            <uses>true</uses>
         </others>
         <party>
         <!-- He's targeting a party member -->
@@ -180,7 +180,7 @@
             <ranged>false</ranged>
             <readies>false</readies>
             <target>false</target>
-            <uses>false</uses>
+            <uses>true</uses>
         </party>
     </global>
 </settings>

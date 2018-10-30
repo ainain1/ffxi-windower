@@ -2575,7 +2575,7 @@ return {
     [2673] = {id=2673,en="immature crab memento",ja="幼生クラブの思い出",category="Mog Garden"},
     [2674] = {id=2674,en="crab memento",ja="クラブの思い出",category="Mog Garden"},
     [2675] = {id=2675,en="porter crab memento",ja="ポータークラブの思い出",category="Mog Garden"},
-    [2676] = {id=2676,en="colibri chick memento",ja="幼鳥コリブリの思い出",category="Mog Garden"},
+    [2676] = {id=2676,en="baby colibri memento",ja="幼鳥コリブリの思い出",category="Mog Garden"},
     [2677] = {id=2677,en="colibri memento",ja="コリブリの思い出",category="Mog Garden"},
     [2678] = {id=2678,en="toucalibri memento",ja="トゥカリブリの思い出",category="Mog Garden"},
     [2679] = {id=2679,en="coeurl cub memento",ja="子クァールの思い出",category="Mog Garden"},
@@ -2948,7 +2948,7 @@ return {
     [3075] = {id=3075,en="♪Crab companion",ja="♪クラブ",category="Mounts"},
     [3076] = {id=3076,en="♪Red crab companion",ja="♪赤クラブ",category="Mounts"},
     [3077] = {id=3077,en="♪Bomb companion",ja="♪ボム",category="Mounts"},
-    [3078] = {id=3078,en="♪Ram companion",ja="♪大羊",category="Mounts"},
+    [3078] = {id=3078,en="♪Sheep companion",ja="♪大羊",category="Mounts"},
     [3079] = {id=3079,en="♪Morbol companion",ja="♪モルボル",category="Mounts"},
     [3080] = {id=3080,en="♪Crawler companion",ja="♪クロウラー",category="Mounts"},
     [3081] = {id=3081,en="♪Fenrir whistle",ja="♪フェンリル",category="Mounts"},
@@ -2959,6 +2959,10 @@ return {
     [3086] = {id=3086,en="♪Warmachine companion",ja="♪ウォーマシン",category="Mounts"},
     [3087] = {id=3087,en="♪Xzomit companion",ja="♪ゾミト",category="Mounts"},
     [3088] = {id=3088,en="♪Hippogryph companion",ja="♪ヒポグリフ",category="Mounts"},
+    [3089] = {id=3089,en="♪Spectral chair companion",ja="♪悪霊の椅子",category="Mounts"},
+    [3090] = {id=3090,en="♪Spheroid companion",ja="♪スフィアロイド",category="Mounts"},
+    [3091] = {id=3091,en="♪Omega",ja="♪オメガ",category="Mounts"},
+    [3092] = {id=3092,en="♪Coeurl",ja="♪クァール",category="Mounts"},
     [3136] = {id=3136,en="sheet of Shadow Lord tunes",ja="オーケストリオン譜：闇の王",category="Permanent Key Items"},
     [3137] = {id=3137,en="mystical canteen",ja="チカラを閉じ込めた飯盒",category="Temporary Key Items"},
     [3138] = {id=3138,en="Ygnas's insignia",ja="ユグナスの紹介状",category="Permanent Key Items"},
@@ -2973,12 +2977,18 @@ return {
     [3147] = {id=3147,en="Ygnas's leaf",ja="ユグナスの葉っぱ",category="Permanent Key Items"},
     [3148] = {id=3148,en="Ancient Melody: O",ja="古の旋律【Ｏ】",category="Temporary Key Items"},
     [3149] = {id=3149,en="Ancient Melody: M",ja="古の旋律【Ｍ】",category="Temporary Key Items"},
+    [3150] = {id=3150,en="Ancient Melody: E",ja="古の旋律【Ｅ】",category="Temporary Key Items"},
+    [3151] = {id=3151,en="Ancient Melody: G",ja="古の旋律【Ｇ】",category="Temporary Key Items"},
+    [3152] = {id=3152,en="Ancient Melody: A",ja="古の旋律【Ａ】",category="Temporary Key Items"},
     [3153] = {id=3153,en="after-party pass",ja="ミュモルエクストラステージ特別招待券",category="Temporary Key Items"},
     [3154] = {id=3154,en="reassembling technique",ja="リアセンブル",category="Permanent Key Items"},
+    [3155] = {id=3155,en="memory gem",ja="想いを感知するダイアモンド",category="Temporary Key Items"},
+    [3156] = {id=3156,en="empty hourglass",ja="空虚な砂時計",category="Permanent Key Items"},
+    [3157] = {id=3157,en="filled memory gem",ja="想いの詰まったダイヤモンド",category="Permanent Key Items"},
 }, {"id", "en", "ja", "category"}
 
 --[[
-Copyright © 2013-2017, Windower
+Copyright © 2013-2018, Windower
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

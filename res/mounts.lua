@@ -7,7 +7,7 @@ return {
     [3] = {id=3,en="Crab",ja="クラブ",endesc="Calls forth a crab.",icon_id=87,jadesc="クラブを呼び出す。",prefix="/mount"},
     [4] = {id=4,en="Red Crab",ja="赤クラブ",endesc="Calls forth a red crab.",icon_id=87,jadesc="赤クラブを呼び出す。",prefix="/mount"},
     [5] = {id=5,en="Bomb",ja="ボム",endesc="Calls forth a bomb.",icon_id=87,jadesc="ボムを呼び出す。",prefix="/mount"},
-    [6] = {id=6,en="Ram",ja="大羊",endesc="Calls forth a ram.",icon_id=87,jadesc="大羊を呼び出す。",prefix="/mount"},
+    [6] = {id=6,en="Sheep",ja="大羊",endesc="Calls forth a sheep.",icon_id=87,jadesc="大羊を呼び出す。",prefix="/mount"},
     [7] = {id=7,en="Morbol",ja="モルボル",endesc="Calls forth a morbol.",icon_id=87,jadesc="モルボルを呼び出す。",prefix="/mount"},
     [8] = {id=8,en="Crawler",ja="クロウラー",endesc="Calls forth a crawler.",icon_id=87,jadesc="クロウラーを呼び出す。",prefix="/mount"},
     [9] = {id=9,en="Fenrir",ja="フェンリル",endesc="Calls forth Fenrir.",icon_id=87,jadesc="フェンリルを呼び出す。",prefix="/mount"},
@@ -18,10 +18,14 @@ return {
     [14] = {id=14,en="Warmachine",ja="ウォーマシン",endesc="Calls forth a warmachine.",icon_id=87,jadesc="ウォーマシンを呼び出す。",prefix="/mount"},
     [15] = {id=15,en="Xzomit",ja="ゾミト",endesc="Calls forth a xzomit.",icon_id=87,jadesc="ゾミトを呼び出す。",prefix="/mount"},
     [16] = {id=16,en="Hippogryph",ja="ヒポグリフ",endesc="Calls forth a hippogryph.",icon_id=87,jadesc="ヒポグリフを呼び出す。",prefix="/mount"},
+    [17] = {id=17,en="Spectral Chair",ja="悪霊の椅子",endesc="Calls forth a spectral chair.",icon_id=87,jadesc="悪霊の椅子を呼び出す。",prefix="/mount"},
+    [18] = {id=18,en="Spheroid",ja="スフィアロイド",endesc="Calls forth a spheroid.",icon_id=87,jadesc="スフィアロイドを呼び出す。",prefix="/mount"},
+    [19] = {id=19,en="Omega",ja="オメガ",endesc="Calls forth Omega.",icon_id=87,jadesc="オメガを呼び出す。",prefix="/mount"},
+    [20] = {id=20,en="Coeurl",ja="クァール",endesc="Calls forth a coeurl.",icon_id=87,jadesc="クァールを呼び出す。",prefix="/mount"},
 }, {"id", "en", "ja", "endesc", "icon_id", "jadesc", "prefix"}
 
 --[[
-Copyright © 2013-2017, Windower
+Copyright © 2013-2018, Windower
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

@@ -2,24 +2,17 @@
 <settings>
   <autoload>
     <addon>vwhl</addon>
-    <addon>autojoin</addon>
-    <addon>thtracker</addon>
     <addon>GearSwap</addon>
-    <addon>aecho</addon>
-    <addon>autocontrol</addon>
     <addon>shortcuts</addon>
     <addon>update</addon>
     <addon>zonetimer</addon>
     <addon>TParty</addon>
-    <addon>distance</addon>
-    <addon>instaLS</addon>
     <addon>pointwatch</addon>
-    <addon>ChatLink</addon>
     <addon>findAll</addon>
-    <addon>battlemod</addon>
-    <addon>capetrader</addon>
-    <addon>craft</addon>
-    <addon>temps</addon>
+    <addon>DistancePlus</addon>
+    <addon>xivbar</addon>
+    <addon>instaLS</addon>
+    <addon>targetinfo</addon>
     <plugin>BoxHelper</plugin>
     <plugin>ChatLink</plugin>
     <plugin>Cancel</plugin>
@@ -28,18 +21,16 @@
     <plugin>DrawDistance</plugin>
     <plugin>Find</plugin>
     <plugin>PetTP</plugin>
-    <plugin>SSOrganizer</plugin>
     <plugin>Text</plugin>
-    <plugin>Tickle</plugin>
-    <plugin>Timers</plugin>
     <plugin>Timestamp</plugin>
     <plugin>TParty</plugin>
-    <plugin>WeatherMon</plugin>
     <plugin>Itemizer</plugin>
-    <plugin>AutoExec</plugin>
-    <plugin>DelayMeNot</plugin>
+    <plugin>SSOrganizer</plugin>
     <plugin>FFXIDB</plugin>
-    <plugin>Config</plugin>
+    <plugin>StatusTimer</plugin>
+    <plugin>Tickle</plugin>
+    <plugin>Timers</plugin>
+    <plugin>DelayMeNot</plugin>
     <plugin>JaZero</plugin>
   </autoload>
   <profile name="">
@@ -70,5 +61,16 @@
     <logs>3</logs>
     <args>--server 198.27.98.49</args>
     <executable>xiloader.exe</executable>
+  </profile>
+  <profile name="DSP">
+    <consolekey>Insert</consolekey>
+    <width>1920</width>
+    <height>1040</height>
+    <mipmaplevel>6</mipmaplevel>
+    <uiscale>1</uiscale>
+    <supersampling>2</supersampling>
+    <logs>3</logs>
+    <args>--server 69.157.14.149 --user Tanag --pass z54%U)dN?:nS$-Y`</args>
+    <executable>D:\dev\ffxi-windower\xiloader\pol.exe</executable>
   </profile>
 </settings>

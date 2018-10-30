@@ -1,5 +1,9 @@
 <?xml version="1.1" ?>
 <settings>
+    <!--
+        Colors are customizable based on party / alliance position. Use the colortest command to view the available colors.
+        If you wish for a color to be unchanged from its normal color, set it to 0.
+    -->
     <global>
         <a10>205</a10>
         <a11>359</a11>
@@ -15,7 +19,7 @@
         <a25>208</a25>
         <abilcol>0</abilcol>
         <allydmg>0</allydmg>
-        <enfeebcol>475</enfeebcol>
+        <enfeebcol>501</enfeebcol>
         <itemcol>256</itemcol>
         <mob>69</mob>
         <mobdmg>0</mobdmg>
